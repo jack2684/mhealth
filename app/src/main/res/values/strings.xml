@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Driving Data Collector</string>
+    <string name="app_name">Data Collector</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="connect">Connect</string>
@@ -16,6 +16,7 @@
     <string name="artifacts">Blinks, Jaw: </string>
     <string name="msg_count">Msg number, size: </string>
     <string name="pause">Pause/Resume</string>
+    <string name="pss">PSS</string>
     <string name="drop">Drop</string>
     <string name="muse_elem">Signal Quality (1 or 2 is good):</string>
 

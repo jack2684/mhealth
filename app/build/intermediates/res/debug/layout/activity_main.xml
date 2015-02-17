@@ -175,6 +175,11 @@
 	            android:layout_width="150dp"
 	            android:layout_height="40dp"
 	            android:text="@string/pause" />
+            <Button
+	            android:id="@+id/pss"
+	            android:layout_width="150dp"
+	            android:layout_height="40dp"
+	            android:text="@string/pss" />
 		</LinearLayout>
 
-</LinearLayout><!-- From: file:/home/mridul/AndroidStudioProjects/DrivingDataCollector/app/src/main/res/layout/activity_main.xml -->
+</LinearLayout><!-- From: file:/home/mridul/AndroidStudioProjects/DataCollector/app/src/main/res/layout/activity_main.xml -->

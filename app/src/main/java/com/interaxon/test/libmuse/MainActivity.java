@@ -15,18 +15,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.interaxon.libmuse.Accelerometer;
 import com.interaxon.libmuse.ConnectionState;
@@ -146,14 +153,13 @@ public class MainActivity extends Activity implements OnClickListener {
 
         public void prepareOutputFiles() {
             String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
-            File outDir = new File(root + "/driving_data_" + System.currentTimeMillis());
+            File outDir = new File(root + "/muse_data_" + System.currentTimeMillis());
             outDir.mkdirs();
 
             eegOut = createBinaryFile(new File(outDir, "eeg"));
             accelerometerOut = createBinaryFile(new File(outDir, "accelerometer"));
             horseShoeOut = createBinaryFile(new File(outDir, "horseshoe"));
             blinkOut = createBinaryFile(new File(outDir, "blink"));
-
         }
 
 
@@ -324,10 +330,18 @@ public class MainActivity extends Activity implements OnClickListener {
     }
 
 
-    private Muse muse = null;
-    private ConnectionListener connectionListener = null;
-    private DataListener dataListener = null;
+    private Muse muse;
+    private ConnectionListener connectionListener;
+    private DataListener dataListener;
     private boolean dataTransmission = true;
+
+    private View perceivedStressScaleView;
+    private View dataView;
+
+    private TextView pssText;
+    private RadioGroup pssRadioGroup;
+    private int currentPssTextIndex;
+    private String pssResponses = "";
 
     public MainActivity() {
         // Create listeners and pass reference to activity to them
@@ -340,7 +354,22 @@ public class MainActivity extends Activity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        perceivedStressScaleView = ((LayoutInflater)
+            getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
+                R.layout.perceived_stress_scale, null
+        );
+        dataView = ((LayoutInflater)
+            getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
+                R.layout.activity_main, null
+        );
+
+        setContentView(R.layout.root_layout);
+        ((ViewGroup) getWindow().getDecorView().findViewById(android.R.id.content)).addView(dataView);
+        ((ViewGroup) getWindow().getDecorView().findViewById(android.R.id.content)).addView(perceivedStressScaleView);
+        dataView.setVisibility(View.VISIBLE);
+        perceivedStressScaleView.setVisibility(View.GONE);
+
         Button refreshButton = (Button) findViewById(R.id.refresh);
         refreshButton.setOnClickListener(this);
         Button connectButton = (Button) findViewById(R.id.connect);
@@ -349,6 +378,22 @@ public class MainActivity extends Activity implements OnClickListener {
         disconnectButton.setOnClickListener(this);
         Button pauseButton = (Button) findViewById(R.id.pause);
         pauseButton.setOnClickListener(this);
+
+        Button button = (Button) findViewById(R.id.pss);
+        button.setOnClickListener(this);
+
+        button = (Button) findViewById(R.id.pss_close);
+        button.setOnClickListener(this);
+
+        button = (Button) findViewById(R.id.pss_next);
+        button.setOnClickListener(this);
+
+        pssText = (TextView) findViewById(R.id.pss_text);
+        pssText.setText(PSSText[currentPssTextIndex]);
+
+        pssRadioGroup = (RadioGroup) findViewById(R.id.pss_radio_group);
+        ((RadioButton) findViewById(R.id.radio_never)).setChecked(true);
+
         Log.i("Muse Headband", "libmuse version=" + LibMuseVersion.SDK_VERSION);
     }
 
@@ -415,6 +460,50 @@ public class MainActivity extends Activity implements OnClickListener {
                 muse.enableDataTransmission(dataTransmission);
             }
         }
+        else if (v.getId() == R.id.pss) {
+            dataView.setVisibility(View.GONE);
+            perceivedStressScaleView.setVisibility(View.VISIBLE);
+        }
+        else if (v.getId() == R.id.pss_close) {
+            perceivedStressScaleView.setVisibility(View.GONE);
+            dataView.setVisibility(View.VISIBLE);
+        }
+        else if (v.getId() == R.id.pss_next) {
+
+            int pssResponse = pssRadioGroup.indexOfChild(
+                pssRadioGroup.findViewById(pssRadioGroup.getCheckedRadioButtonId())
+            );
+            pssResponses += pssResponse + (currentPssTextIndex == PSSText.length - 1 ? "" : ",") ;
+
+            currentPssTextIndex = (currentPssTextIndex + 1) % PSSText.length;
+            pssText.setText(PSSText[currentPssTextIndex]);
+            pssText.invalidate();
+            ((RadioButton) findViewById(R.id.radio_never)).setChecked(true);
+            if (currentPssTextIndex == 0) {
+                writePssResponses();
+                pssResponses = "";
+                perceivedStressScaleView.setVisibility(View.GONE);
+                dataView.setVisibility(View.VISIBLE);
+                Toast.makeText(this, "Writing PSS Responses", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void writePssResponses() {
+        String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+        File outFile = new File(root + "/pss_responses_" + System.currentTimeMillis());
+        try {
+            outFile.createNewFile();
+            FileOutputStream writer = new FileOutputStream(outFile);
+
+            writer.write(pssResponses.getBytes());
+            writer.flush();
+
+            writer.close();
+            MediaScannerConnection.scanFile(this, new String[]{outFile.getAbsolutePath()}, null, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void configure_library() {
@@ -449,4 +538,17 @@ public class MainActivity extends Activity implements OnClickListener {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private static String PSSText[] = {
+        "In the last month, how often have you been upset because of something that happened unexpectedly?",
+        "In the last month, how often have you felt that you were unable to control the important things in your life?",
+        "In the last month, how often have you felt nervous and \"stressed\"?",
+        "In the last month, how often have you felt confident about your ability to handle your personal problems?",
+        "In the last month, how often have you felt that things were going your way?",
+        "In the last month, how often have you found that you could not cope with all the things that you had to do?",
+        "In the last month, how often have you been able to control irritations in your life?",
+        "In the last month, how often have you felt that you were on top of things?",
+        "In the last month, how often have you been angered because of things that were outside of your control?",
+        "In the last month, how often have you felt difficulties were piling up so high that you could not overcome them?"
+    };
 }
