@@ -10,8 +10,7 @@
         android:paddingTop="60dp"
         android:text="Medium Text"
         android:id="@+id/pss_text"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/black" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <RadioGroup
         android:layout_width="match_parent"
@@ -24,37 +23,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Never"
-            android:id="@+id/radio_never"
-            android:textColor="@android:color/black" />
+            android:id="@+id/radio_never" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Almost Never"
-            android:id="@+id/radio_almost_never"
-            android:textColor="@android:color/black" />
+            android:id="@+id/radio_almost_never" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sometimes"
-            android:id="@+id/radio_sometimes"
-            android:textColor="@android:color/black" />
+            android:id="@+id/radio_sometimes" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Fairly Often"
-            android:id="@+id/radio_fairly_often"
-            android:textColor="@android:color/black" />
+            android:id="@+id/radio_fairly_often" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Very Often"
             android:id="@+id/radio_very_often"
-            android:checked="false"
-            android:textColor="@android:color/black" />
+            android:checked="false" />
     </RadioGroup>
 
     <RelativeLayout

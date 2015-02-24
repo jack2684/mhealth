@@ -16,6 +16,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
@@ -28,6 +29,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -146,14 +148,16 @@ public class MainActivity extends Activity implements OnClickListener {
                 MediaScannerConnection.scanFile(activityRef.get(), new String[]{f.getAbsolutePath()}, null, null);
             }
             catch (IOException e) {
+                System.exit(1);
                 e.printStackTrace();
             }
             return dataOutputStream;
         }
 
         public void prepareOutputFiles() {
+            setIsSessionNameInputActive(false);
             String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
-            File outDir = new File(root + "/muse_data_" + System.currentTimeMillis());
+            File outDir = new File(root + "/muse_" + ((EditText) findViewById(R.id.sessionName)).getText() + "_" + System.currentTimeMillis());
             outDir.mkdirs();
 
             eegOut = createBinaryFile(new File(outDir, "eeg"));
@@ -165,6 +169,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 
         public void closeOutputFiles() {
+            setIsSessionNameInputActive(true);
             if (eegOut == null) return;
             try {
                 eegOut.close();
@@ -238,7 +243,7 @@ public class MainActivity extends Activity implements OnClickListener {
         public void receiveMuseArtifactPacket(MuseArtifactPacket p) {
             if (p.getHeadbandOn() && p.getBlink()) {
                 Log.i("Artifacts", "blink");
-                writeOutput(MuseDataPacketType.ARTIFACTS, System.currentTimeMillis(), null);
+                writeOutput(MuseDataPacketType.ARTIFACTS, System.currentTimeMillis()*1000, null);
             }
         }
 
@@ -342,6 +347,7 @@ public class MainActivity extends Activity implements OnClickListener {
     private RadioGroup pssRadioGroup;
     private int currentPssTextIndex;
     private String pssResponses = "";
+    boolean isSessionNameInputActive;
 
     public MainActivity() {
         // Create listeners and pass reference to activity to them
@@ -395,6 +401,8 @@ public class MainActivity extends Activity implements OnClickListener {
         ((RadioButton) findViewById(R.id.radio_never)).setChecked(true);
 
         Log.i("Muse Headband", "libmuse version=" + LibMuseVersion.SDK_VERSION);
+
+        setIsSessionNameInputActive(true);
     }
 
     @Override
@@ -489,9 +497,15 @@ public class MainActivity extends Activity implements OnClickListener {
         }
     }
 
+    private void setIsSessionNameInputActive(boolean b) {
+        isSessionNameInputActive = b;
+        EditText sessionNameEditor = (EditText) findViewById(R.id.sessionName);
+        sessionNameEditor.setEnabled(b);
+    }
+
     private void writePssResponses() {
         String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
-        File outFile = new File(root + "/pss_responses_" + System.currentTimeMillis());
+        File outFile = new File(root + "/pss_" + ((EditText) findViewById(R.id.sessionName)).getText() + "_" + System.currentTimeMillis());
         try {
             outFile.createNewFile();
             FileOutputStream writer = new FileOutputStream(outFile);
@@ -503,6 +517,7 @@ public class MainActivity extends Activity implements OnClickListener {
             MediaScannerConnection.scanFile(this, new String[]{outFile.getAbsolutePath()}, null, null);
         } catch (IOException e) {
             e.printStackTrace();
+            System.exit(1);
         }
     }
 
