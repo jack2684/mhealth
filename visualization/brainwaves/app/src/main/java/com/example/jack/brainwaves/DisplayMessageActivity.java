@@ -3,9 +3,12 @@ package com.example.jack.brainwaves;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 
 public class DisplayMessageActivity extends Activity {
@@ -23,8 +26,23 @@ public class DisplayMessageActivity extends Activity {
         textView.setTextSize(40);
         textView.setText(message);
 
-        // Set the text view as the activity layout
-        setContentView(textView);
+        // Set the text view and graph view as the activity layout
+        setContentView(R.layout.activity_display_message);
+
+        // Some graph view data
+        GraphView graph = (GraphView) findViewById(R.id.graph);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3),
+                new DataPoint(3, 2),
+                new DataPoint(4, 6)
+        });
+        if(graph == null) {
+            System.out.println("Cannot get graph object from xml!!");
+        } else {
+            graph.addSeries(series);
+        }
     }
 
     @Override
