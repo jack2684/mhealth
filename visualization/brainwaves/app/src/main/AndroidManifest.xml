@@ -24,6 +24,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.jack.brainwaves.MainActivity" />
         </activity>
+        <activity
+            android:name=".brainwaves"
+            android:label="@string/title_activity_brainwaves" >
+        </activity>
+        <activity
+            android:name=".SimpleXYPlotActivity"
+            android:label="@string/title_activity_simple_xyplot" >
+        </activity>
     </application>
 
 </manifest>

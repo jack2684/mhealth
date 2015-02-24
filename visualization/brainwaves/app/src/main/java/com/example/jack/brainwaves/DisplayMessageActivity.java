@@ -27,22 +27,9 @@ public class DisplayMessageActivity extends Activity {
         textView.setText(message);
 
         // Set the text view and graph view as the activity layout
-        setContentView(R.layout.activity_display_message);
+        setContentView(textView);
+        //setContentView(R.layout.activity_display_message);
 
-        // Some graph view data
-        GraphView graph = (GraphView) findViewById(R.id.graph);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6)
-        });
-        if(graph == null) {
-            System.out.println("Cannot get graph object from xml!!");
-        } else {
-            graph.addSeries(series);
-        }
     }
 
     @Override
