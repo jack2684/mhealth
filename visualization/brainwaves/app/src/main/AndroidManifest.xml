@@ -32,6 +32,14 @@
             android:name=".SimpleXYPlotActivity"
             android:label="@string/title_activity_simple_xyplot" >
         </activity>
+        <activity
+            android:name=".DynamicXYPlotActivity"
+            android:label="@string/title_activity_dynamic_xyplot" >
+        </activity>
+        <activity
+            android:name=".OrientationSensorExampleActivity"
+            android:label="@string/title_activity_orientation_sensor_example" >
+        </activity>
     </application>
 
 </manifest>

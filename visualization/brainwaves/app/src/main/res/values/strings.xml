@@ -10,5 +10,8 @@
     <string name="action_search">Search</string>
     <string name="title_activity_brainwaves">brainwaves</string>
     <string name="title_activity_simple_xyplot">SimpleXYPlotActivity</string>
+    <string name="title_activity_dynamic_xyplot">DynamicXYPlotActivity</string>
+    <string name="dynamic_plot">Dynamic plot</string>
+    <string name="title_activity_orientation_sensor_example">OrientationSensorExampleActivity</string>
 
 </resources>

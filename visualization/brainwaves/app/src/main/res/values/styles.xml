@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light">
+    <style name="AppTheme" parent="android:Theme.Holo">
         <!-- Customize your theme here. -->
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <item name="android:actionBarTabTextStyle">@style/MyActionBarTabText</item>
@@ -24,6 +24,22 @@
     <style name="MyActionBarTabText"
         parent="@android:style/Widget.Holo.ActionBar.TabText">
         <item name="android:textColor">@color/actionbar_text</item>
+    </style>
+
+    <style name="sample_activity">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+    </style>
+
+    <style name="toc_button">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="plotStyle1">
+        <!--<item name="androidplot.title">Default Title</item>
+        <item name="androidplot.domainLabel">my domain</item>-->
+        <!--<item name="XYPlot:androidplot.title">my domain</item>-->
     </style>
 
     <color name="actionbar_text">#ffcc3d2a</color>
