@@ -40,6 +40,10 @@
             android:name=".OrientationSensorExampleActivity"
             android:label="@string/title_activity_orientation_sensor_example" >
         </activity>
+        <activity
+            android:name=".MuseActivity"
+            android:label="@string/title_activity_muse" >
+        </activity>
     </application>
 
 </manifest>

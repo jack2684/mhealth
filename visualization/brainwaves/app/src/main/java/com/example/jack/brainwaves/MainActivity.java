@@ -17,6 +17,8 @@ import com.androidplot.pie.PieRenderer;
 import com.androidplot.pie.Segment;
 import com.androidplot.pie.SegmentFormatter;
 
+import java.util.Random;
+
 public class MainActivity extends Activity {
 
     public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
@@ -28,8 +30,6 @@ public class MainActivity extends Activity {
 
     private Segment s1;
     private Segment s2;
-    private Segment s3;
-    private Segment s4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,14 @@ public class MainActivity extends Activity {
             }
         });
 
+        Button startMuseButton = (Button) findViewById(R.id.museandpssbtn);
+        startMuseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, MuseActivity.class));
+            }
+        });
+
         // initialize our XYPlot reference:
         pie = (PieChart) findViewById(R.id.mySimplePieChart);
 
@@ -60,57 +68,46 @@ public class MainActivity extends Activity {
 
         donutSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {}
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                s1.setValue((s1.getValue().intValue() + 1));
+                pie.redraw();
+                updateDonutText();
+            }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                pie.getRenderer(PieRenderer.class).setDonutSize(seekBar.getProgress()/100f,
-                        PieRenderer.DonutMode.PERCENT);
-                pie.redraw();
-                updateDonutText();
+
             }
         });
 
         donutSizeTextView = (TextView) findViewById(R.id.donutSizeTextView);
         updateDonutText();
 
-        s1 = new Segment("s1", 10);
-        s2 = new Segment("s2", 1);
-        s3 = new Segment("s3", 10);
-        s4 = new Segment("s4", 10);
+        s1 = new Segment("", 20);
+        s2 = new Segment("", 10);
 
         EmbossMaskFilter emf = new EmbossMaskFilter(
                 new float[]{1, 1, 1}, 0.4f, 10, 8.2f);
 
         SegmentFormatter sf1 = new SegmentFormatter();
         sf1.configure(getApplicationContext(), R.xml.pie_segment_formatter1);
-
         sf1.getFillPaint().setMaskFilter(emf);
 
         SegmentFormatter sf2 = new SegmentFormatter();
         sf2.configure(getApplicationContext(), R.xml.pie_segment_formatter2);
-
         sf2.getFillPaint().setMaskFilter(emf);
 
-        SegmentFormatter sf3 = new SegmentFormatter();
-        sf3.configure(getApplicationContext(), R.xml.pie_segment_formatter3);
-        sf3.getFillPaint().setMaskFilter(emf);
-
-        SegmentFormatter sf4 = new SegmentFormatter();
-        sf4.configure(getApplicationContext(), R.xml.pie_segment_formatter4);
-
-        sf4.getFillPaint().setMaskFilter(emf);
-
-        pie.addSeries(s1, sf1);
-        pie.addSeries(s2, sf2);
-        pie.addSeries(s3, sf3);
-        pie.addSeries(s4, sf4);
-
+        pie.setPlotMarginBottom(0);
+        pie.addSegment(s1, sf1);
+        pie.addSegment(s2, sf2);
+        pie.redraw();
         pie.getBorderPaint().setColor(Color.TRANSPARENT);
         pie.getBackgroundPaint().setColor(Color.TRANSPARENT);
+
+        pie.getRenderer(PieRenderer.class).setDonutSize(.80f, PieRenderer.DonutMode.PERCENT);
     }
 
     protected void updateDonutText() {

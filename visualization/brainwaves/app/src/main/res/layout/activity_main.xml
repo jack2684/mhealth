@@ -20,7 +20,7 @@
                 android:id="@+id/mySimplePieChart"
                 android:layout_width="fill_parent"
                 android:layout_height="333dp"
-                androidPlot.title="A Simple Pie Chart"
+                androidPlot.title="Your stress/match level"
                 androidPlot.titleWidget.labelPaint.textSize="@dimen/title_font_size"/>
             <LinearLayout
                 android:layout_height="wrap_content"
@@ -57,6 +57,9 @@
             <Button android:id="@+id/startOrSensorExButton"
                 style="@style/toc_button"
                 android:text="Realtime Orientation Sensor Plot"/>
+            <Button android:id="@+id/museandpssbtn"
+                style="@style/toc_button"
+                android:text="Muse and PSS"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
