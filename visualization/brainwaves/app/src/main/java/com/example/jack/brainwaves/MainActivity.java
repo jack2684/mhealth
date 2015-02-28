@@ -145,10 +145,12 @@ public class MainActivity extends Activity {
                 keepRunning = true;
                 s1.setValue(0);
                 dynamicPercentage = .0f;
-                while(Math.abs(dynamicPercentage - goldenPercentageOutput) > 0.0001 && keepRunning) {
-                    Thread.sleep((long) Math.min(10 / Math.abs(dynamicPercentage - goldenPercentageOutput), 20));
+                float diff = Math.abs(dynamicPercentage - goldenPercentageOutput);
+                while(dynamicPercentage <= goldenPercentageOutput && keepRunning) {
+                    Thread.sleep(10);
                     s1.setValue(s2.getValue().floatValue() * dynamicPercentage / (1 - dynamicPercentage));
-                    dynamicPercentage += 0.001f;
+                    dynamicPercentage += 0.001f * diff + 0.0005f;
+                    diff = Math.abs(dynamicPercentage - goldenPercentageOutput);
                     updatePie();
                     updateDonutInUIThread();    // This has to be done in UI Thread!!
                 }
@@ -178,8 +180,6 @@ public class MainActivity extends Activity {
 
     protected void updatePie() {
         sf1.getFillPaint().setColor(dynamicColor());
-        pie.removeSegment(s1);
-        pie.addSegment(s1, sf1);
         pie.redraw();
     }
 
