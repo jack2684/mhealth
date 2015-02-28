@@ -20,10 +20,10 @@
                 android:id="@+id/mySimplePieChart"
                 android:layout_width="fill_parent"
                 android:layout_height="333dp"
-                androidPlot.title="Your stress/match level"
+                androidPlot.title=""
                 androidPlot.titleWidget.labelPaint.textSize="@dimen/title_font_size"/>
             <LinearLayout
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_width="fill_parent"
                 android:layout_gravity="center"
                 android:orientation="vertical">
@@ -34,21 +34,14 @@
                     android:layout_gravity="center"
                     android:text="unknown"
                     android:textSize="88dp"
+                    android:textColor="@color/appRed"
                     android:id="@+id/donutSizeTextView"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:layout_gravity="center"
-                    android:text="Donut Size"
+                    android:text="Stress score\n\r"
                     android:id="@+id/donutSizeSeekLabel"/>
-                <SeekBar
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:max="90"
-                    android:progress="50"
-                    android:id="@+id/donutSizeSeekBar"/>
 
             </LinearLayout>
 

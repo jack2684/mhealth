@@ -19,25 +19,28 @@ import com.androidplot.pie.SegmentFormatter;
 
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Random;
 
 public class MainActivity extends Activity {
 
     public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
 
     private TextView donutSizeTextView;
-    private SeekBar donutSizeSeekBar;
 
     private PieChart pie;
 
     private Segment s1;
     private Segment s2;
 
-    private float saclePercentage = .88f;
+    private float goldenPercentageOutput = .88f;
+    private float dynamicPercentage;
 
     private Thread myThread;
 
     private DynamicScaleShow data;
+
+    int dynamicColorR = 255;
+    int dynamicColorG = 80;
+    int dynamicColorB = 80;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,31 +71,17 @@ public class MainActivity extends Activity {
             }
         });
 
+        dynamicColorR = 255;
+        dynamicColorG = 80;
+        dynamicColorB = 80;
+        dynamicPercentage = .0f;
+
         // initialize our XYPlot reference:
         pie = (PieChart) findViewById(R.id.mySimplePieChart);
 
-
-        donutSizeSeekBar = (SeekBar) findViewById(R.id.donutSizeSeekBar);
-
-        donutSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                s1.setValue((s1.getValue().intValue() + 1));
-                pie.redraw();
-                updateDonutText();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
         donutSizeTextView = (TextView) findViewById(R.id.donutSizeTextView);
         updateDonutText();
+        updateDonutColor();
 
         s1 = new Segment("", 20);
         s2 = new Segment("", 50);
@@ -160,18 +149,27 @@ public class MainActivity extends Activity {
             try {
                 keepRunning = true;
                 s1.setValue(0);
-                float percentage = .0f;
-                while(Math.abs(percentage - saclePercentage) > 0.1 && keepRunning) {
-                    Thread.sleep((long) Math.min(10 / Math.abs(percentage - saclePercentage), 100));
-                    s1.setValue(s2.getValue().floatValue() * percentage / (1 - percentage));
-                    percentage += 0.001f;
+                dynamicPercentage = .0f;
+                while(Math.abs(dynamicPercentage - goldenPercentageOutput) > 0.0001 && keepRunning) {
+                    Thread.sleep((long) Math.min(10 / Math.abs(dynamicPercentage - goldenPercentageOutput), 75));
+                    s1.setValue(s2.getValue().floatValue() * dynamicPercentage / (1 - dynamicPercentage));
+                    dynamicPercentage += 0.001f;
                     pie.redraw();
+                    updateDonutInUIThread();    // This has to be done in UI Thread!!
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
+        protected void updateDonutInUIThread() {
+            donutSizeTextView.post(new Runnable() {
+                @Override
+                public void run() {
+                    updateDonutText();
+                }
+            });
+        }
 
         public void addObserver(Observer observer) {
             notifier.addObserver(observer);
@@ -185,7 +183,13 @@ public class MainActivity extends Activity {
 
 
     protected void updateDonutText() {
-        donutSizeTextView.setText(donutSizeSeekBar.getProgress() + "%");
+        donutSizeTextView.setText(String.format("%.0f", dynamicPercentage * 100));
+    }
+
+    protected void updateDonutColor() {
+        donutSizeTextView.setTextColor(Color.rgb(dynamicColorR * dynamicColorB,
+                                                dynamicColorG,
+                                                dynamicColorB));
     }
 
 
