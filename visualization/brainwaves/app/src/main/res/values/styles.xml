@@ -42,7 +42,7 @@
         <!--<item name="XYPlot:androidplot.title">my domain</item>-->
     </style>
 
-    <color name="actionbar_text">#ffcc3d2a</color>
+    <color name="actionbar_text">#fff0f0f0</color>
     <color name="black">#ff000000</color>
     <color name="appRed">#ffe35051</color>
     <color name="lightGrey">#fff0f0f0</color>

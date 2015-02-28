@@ -194,9 +194,9 @@ public class MainActivity extends Activity {
     protected int dynamicColor() {
         Color c = new Color();
         return c.rgb(
-                Math.round(dynamicColorR * dynamicPercentage * 0.40f) + 102,
-                Math.round(dynamicColorG * (dynamicPercentage) * 0.30f) + 76,
-                Math.round(dynamicColorB * (dynamicPercentage) * 0.30f) + 76
+                Math.round(dynamicColorR * dynamicPercentage * 0.35f) + 102,
+                Math.round(dynamicColorG * (1 - dynamicPercentage) * 0.30f) + 60,
+                Math.round(dynamicColorB * (1 - dynamicPercentage) * 0.30f) + 60
         );
     }
 
