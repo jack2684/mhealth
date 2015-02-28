@@ -17,6 +17,8 @@ import com.androidplot.pie.PieRenderer;
 import com.androidplot.pie.Segment;
 import com.androidplot.pie.SegmentFormatter;
 
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
 
 public class MainActivity extends Activity {
@@ -30,6 +32,12 @@ public class MainActivity extends Activity {
 
     private Segment s1;
     private Segment s2;
+
+    private float saclePercentage = .88f;
+
+    private Thread myThread;
+
+    private DynamicScaleShow data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +95,7 @@ public class MainActivity extends Activity {
         updateDonutText();
 
         s1 = new Segment("", 20);
-        s2 = new Segment("", 10);
+        s2 = new Segment("", 50);
 
         EmbossMaskFilter emf = new EmbossMaskFilter(
                 new float[]{1, 1, 1}, 0.4f, 10, 8.2f);
@@ -103,12 +111,78 @@ public class MainActivity extends Activity {
         pie.setPlotMarginBottom(0);
         pie.addSegment(s1, sf1);
         pie.addSegment(s2, sf2);
-        pie.redraw();
-        pie.getBorderPaint().setColor(Color.TRANSPARENT);
-        pie.getBackgroundPaint().setColor(Color.TRANSPARENT);
-
+        pie.getBorderPaint().setColor(Color.BLACK);
+        pie.getBackgroundPaint().setColor(Color.BLACK);
         pie.getRenderer(PieRenderer.class).setDonutSize(.80f, PieRenderer.DonutMode.PERCENT);
+        pie.redraw();
+
+        data = new DynamicScaleShow();
     }
+
+    @Override
+    public void onResume() {
+        // kick off the data generating thread:
+        myThread = new Thread(data);
+        myThread.start();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        data.stopThread();
+        super.onPause();
+    }
+
+    class DynamicScaleShow implements Runnable {
+
+        // encapsulates management of the observers watching this datasource for update events:
+        class MyObservable extends Observable {
+            @Override
+            public void notifyObservers() {
+                setChanged();
+                super.notifyObservers();
+            }
+        }
+
+        private MyObservable notifier;
+        private boolean keepRunning = false;
+
+        {
+            notifier = new MyObservable();
+        }
+
+        public void stopThread() {
+            keepRunning = false;
+        }
+
+        //@Override
+        public void run() {
+            try {
+                keepRunning = true;
+                s1.setValue(0);
+                float percentage = .0f;
+                while(Math.abs(percentage - saclePercentage) > 0.1 && keepRunning) {
+                    Thread.sleep((long) Math.min(1 / Math.abs(percentage - saclePercentage), 100));
+                    s1.setValue(s2.getValue().floatValue() * percentage / (1 - percentage));
+                    percentage += 0.0005f;
+                    pie.redraw();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        public void addObserver(Observer observer) {
+            notifier.addObserver(observer);
+        }
+
+        public void removeObserver(Observer observer) {
+            notifier.deleteObserver(observer);
+        }
+    }
+
+
 
     protected void updateDonutText() {
         donutSizeTextView.setText(donutSizeSeekBar.getProgress() + "%");
