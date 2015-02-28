@@ -30,8 +30,10 @@ public class MainActivity extends Activity {
 
     private Segment s1;
     private Segment s2;
+    SegmentFormatter sf1 = new SegmentFormatter();
+    SegmentFormatter sf2 = new SegmentFormatter();
 
-    private float goldenPercentageOutput = .88f;
+    private float goldenPercentageOutput = .96f;
     private float dynamicPercentage;
 
     private Thread myThread;
@@ -86,16 +88,9 @@ public class MainActivity extends Activity {
         s1 = new Segment("", 20);
         s2 = new Segment("", 50);
 
-        EmbossMaskFilter emf = new EmbossMaskFilter(
-                new float[]{1, 1, 1}, 0.4f, 10, 8.2f);
-
-        SegmentFormatter sf1 = new SegmentFormatter();
         sf1.configure(getApplicationContext(), R.xml.pie_segment_formatter1);
-        sf1.getFillPaint().setMaskFilter(emf);
-
-        SegmentFormatter sf2 = new SegmentFormatter();
+        sf1.getFillPaint().setColor(dynamicColor());
         sf2.configure(getApplicationContext(), R.xml.pie_segment_formatter2);
-        sf2.getFillPaint().setMaskFilter(emf);
 
         pie.setPlotMarginBottom(0);
         pie.addSegment(s1, sf1);
@@ -151,10 +146,10 @@ public class MainActivity extends Activity {
                 s1.setValue(0);
                 dynamicPercentage = .0f;
                 while(Math.abs(dynamicPercentage - goldenPercentageOutput) > 0.0001 && keepRunning) {
-                    Thread.sleep((long) Math.min(10 / Math.abs(dynamicPercentage - goldenPercentageOutput), 75));
+                    Thread.sleep((long) Math.min(10 / Math.abs(dynamicPercentage - goldenPercentageOutput), 20));
                     s1.setValue(s2.getValue().floatValue() * dynamicPercentage / (1 - dynamicPercentage));
                     dynamicPercentage += 0.001f;
-                    pie.redraw();
+                    updatePie();
                     updateDonutInUIThread();    // This has to be done in UI Thread!!
                 }
             } catch (InterruptedException e) {
@@ -167,6 +162,7 @@ public class MainActivity extends Activity {
                 @Override
                 public void run() {
                     updateDonutText();
+                    updateDonutColor();
                 }
             });
         }
@@ -180,18 +176,29 @@ public class MainActivity extends Activity {
         }
     }
 
-
+    protected void updatePie() {
+        sf1.getFillPaint().setColor(dynamicColor());
+        pie.removeSegment(s1);
+        pie.addSegment(s1, sf1);
+        pie.redraw();
+    }
 
     protected void updateDonutText() {
         donutSizeTextView.setText(String.format("%.0f", dynamicPercentage * 100));
     }
 
     protected void updateDonutColor() {
-        donutSizeTextView.setTextColor(Color.rgb(dynamicColorR * dynamicColorB,
-                                                dynamicColorG,
-                                                dynamicColorB));
+        donutSizeTextView.setTextColor(dynamicColor());
     }
 
+    protected int dynamicColor() {
+        Color c = new Color();
+        return c.rgb(
+                Math.round(dynamicColorR * dynamicPercentage * 0.40f) + 102,
+                Math.round(dynamicColorG * (dynamicPercentage) * 0.30f) + 76,
+                Math.round(dynamicColorB * (dynamicPercentage) * 0.30f) + 76
+        );
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
