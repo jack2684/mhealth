@@ -162,9 +162,9 @@ public class MainActivity extends Activity {
                 s1.setValue(0);
                 float percentage = .0f;
                 while(Math.abs(percentage - saclePercentage) > 0.1 && keepRunning) {
-                    Thread.sleep((long) Math.min(1 / Math.abs(percentage - saclePercentage), 100));
+                    Thread.sleep((long) Math.min(10 / Math.abs(percentage - saclePercentage), 100));
                     s1.setValue(s2.getValue().floatValue() * percentage / (1 - percentage));
-                    percentage += 0.0005f;
+                    percentage += 0.001f;
                     pie.redraw();
                 }
             } catch (InterruptedException e) {
