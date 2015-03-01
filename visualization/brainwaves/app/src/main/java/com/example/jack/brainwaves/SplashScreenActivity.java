@@ -25,11 +25,6 @@ public class SplashScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        SharedPreferences settings = this.getSharedPreferences("appInfo", 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean("replay_animation", true);
-        editor.commit();
-
 //        // Get screen size
 //        DisplayMetrics dm = new DisplayMetrics();
 //        getWindowManager().getDefaultDisplay().getMetrics(dm);

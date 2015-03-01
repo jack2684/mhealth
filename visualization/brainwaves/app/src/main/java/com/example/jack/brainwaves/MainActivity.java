@@ -1,18 +1,13 @@
 package com.example.jack.brainwaves;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -27,6 +22,8 @@ import java.util.Observer;
 public class MainActivity extends Activity {
 
     public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
+
+    private boolean firstTime;
 
     private TextView donutSizeTextView;
     private PieChart pie;
@@ -121,22 +118,18 @@ public class MainActivity extends Activity {
         pie.redraw();
 
         data = new DynamicScaleShow();
+        firstTime = true;
     }
 
     @Override
     public void onResume() {
         // kick off the data generating thread:
-        SharedPreferences settings = this.getSharedPreferences("appInfo", 0);
-        boolean replayAnimation = settings.getBoolean("replay_animation", true);
-        data.setReplay(replayAnimation);
-        // Only play animation when necessary
-        if (replayAnimation) {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("replay_animation", false);
-            editor.commit();
+        if(firstTime) {
+            data.setReplay(true);
+            myThread = new Thread(data);
+            myThread.start();
+            firstTime = false;
         }
-        myThread = new Thread(data);
-        myThread.start();
         super.onResume();
     }
 
@@ -180,15 +173,17 @@ public class MainActivity extends Activity {
                 keepRunning = true;
                 s1.setValue(0);
                 dynamicPercentage = replay ? .0f : goldenPercentageOutput;
-                float diff = Math.abs(dynamicPercentage - goldenPercentageOutput);
+//                float diff = Math.abs(dynamicPercentage - goldenPercentageOutput);
                 while(dynamicPercentage <= goldenPercentageOutput && keepRunning) {
                     Thread.sleep(10);
                     s1.setValue(s2.getValue().floatValue() * dynamicPercentage / (1 - dynamicPercentage));
-                    dynamicPercentage += 0.001f * diff + 0.0005f;
-                    diff = Math.abs(dynamicPercentage - goldenPercentageOutput);
+//                    dynamicPercentage += 0.001f * diff + 0.0005f;
+                    dynamicPercentage += 0.001f;
+//                    diff = Math.abs(dynamicPercentage - goldenPercentageOutput);
                     updatePie();
                     updateUIInUIThread();    // This has to be done in UI Thread!!
                 }
+                replay = false;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
