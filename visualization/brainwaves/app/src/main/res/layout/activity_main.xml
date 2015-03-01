@@ -15,23 +15,22 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
-
-            <com.androidplot.pie.PieChart
-                android:id="@+id/mySimplePieChart"
-                android:layout_width="fill_parent"
-                android:layout_height="333dp"
-                androidPlot.title=""
-                androidPlot.titleWidget.labelPaint.textSize="@dimen/title_font_size"/>
-            <LinearLayout
+            <FrameLayout
                 android:layout_height="fill_parent"
                 android:layout_width="fill_parent"
                 android:layout_gravity="center"
                 android:orientation="vertical">
-
+                <com.androidplot.pie.PieChart
+                    android:id="@+id/mySimplePieChart"
+                    android:layout_width="fill_parent"
+                    android:layout_height="333dp"
+                    androidPlot.title=""
+                    androidPlot.titleWidget.labelPaint.textSize="@dimen/title_font_size"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
-                    android:layout_gravity="center"
+                    android:layout_marginTop="111dp"
+                    android:layout_gravity="center_horizontal"
                     android:text="unknown"
                     android:textSize="88dp"
                     android:textColor="@color/appRed"
@@ -39,11 +38,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
-                    android:layout_gravity="center"
+                    android:layout_marginTop="111dp"
+                    android:layout_gravity="center_horizontal"
                     android:text="Stress score\n\r"
                     android:id="@+id/donutSizeSeekLabel"/>
 
-            </LinearLayout>
+            </FrameLayout>
 
             <Button
                 android:id="@+id/startDynamicXYExButton"
