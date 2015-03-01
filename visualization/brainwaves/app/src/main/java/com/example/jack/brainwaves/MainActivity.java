@@ -1,15 +1,19 @@
 package com.example.jack.brainwaves;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.graphics.EmbossMaskFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.androidplot.pie.PieChart;
@@ -25,8 +29,12 @@ public class MainActivity extends Activity {
     public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
 
     private TextView donutSizeTextView;
-
     private PieChart pie;
+    private static final int[] buttonids = {
+            R.id.startDynamicXYExButton,
+            R.id.startOrSensorExButton,
+            R.id.museandpssbtn,
+    };
 
     private Segment s1;
     private Segment s2;
@@ -48,6 +56,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         Button startDynamicXYExButton = (Button)findViewById(R.id.startDynamicXYExButton);
         startDynamicXYExButton.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +79,17 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, MuseActivity.class));
+            }
+        });
+
+        TextView startRefeshAnimation = (TextView) findViewById(R.id.donutSizeTextView);
+        startRefeshAnimation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                data.stopThread();
+                data.setReplay(true);
+                myThread = new Thread(data);
+                myThread.start();
             }
         });
 
@@ -106,6 +126,15 @@ public class MainActivity extends Activity {
     @Override
     public void onResume() {
         // kick off the data generating thread:
+        SharedPreferences settings = this.getSharedPreferences("appInfo", 0);
+        boolean replayAnimation = settings.getBoolean("replay_animation", true);
+        data.setReplay(replayAnimation);
+        // Only play animation when necessary
+        if (replayAnimation) {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("replay_animation", false);
+            editor.commit();
+        }
         myThread = new Thread(data);
         myThread.start();
         super.onResume();
@@ -117,7 +146,13 @@ public class MainActivity extends Activity {
         super.onPause();
     }
 
-    class DynamicScaleShow implements Runnable {
+    class DynamicScaleShow extends Activity implements Runnable {
+
+        private boolean replay;
+
+        public void setReplay(boolean replay) {
+            this.replay = replay;
+        }
 
         // encapsulates management of the observers watching this datasource for update events:
         class MyObservable extends Observable {
@@ -131,7 +166,7 @@ public class MainActivity extends Activity {
         private MyObservable notifier;
         private boolean keepRunning = false;
 
-        {
+        DynamicScaleShow() {
             notifier = new MyObservable();
         }
 
@@ -144,7 +179,7 @@ public class MainActivity extends Activity {
             try {
                 keepRunning = true;
                 s1.setValue(0);
-                dynamicPercentage = .0f;
+                dynamicPercentage = replay ? .0f : goldenPercentageOutput;
                 float diff = Math.abs(dynamicPercentage - goldenPercentageOutput);
                 while(dynamicPercentage <= goldenPercentageOutput && keepRunning) {
                     Thread.sleep(10);
@@ -152,19 +187,20 @@ public class MainActivity extends Activity {
                     dynamicPercentage += 0.001f * diff + 0.0005f;
                     diff = Math.abs(dynamicPercentage - goldenPercentageOutput);
                     updatePie();
-                    updateDonutInUIThread();    // This has to be done in UI Thread!!
+                    updateUIInUIThread();    // This has to be done in UI Thread!!
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
-        protected void updateDonutInUIThread() {
+        protected void updateUIInUIThread() {
             donutSizeTextView.post(new Runnable() {
                 @Override
                 public void run() {
                     updateDonutText();
                     updateDonutColor();
+                    updateButtonsColor();
                 }
             });
         }
@@ -189,6 +225,13 @@ public class MainActivity extends Activity {
 
     protected void updateDonutColor() {
         donutSizeTextView.setTextColor(dynamicColor());
+    }
+
+    protected void updateButtonsColor() {
+        for(int i : buttonids) {
+            Button b = (Button) findViewById(i);
+            b.setBackgroundColor(dynamicColor());
+        }
     }
 
     protected int dynamicColor() {

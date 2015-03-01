@@ -2,6 +2,7 @@ package com.example.jack.brainwaves;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -17,12 +18,17 @@ import android.widget.TextView;
 public class SplashScreenActivity extends Activity {
 
     // Splash screen timer
-    private static int SPLASH_TIME_OUT = 3000;
+    private static int SPLASH_TIME_OUT = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        SharedPreferences settings = this.getSharedPreferences("appInfo", 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("replay_animation", true);
+        editor.commit();
 
 //        // Get screen size
 //        DisplayMetrics dm = new DisplayMetrics();
