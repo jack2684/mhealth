@@ -361,6 +361,7 @@ public class MuseActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         perceivedStressScaleView = ((LayoutInflater)
                 getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
                 R.layout.perceived_stress_scale, null

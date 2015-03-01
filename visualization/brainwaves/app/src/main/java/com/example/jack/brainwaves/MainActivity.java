@@ -95,8 +95,8 @@ public class MainActivity extends Activity {
         pie.setPlotMarginBottom(0);
         pie.addSegment(s1, sf1);
         pie.addSegment(s2, sf2);
-        pie.getBorderPaint().setColor(Color.BLACK);
-        pie.getBackgroundPaint().setColor(Color.BLACK);
+        pie.getBorderPaint().setColor(Color.TRANSPARENT);
+        pie.getBackgroundPaint().setColor(Color.TRANSPARENT);
         pie.getRenderer(PieRenderer.class).setDonutSize(.80f, PieRenderer.DonutMode.PERCENT);
         pie.redraw();
 

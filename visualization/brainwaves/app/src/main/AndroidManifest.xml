@@ -25,7 +25,7 @@
                 android:value="com.example.jack.brainwaves.MainActivity" />
         </activity>
         <activity
-            android:name=".brainwaves"
+            android:name=".Brainwaves"
             android:label="@string/title_activity_brainwaves" >
         </activity>
         <activity
@@ -43,6 +43,10 @@
         <activity
             android:name=".MuseActivity"
             android:label="@string/title_activity_muse" >
+        </activity>
+        <activity
+            android:name=".SplashScreenActivity"
+            android:label="@string/title_activity_splash_screen" >
         </activity>
     </application>
 

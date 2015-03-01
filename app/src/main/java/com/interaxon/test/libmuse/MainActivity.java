@@ -441,7 +441,7 @@ public class MainActivity extends Activity implements OnClickListener {
                     Log.w("Muse Headband", "doesn't make sense to connect second time to the same muse");
                     return;
                 }
-                configure_library();
+/               configure_library();
                 /**
                  * In most cases libmuse native library takes care about
                  * exceptions and recovery mechanism, but native code still

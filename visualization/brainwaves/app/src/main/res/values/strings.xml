@@ -8,13 +8,12 @@
     <string name="title_activity_display_message">My Message</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_search">Search</string>
-    <string name="title_activity_brainwaves">brainwaves</string>
+    <string name="title_activity_brainwaves">Brainwaves</string>
     <string name="title_activity_simple_xyplot">SimpleXYPlotActivity</string>
     <string name="title_activity_dynamic_xyplot">DynamicXYPlotActivity</string>
     <string name="dynamic_plot">Dynamic plot</string>
     <string name="title_activity_orientation_sensor_example">OrientationSensorExampleActivity</string>
     <string name="title_activity_muse">MuseActivity</string>
-
     <string name="connect">Connect</string>
     <string name="status">Connection Status:</string>
     <string name="disconnect">Disconnect</string>
@@ -30,5 +29,6 @@
     <string name="pss">PSS</string>
     <string name="drop">Drop</string>
     <string name="muse_elem">Signal Quality (1 or 2 is good):</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
 
 </resources>
