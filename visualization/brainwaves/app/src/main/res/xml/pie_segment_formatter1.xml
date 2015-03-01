@@ -2,5 +2,5 @@
 <config
     fillPaint.color="@color/appRed"
     labelPaint.textSize="5dp"
-    innerEdgePaint.color = "@color/black"
-    outerEdgePaint.color = "@color/black"/>
+    innerEdgePaint.color = "@color/almost_transparent"
+    outerEdgePaint.color = "@color/almost_transparent"/>

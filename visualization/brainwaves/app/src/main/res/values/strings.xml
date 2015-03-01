@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">brainwaves</string>
+    <string name="app_name">Brainwaves</string>
     <string name="action_settings">Settings</string>
     <string name="edit_message">Enter a message</string>
     <string name="button_send">Send</string>
@@ -29,6 +29,6 @@
     <string name="pss">PSS</string>
     <string name="drop">Drop</string>
     <string name="muse_elem">Signal Quality (1 or 2 is good):</string>
-    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="title_activity_splash_screen">Brainwaves</string>
 
 </resources>
