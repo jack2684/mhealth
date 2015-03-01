@@ -48,6 +48,23 @@
 
             </FrameLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="For the past week"
+                android:id="@+id/durationTextView"
+                android:layout_gravity="center_horizontal" />
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/durationSeekBar"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:max="3"
+                android:progress="2"
+                android:layout_gravity="center_horizontal" />
+
             <Button
                 android:id="@+id/startDynamicXYExButton"
                 style="@style/toc_button"

@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.androidplot.pie.PieChart;
@@ -16,8 +17,7 @@ import com.androidplot.pie.PieRenderer;
 import com.androidplot.pie.Segment;
 import com.androidplot.pie.SegmentFormatter;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.util.Random;
 
 public class MainActivity extends Activity {
 
@@ -25,7 +25,8 @@ public class MainActivity extends Activity {
 
     private boolean firstTime;
 
-    private TextView donutSizeTextView;
+    private TextView stressScoreTextView;
+    private TextView durationTextView;
     private PieChart pie;
     private static final int[] buttonids = {
             R.id.startDynamicXYExButton,
@@ -38,7 +39,7 @@ public class MainActivity extends Activity {
     SegmentFormatter sf1 = new SegmentFormatter();
     SegmentFormatter sf2 = new SegmentFormatter();
 
-    private float goldenPercentageOutput = .96f;
+    private float goldenPercentageOutput = .83f;
     private float dynamicPercentage;
 
     private Thread myThread;
@@ -79,14 +80,31 @@ public class MainActivity extends Activity {
             }
         });
 
+        SeekBar durationBar = (SeekBar) findViewById(R.id.durationSeekBar);
+        durationBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+                redrawData();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
+                // TODO Auto-generated method stub
+                translateProgress2Duration(seekBar);
+            }
+        });
+
         TextView startRefeshAnimation = (TextView) findViewById(R.id.donutSizeTextView);
         startRefeshAnimation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                data.stopThread();
-                data.setReplay(true);
-                myThread = new Thread(data);
-                myThread.start();
+                redrawData();
             }
         });
 
@@ -95,10 +113,10 @@ public class MainActivity extends Activity {
         dynamicColorB = 80;
         dynamicPercentage = .0f;
 
-        // initialize our XYPlot reference:
+        // initialize Views:
         pie = (PieChart) findViewById(R.id.mySimplePieChart);
-
-        donutSizeTextView = (TextView) findViewById(R.id.donutSizeTextView);
+        stressScoreTextView = (TextView) findViewById(R.id.donutSizeTextView);
+        durationTextView = (TextView) findViewById(R.id.durationTextView);
         updateDonutText();
         updateDonutColor();
 
@@ -114,7 +132,7 @@ public class MainActivity extends Activity {
         pie.addSegment(s2, sf2);
         pie.getBorderPaint().setColor(Color.TRANSPARENT);
         pie.getBackgroundPaint().setColor(Color.TRANSPARENT);
-        pie.getRenderer(PieRenderer.class).setDonutSize(.80f, PieRenderer.DonutMode.PERCENT);
+        pie.getRenderer(PieRenderer.class).setDonutSize(.85f, PieRenderer.DonutMode.PERCENT);
         pie.redraw();
 
         data = new DynamicScaleShow();
@@ -125,9 +143,7 @@ public class MainActivity extends Activity {
     public void onResume() {
         // kick off the data generating thread:
         if(firstTime) {
-            data.setReplay(true);
-            myThread = new Thread(data);
-            myThread.start();
+            redrawData();
             firstTime = false;
         }
         super.onResume();
@@ -141,27 +157,7 @@ public class MainActivity extends Activity {
 
     class DynamicScaleShow extends Activity implements Runnable {
 
-        private boolean replay;
-
-        public void setReplay(boolean replay) {
-            this.replay = replay;
-        }
-
-        // encapsulates management of the observers watching this datasource for update events:
-        class MyObservable extends Observable {
-            @Override
-            public void notifyObservers() {
-                setChanged();
-                super.notifyObservers();
-            }
-        }
-
-        private MyObservable notifier;
         private boolean keepRunning = false;
-
-        DynamicScaleShow() {
-            notifier = new MyObservable();
-        }
 
         public void stopThread() {
             keepRunning = false;
@@ -172,25 +168,25 @@ public class MainActivity extends Activity {
             try {
                 keepRunning = true;
                 s1.setValue(0);
-                dynamicPercentage = replay ? .0f : goldenPercentageOutput;
+                dynamicPercentage = .0f;
 //                float diff = Math.abs(dynamicPercentage - goldenPercentageOutput);
+                int interval = 20;
+                int animat_duration = 3000;
+                float step = interval * goldenPercentageOutput / animat_duration;
                 while(dynamicPercentage <= goldenPercentageOutput && keepRunning) {
-                    Thread.sleep(10);
+                    Thread.sleep(interval);
                     s1.setValue(s2.getValue().floatValue() * dynamicPercentage / (1 - dynamicPercentage));
-//                    dynamicPercentage += 0.001f * diff + 0.0005f;
-                    dynamicPercentage += 0.001f;
-//                    diff = Math.abs(dynamicPercentage - goldenPercentageOutput);
+                    dynamicPercentage += step;
                     updatePie();
                     updateUIInUIThread();    // This has to be done in UI Thread!!
                 }
-                replay = false;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
         protected void updateUIInUIThread() {
-            donutSizeTextView.post(new Runnable() {
+            stressScoreTextView.post(new Runnable() {
                 @Override
                 public void run() {
                     updateDonutText();
@@ -199,14 +195,38 @@ public class MainActivity extends Activity {
                 }
             });
         }
+    }
 
-        public void addObserver(Observer observer) {
-            notifier.addObserver(observer);
-        }
+    protected void redrawData() {
+        // @TODO: this is just demo data, will replace with realworld data later
+        Random rand = new Random();
+        goldenPercentageOutput = (60 + rand.nextInt(30)) / 100.f;
+        data.stopThread();
+        myThread = new Thread(data);
+        myThread.start();
+    }
 
-        public void removeObserver(Observer observer) {
-            notifier.deleteObserver(observer);
-        }
+    protected void translateProgress2Duration(SeekBar seekBar) {
+        final int progress = seekBar.getProgress();
+        durationTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                String base = "For the past one ";
+                switch (progress) {
+                    case 1:
+                        durationTextView.setText(base + "day");
+                        break;
+                    case 2:
+                        durationTextView.setText(base + "week");
+                        break;
+                    case 3:
+                        durationTextView.setText(base + "month");
+                        break;
+                    default:
+                        durationTextView.setText("For now");
+                }
+            }
+        });
     }
 
     protected void updatePie() {
@@ -215,11 +235,11 @@ public class MainActivity extends Activity {
     }
 
     protected void updateDonutText() {
-        donutSizeTextView.setText(String.format("%.0f", dynamicPercentage * 100));
+        stressScoreTextView.setText(String.format("%.0f", dynamicPercentage * 100));
     }
 
     protected void updateDonutColor() {
-        donutSizeTextView.setTextColor(dynamicColor());
+        stressScoreTextView.setTextColor(dynamicColor());
     }
 
     protected void updateButtonsColor() {

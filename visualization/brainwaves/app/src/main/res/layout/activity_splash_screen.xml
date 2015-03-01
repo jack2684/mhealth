@@ -19,7 +19,9 @@
             android:textColor="#ff160c1c"
             android:gravity="center_horizontal"
             android:layout_marginTop="285dp"
-            android:text="Your brain knows you better than yourself..." />
+            android:shadowColor="@color/black"
+            android:shadowRadius="0"
+            android:text="Your brain knows you better than yourself\n(loading...)" />
 
 
     <TextView
