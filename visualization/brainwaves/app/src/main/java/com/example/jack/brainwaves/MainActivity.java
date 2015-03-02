@@ -186,7 +186,7 @@ public class MainActivity extends FragmentActivity {
         @Override
         public Fragment getItem(int position) {
             switch(position) {
-                case 2:
+                case 0:
                     return HomePieFragment.newInstance(position);
                 default:
                     return SuperAwesomeCardFragment.newInstance(position);

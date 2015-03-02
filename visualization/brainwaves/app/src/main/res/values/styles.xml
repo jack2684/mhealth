@@ -70,11 +70,5 @@
         <item name="android:shadowRadius">2</item>
     </style>
 
-    <color name="actionbar_text">#fff0f0f0</color>
-    <color name="black">#ff000000</color>
-    <color name="white">#ffffffff</color>
-    <color name="almost_transparent">#21000000</color>
-    <color name="appRed">#ffe35051</color>
-    <color name="lightGrey">#fff0f0f0</color>
-    <color name="background_window">#FFE5E5E5</color>
+
 </resources>

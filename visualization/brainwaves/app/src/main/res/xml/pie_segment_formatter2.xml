@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config
-    fillPaint.color="@color/lightGrey"
+    fillPaint.color="@color/background_window"
     labelPaint.textSize="5dp"
     innerEdgePaint.color = "@color/black"
     radialEdgeColor.color = "@color/black"

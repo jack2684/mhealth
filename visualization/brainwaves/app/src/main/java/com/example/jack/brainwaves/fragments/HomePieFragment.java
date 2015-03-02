@@ -1,8 +1,9 @@
 package com.example.jack.brainwaves.fragments;
 
-import android.content.SyncAdapterType;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.support.v4.app.Fragment;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.app.Activity;
 import android.content.Context;
@@ -18,6 +19,7 @@ import com.androidplot.pie.PieRenderer;
 import com.androidplot.pie.Segment;
 import com.androidplot.pie.SegmentFormatter;
 import com.example.jack.brainwaves.R;
+import com.example.jack.brainwaves.helper.OrientationHelper;
 
 import java.util.Random;
 
@@ -33,9 +35,12 @@ public class HomePieFragment extends Fragment {
 
 
     private boolean firstTime;
+    private boolean isLandscape;
 
     private TextView stressScoreTextView;
+    private TextView stressScoreLabel;
     private TextView durationTextView;
+    private SeekBar durationSeekBar;
     private PieChart pie;
 
     private Segment s1;
@@ -71,43 +76,23 @@ public class HomePieFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mMainView =  inflater.inflate(R.layout.activity_pie_chart, container, false);
         mMainActivity = getActivity();
-
-        SeekBar durationBar = (SeekBar) findViewById(R.id.durationSeekBar);
-        durationBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
-                redrawData();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
-                // TODO Auto-generated method stub
-                translateProgress2Duration(seekBar);
-            }
-        });
-
-        TextView startRefeshAnimation = (TextView) findViewById(R.id.donutSizeTextView);
-        startRefeshAnimation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                redrawData();
-            }
-        });
+        isLandscape = OrientationHelper.isLandsacpe(mMainActivity);
+        if(isLandscape) {
+            mMainView = inflater.inflate(R.layout.fragment_pie_chart_landscape, container, false);
+        } else {
+            mMainView = inflater.inflate(R.layout.fragment_pie_chart, container, false);
+        }
 
         // initialize Views:
         pie = (PieChart) findViewById(R.id.mySimplePieChart);
-        stressScoreTextView = (TextView) findViewById(R.id.donutSizeTextView);
+        stressScoreTextView = (TextView) findViewById(R.id.stressScoreTextView);
+        stressScoreLabel = (TextView) findViewById(R.id.stressScoreLabel);
         durationTextView = (TextView) findViewById(R.id.durationTextView);
+        durationSeekBar = (SeekBar) findViewById(R.id.durationSeekBar);
         updateDonutText();
         updateDonutColor();
+        updateSeekBarColor();
 
         s1 = new Segment("", 20);
         s2 = new Segment("", 50);
@@ -126,6 +111,32 @@ public class HomePieFragment extends Fragment {
 
         data = new DynamicScaleShow();
         firstTime = true;
+
+        durationSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+                redrawData();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                // TODO Auto-generated method stub
+                translateProgress2Duration(seekBar);
+            }
+        });
+
+        stressScoreTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                redrawData();
+            }
+        });
 
         return mMainView;
     }
@@ -170,7 +181,7 @@ public class HomePieFragment extends Fragment {
                 dynamicPercentage = .0f;
 //                float diff = Math.abs(dynamicPercentage - goldenPercentageOutput);
                 int interval = 20;
-                int animat_duration = 3000;
+                int animat_duration = (int) (3000 + 2000 * goldenPercentageOutput);
                 float step = interval * goldenPercentageOutput / animat_duration;
                 while(dynamicPercentage <= goldenPercentageOutput && keepRunning) {
                     Thread.sleep(interval);
@@ -191,6 +202,7 @@ public class HomePieFragment extends Fragment {
                 public void run() {
                     updateDonutText();
                     updateDonutColor();
+                    updateSeekBarColor();
                 }
             });
         }
@@ -210,7 +222,7 @@ public class HomePieFragment extends Fragment {
         durationTextView.post(new Runnable() {
             @Override
             public void run() {
-                String base = "For the past one ";
+                String base = "Since: \npast 1 ";
                 switch (progress) {
                     case 1:
                         durationTextView.setText(base + "day");
@@ -228,7 +240,7 @@ public class HomePieFragment extends Fragment {
                         durationTextView.setText(base + "year");
                         break;
                     default:
-                        durationTextView.setText("For now");
+                        durationTextView.setText("Since: \nnow");
                 }
             }
         });
@@ -245,6 +257,12 @@ public class HomePieFragment extends Fragment {
 
     protected void updateDonutColor() {
         stressScoreTextView.setTextColor(getDynamicColor());
+    }
+
+    protected void updateSeekBarColor() {
+//        LayerDrawable ld = (LayerDrawable) durationSeekBar.getProgressDrawable();
+//        ClipDrawable d1 = (ClipDrawable) ld.findDrawableByLayerId(R.id.durationSeekBar);
+//        d1.setColorFilter(getDynamicColor(), PorterDuff.Mode.SRC_IN);
     }
 
     protected int getDynamicColor() {

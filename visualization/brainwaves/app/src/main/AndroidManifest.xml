@@ -38,10 +38,6 @@
             android:name=".MuseActivity"
             android:label="@string/title_activity_muse" >
         </activity>
-        <activity
-            android:name=".PieChartActivity"
-            android:label="@string/title_activity_pie_chart" >
-        </activity>
     </application>
 
 </manifest>
