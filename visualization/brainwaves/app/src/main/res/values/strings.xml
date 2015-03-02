@@ -30,5 +30,8 @@
     <string name="drop">Drop</string>
     <string name="muse_elem">Signal Quality (1 or 2 is good):</string>
     <string name="title_activity_splash_screen">Brainwaves</string>
+    <string name="title_activity_pie_chart">PieChartActivity</string>
+    <string name="first">firsttab</string>
+    <string name="last">lasttab</string>
 
 </resources>
