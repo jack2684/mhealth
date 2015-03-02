@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 // Monitor the phone's orientation sensor and plot the resulting azimuth pitch and roll values.
 // See: http://developer.android.com/reference/android/hardware/SensorEvent.html
-public class OrientationSensorExampleActivity extends Activity implements SensorEventListener
+public class RealtimePlotActivity extends Activity implements SensorEventListener
 {
 
     private static final int HISTORY_SIZE = 300;            // number of points to plot in history
@@ -46,7 +46,7 @@ public class OrientationSensorExampleActivity extends Activity implements Sensor
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_orientation_sensor_example);
+        setContentView(R.layout.activity_realtime_plot);
 
         // setup the APR Levels plot:
         aprLevelsPlot = (XYPlot) findViewById(R.id.aprLevelsPlot);

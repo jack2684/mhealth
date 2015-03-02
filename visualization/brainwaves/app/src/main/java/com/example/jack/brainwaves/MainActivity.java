@@ -29,7 +29,7 @@ public class MainActivity extends Activity {
     private TextView durationTextView;
     private PieChart pie;
     private static final int[] buttonids = {
-            R.id.startDynamicXYExButton,
+            R.id.startLogXYPlotButton,
             R.id.startOrSensorExButton,
             R.id.museandpssbtn,
     };
@@ -47,8 +47,8 @@ public class MainActivity extends Activity {
     private DynamicScaleShow data;
 
     int dynamicColorR = 255;
-    int dynamicColorG = 80;
-    int dynamicColorB = 80;
+    int dynamicColorG = 150;
+    int dynamicColorB = 150;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +56,11 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        Button startDynamicXYExButton = (Button)findViewById(R.id.startDynamicXYExButton);
-        startDynamicXYExButton.setOnClickListener(new View.OnClickListener() {
+        Button startLogXYPlotButton = (Button)findViewById(R.id.startLogXYPlotButton);
+        startLogXYPlotButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, DynamicXYPlotActivity.class));
+                startActivity(new Intent(MainActivity.this, LogXYPlotActivity.class));
             }
         });
 
@@ -68,7 +68,7 @@ public class MainActivity extends Activity {
         startOrSensorExButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, OrientationSensorExampleActivity.class));
+                startActivity(new Intent(MainActivity.this, RealtimePlotActivity.class));
             }
         });
 
@@ -108,11 +108,6 @@ public class MainActivity extends Activity {
             }
         });
 
-        dynamicColorR = 255;
-        dynamicColorG = 80;
-        dynamicColorB = 80;
-        dynamicPercentage = .0f;
-
         // initialize Views:
         pie = (PieChart) findViewById(R.id.mySimplePieChart);
         stressScoreTextView = (TextView) findViewById(R.id.donutSizeTextView);
@@ -124,7 +119,7 @@ public class MainActivity extends Activity {
         s2 = new Segment("", 50);
 
         sf1.configure(getApplicationContext(), R.xml.pie_segment_formatter1);
-        sf1.getFillPaint().setColor(dynamicColor());
+        sf1.getFillPaint().setColor(getDynamicColor());
         sf2.configure(getApplicationContext(), R.xml.pie_segment_formatter2);
 
         pie.setPlotMarginBottom(0);
@@ -200,7 +195,7 @@ public class MainActivity extends Activity {
     protected void redrawData() {
         // @TODO: this is just demo data, will replace with realworld data later
         Random rand = new Random();
-        goldenPercentageOutput = (60 + rand.nextInt(30)) / 100.f;
+        goldenPercentageOutput = (90 + rand.nextInt(10)) / 100.f;
         data.stopThread();
         myThread = new Thread(data);
         myThread.start();
@@ -230,7 +225,7 @@ public class MainActivity extends Activity {
     }
 
     protected void updatePie() {
-        sf1.getFillPaint().setColor(dynamicColor());
+        sf1.getFillPaint().setColor(getDynamicColor());
         pie.redraw();
     }
 
@@ -239,22 +234,23 @@ public class MainActivity extends Activity {
     }
 
     protected void updateDonutColor() {
-        stressScoreTextView.setTextColor(dynamicColor());
+        stressScoreTextView.setTextColor(getDynamicColor());
     }
 
     protected void updateButtonsColor() {
         for(int i : buttonids) {
             Button b = (Button) findViewById(i);
-            b.setBackgroundColor(dynamicColor());
+            b.setBackgroundColor(getDynamicColor());
         }
     }
 
-    protected int dynamicColor() {
+    protected int getDynamicColor() {
         Color c = new Color();
         return c.rgb(
-                Math.round(dynamicColorR * dynamicPercentage * 0.35f) + 102,
-                Math.round(dynamicColorG * (1 - dynamicPercentage) * 0.30f) + 60,
-                Math.round(dynamicColorB * (1 - dynamicPercentage) * 0.30f) + 60
+                Math.round(dynamicColorR * dynamicPercentage),
+                Math.round(dynamicColorG * dynamicPercentage),
+//                Math.round(dynamicColorB * (1 - dynamicPercentage) * 0.30f) + 60
+                dynamicColorB
         );
     }
 

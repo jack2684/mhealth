@@ -15,7 +15,7 @@ import com.androidplot.xy.XYSeries;
 import java.util.Arrays;
 
 
-public class SimpleXYPlotActivity extends Activity {
+public class LogXYPlotActivity extends Activity {
 
     private XYPlot plot;
 
@@ -28,7 +28,7 @@ public class SimpleXYPlotActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE);
 
-        setContentView(R.layout.activity_simple_xyplot);
+        setContentView(R.layout.activity_log_xyplot);
 
         // initialize our XYPlot reference:
         plot = (XYPlot) findViewById(R.id.mySimpleXYPlot);
@@ -71,7 +71,7 @@ public class SimpleXYPlotActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_simple_xyplot, menu);
+        getMenuInflater().inflate(R.menu.menu_log_xyplot, menu);
         return true;
     }
 

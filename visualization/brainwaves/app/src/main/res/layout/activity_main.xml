@@ -65,16 +65,23 @@
                 android:progress="2"
                 android:layout_gravity="center_horizontal" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\n"
+                android:id="@+id/blanktext"
+                android:layout_gravity="center_horizontal" />
+
             <Button
-                android:id="@+id/startDynamicXYExButton"
+                android:id="@+id/startLogXYPlotButton"
                 style="@style/toc_button"
-                android:text="A Dynamic XY Plot"/>
+                android:text="Stress data log"/>
             <Button android:id="@+id/startOrSensorExButton"
                 style="@style/toc_button"
-                android:text="Realtime Orientation Sensor Plot"/>
+                android:text="Realtime Muse data"/>
             <Button android:id="@+id/museandpssbtn"
                 style="@style/toc_button"
-                android:text="Muse and PSS"/>
+                android:text="Muse and PSS config"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

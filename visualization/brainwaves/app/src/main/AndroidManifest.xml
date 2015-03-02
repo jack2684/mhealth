@@ -6,7 +6,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@android:style/Theme.Holo.NoActionBar">
         <activity
             android:name=".SplashScreenActivity"
             android:screenOrientation="portrait"
@@ -19,19 +19,11 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar">
         </activity>
         <activity
-            android:name=".DisplayMessageActivity"
-            android:label="@string/title_activity_display_message"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.jack.brainwaves.MainActivity" />
-        </activity>
-        <activity
-            android:name=".SimpleXYPlotActivity"
+            android:name=".LogXYPlotActivity"
             android:label="@string/title_activity_simple_xyplot" >
         </activity>
         <activity
@@ -39,7 +31,7 @@
             android:label="@string/title_activity_dynamic_xyplot" >
         </activity>
         <activity
-            android:name=".OrientationSensorExampleActivity"
+            android:name=".RealtimePlotActivity"
             android:label="@string/title_activity_orientation_sensor_example" >
         </activity>
         <activity
