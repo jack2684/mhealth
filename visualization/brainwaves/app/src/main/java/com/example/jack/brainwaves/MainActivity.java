@@ -47,8 +47,8 @@ public class MainActivity extends Activity {
     private DynamicScaleShow data;
 
     int dynamicColorR = 255;
-    int dynamicColorG = 150;
-    int dynamicColorB = 150;
+    int dynamicColorG = 125;
+    int dynamicColorB = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,9 +248,8 @@ public class MainActivity extends Activity {
         Color c = new Color();
         return c.rgb(
                 Math.round(dynamicColorR * dynamicPercentage),
-                Math.round(dynamicColorG * dynamicPercentage),
-//                Math.round(dynamicColorB * (1 - dynamicPercentage) * 0.30f) + 60
-                dynamicColorB
+                dynamicColorG,
+                Math.round(dynamicColorB)
         );
     }
 
