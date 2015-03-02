@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppBaseTheme" parent="android:Theme.Light"></style>
+    <style name="AppBaseTheme" parent="android:Theme.Holo.NoActionBar"></style>
 
     <style name="AppTheme" parent="AppBaseTheme">
         <item name="android:windowBackground">@color/background_window</item>

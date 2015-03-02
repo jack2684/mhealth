@@ -1,14 +1,15 @@
-package com.example.jack.brainwaves;
+package com.example.jack.brainwaves.fragments;
 
-import android.app.Activity;
+import android.content.SyncAdapterType;
+import android.support.v4.app.Fragment;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.content.Intent;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -16,21 +17,26 @@ import com.androidplot.pie.PieChart;
 import com.androidplot.pie.PieRenderer;
 import com.androidplot.pie.Segment;
 import com.androidplot.pie.SegmentFormatter;
+import com.example.jack.brainwaves.R;
 
 import java.util.Random;
 
-public class PieChartActivity extends Activity {
+/**
+ * Created by jack on 3/2/15.
+ */
+public class HomePieFragment extends Fragment {
+
+    protected View mMainView;
+    protected Activity mMainActivity;
+    private static final String ARG_POSITION = "position";
+    private int position;
+
 
     private boolean firstTime;
 
     private TextView stressScoreTextView;
     private TextView durationTextView;
     private PieChart pie;
-//    private static final int[] buttonids = {
-//            R.id.startLogXYPlotButton,
-//            R.id.startOrSensorExButton,
-//            R.id.museandpssbtn,
-//    };
 
     private Segment s1;
     private Segment s2;
@@ -48,35 +54,25 @@ public class PieChartActivity extends Activity {
     int dynamicColorG = 100;
     int dynamicColorB = 40;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    public static HomePieFragment newInstance(int position) {
+        HomePieFragment f = new HomePieFragment();
+        Bundle b = new Bundle();
+        b.putInt(ARG_POSITION, position);
+        f.setArguments(b);
+        return f;
+    }
 
-//        Button startLogXYPlotButton = (Button)findViewById(R.id.startLogXYPlotButton);
-//        startLogXYPlotButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(PieChartActivity.this, LogXYPlotActivity.class));
-//            }
-//        });
-//
-//        Button startOrSensorExButton = (Button) findViewById(R.id.startOrSensorExButton);
-//        startOrSensorExButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(PieChartActivity.this, RealtimePlotActivity.class));
-//            }
-//        });
-//
-//        Button startMuseButton = (Button) findViewById(R.id.museandpssbtn);
-//        startMuseButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(PieChartActivity.this, MuseActivity.class));
-//            }
-//        });
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        position = getArguments().getInt(ARG_POSITION);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        mMainView =  inflater.inflate(R.layout.activity_pie_chart, container, false);
+        mMainActivity = getActivity();
 
         SeekBar durationBar = (SeekBar) findViewById(R.id.durationSeekBar);
         durationBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -130,6 +126,16 @@ public class PieChartActivity extends Activity {
 
         data = new DynamicScaleShow();
         firstTime = true;
+
+        return mMainView;
+    }
+
+    private final View findViewById(int id) {
+        return mMainView.findViewById(id);
+    }
+
+    private Context getApplicationContext() {
+        return mMainActivity.getApplicationContext();
     }
 
     @Override
@@ -173,6 +179,7 @@ public class PieChartActivity extends Activity {
                     updatePie();
                     updateUIInUIThread();    // This has to be done in UI Thread!!
                 }
+                System.out.println(this.getClass().getName() + ": Animation down");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -184,7 +191,6 @@ public class PieChartActivity extends Activity {
                 public void run() {
                     updateDonutText();
                     updateDonutColor();
-//                    updateButtonsColor();
                 }
             });
         }
@@ -241,13 +247,6 @@ public class PieChartActivity extends Activity {
         stressScoreTextView.setTextColor(getDynamicColor());
     }
 
-    protected void updateButtonsColor() {
-//        for(int i : buttonids) {
-//            Button b = (Button) findViewById(i);
-//            b.setBackgroundColor(getDynamicColor());
-//        }
-    }
-
     protected int getDynamicColor() {
         Color c = new Color();
         return c.rgb(
@@ -255,27 +254,5 @@ public class PieChartActivity extends Activity {
                 dynamicColorG,
                 dynamicColorB
         );
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -20,6 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.example.jack.brainwaves.fragments.HomePieFragment;
+import com.example.jack.brainwaves.fragments.SuperAwesomeCardFragment;
 
 public class MainActivity extends FragmentActivity {
 
@@ -161,8 +164,7 @@ public class MainActivity extends FragmentActivity {
 
     public class MyPagerAdapter extends FragmentPagerAdapter {
 
-        private final String[] TITLES = {"Categories", "Home", "Top Paid", "Top Free", "Top Grossing", "Top New Paid",
-                "Top New Free", "Trending"};
+        private final String[] TITLES = {"Home", "Log over time", "Real time plot", "PSS Questionnaires", "Muse Config", "Settings", "About"};
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -178,9 +180,17 @@ public class MainActivity extends FragmentActivity {
             return TITLES.length;
         }
 
+        /*@TODO: return different fragment based on the postiion
+            Apparently onCreateView in Fragment is corresponding to onCreate in Activity
+         */
         @Override
         public Fragment getItem(int position) {
-            return SuperAwesomeCardFragment.newInstance(position);
+            switch(position) {
+                case 2:
+                    return HomePieFragment.newInstance(position);
+                default:
+                    return SuperAwesomeCardFragment.newInstance(position);
+            }
         }
 
     }

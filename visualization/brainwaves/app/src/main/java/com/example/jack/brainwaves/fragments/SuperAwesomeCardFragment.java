@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.jack.brainwaves;
+package com.example.jack.brainwaves.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +26,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
+
+import com.example.jack.brainwaves.R;
 
 public class SuperAwesomeCardFragment extends Fragment {
 
