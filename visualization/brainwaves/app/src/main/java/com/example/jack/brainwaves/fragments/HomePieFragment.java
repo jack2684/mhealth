@@ -106,7 +106,7 @@ public class HomePieFragment extends Fragment {
         pie.addSegment(s2, sf2);
         pie.getBorderPaint().setColor(Color.TRANSPARENT);
         pie.getBackgroundPaint().setColor(Color.TRANSPARENT);
-        pie.getRenderer(PieRenderer.class).setDonutSize(.85f, PieRenderer.DonutMode.PERCENT);
+        pie.getRenderer(PieRenderer.class).setDonutSize(.95f, PieRenderer.DonutMode.PERCENT);
         pie.redraw();
 
         data = new DynamicScaleShow();
