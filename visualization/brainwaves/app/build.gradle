@@ -22,5 +22,6 @@ android {
 dependencies {
     compile 'com.androidplot:androidplot-core:0.6.1'
     compile "com.android.support:support-v13:18.0.0"
+    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile files('libs/libmuseandroid.jar')
 }
