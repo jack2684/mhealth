@@ -122,18 +122,6 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
         myThread.start();
     }
 
-    @Override
-    public void onResume() {
-        // kick off the data generating thread:
-        super.onResume();
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
     /**
      * circularAnimation will fill the outer ring while applying a color effect from red to green
      *
@@ -259,10 +247,6 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
                 stressScoreTextView.setText(s);
             }
         });
-    }
-
-    private final View findViewById(int id) {
-        return mMainView.findViewById(id);
     }
 
     protected void translateProgress2Duration() {

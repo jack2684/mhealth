@@ -7,7 +7,6 @@ package com.example.jack.brainwaves;
 
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -16,7 +15,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
@@ -35,7 +33,6 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
 
 import com.interaxon.libmuse.Accelerometer;
 import com.interaxon.libmuse.ConnectionState;
@@ -368,7 +365,7 @@ public class MuseActivity extends Activity implements OnClickListener {
         );
         dataView = ((LayoutInflater)
                 getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
-                R.layout.activity_muse, null
+                R.layout.fragment_muse, null
         );
 
         setContentView(R.layout.root_layout);
@@ -386,10 +383,7 @@ public class MuseActivity extends Activity implements OnClickListener {
         Button pauseButton = (Button) findViewById(R.id.pause);
         pauseButton.setOnClickListener(this);
 
-        Button button = (Button) findViewById(R.id.pss);
-        button.setOnClickListener(this);
-
-        button = (Button) findViewById(R.id.pss_close);
+        Button button = (Button) findViewById(R.id.pss_close);
         button.setOnClickListener(this);
 
         button = (Button) findViewById(R.id.pss_next);
@@ -468,10 +462,6 @@ public class MuseActivity extends Activity implements OnClickListener {
             if (muse != null) {
                 muse.enableDataTransmission(dataTransmission);
             }
-        }
-        else if (v.getId() == R.id.pss) {
-            dataView.setVisibility(View.GONE);
-            perceivedStressScaleView.setVisibility(View.VISIBLE);
         }
         else if (v.getId() == R.id.pss_close) {
             perceivedStressScaleView.setVisibility(View.GONE);

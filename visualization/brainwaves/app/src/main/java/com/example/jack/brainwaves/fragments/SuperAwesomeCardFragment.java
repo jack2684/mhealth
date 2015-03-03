@@ -70,25 +70,32 @@ public class SuperAwesomeCardFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return createCardView("CARD " + (position + 1));
+	}
 
-		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+    public View createCardView(String s) {
+        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
-		FrameLayout fl = new FrameLayout(getActivity());
-		fl.setLayoutParams(params);
+        FrameLayout fl = new FrameLayout(getActivity());
+        fl.setLayoutParams(params);
 
-		final int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources()
+        final int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources()
                 .getDisplayMetrics());
 
-		TextView v = new TextView(getActivity());
-		params.setMargins(margin, margin, margin, margin);
-		v.setLayoutParams(params);
-		v.setLayoutParams(params);
-		v.setGravity(Gravity.CENTER);
-		v.setBackgroundResource(R.drawable.background_card);
-		v.setText("CARD " + (position + 1));
+        TextView v = new TextView(getActivity());
+        params.setMargins(margin, margin, margin, margin);
+        v.setLayoutParams(params);
+        v.setLayoutParams(params);
+        v.setGravity(Gravity.CENTER);
+        v.setBackgroundResource(R.drawable.background_card);
+        v.setText(s);
+        fl.addView(v);
 
-		fl.addView(v);
-		return fl;
-	}
+        return fl;
+    }
+
+    protected final View findViewById(int id) {
+        return mMainView.findViewById(id);
+    }
 
 }
