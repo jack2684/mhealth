@@ -66,16 +66,17 @@
                     android:textColor="@color/dark"
                     android:id="@+id/durationTextView"
                     android:layout_gravity="center_horizontal" />
-
-                <SeekBar
+                <com.appyvet.rangebar.RangeBar
+                    xmlns:custom="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/materialBar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/durationSeekBar"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:max="5"
-                    android:progress="2"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_height="72dp"
+                    custom:tickStart="0"
+                    custom:tickInterval="1"
+                    custom:tickEnd="7"
+                    custom:rangeBar="false"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

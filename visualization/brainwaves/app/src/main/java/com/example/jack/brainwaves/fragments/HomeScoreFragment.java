@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.appyvet.rangebar.RangeBar;
 import com.example.jack.brainwaves.R;
 import com.example.jack.brainwaves.helper.OrientationHelper;
 import com.sefford.circularprogressdrawable.CircularProgressDrawable;
@@ -42,9 +43,11 @@ public class HomeScoreFragment extends Fragment {
     // Views
     private TextView stressScoreTextView;
     private TextView durationTextView;
-    private SeekBar durationSeekBar;
-    private CircularProgressDrawable circularDrawable;
     private ImageView ivDrawable;
+    private RangeBar durationSeekBar;
+
+    // Draweable
+    private CircularProgressDrawable circularDrawable;
 
     // Key to the show
     private float normClassifierOutput;     // Normalized, expected to be 0 to 1
@@ -75,24 +78,21 @@ public class HomeScoreFragment extends Fragment {
         // initialize Views:
         stressScoreTextView = (TextView) findViewById(R.id.stressScoreTextView);
         durationTextView = (TextView) findViewById(R.id.durationTextView);
-        durationSeekBar = (SeekBar) findViewById(R.id.durationSeekBar);
+        ivDrawable = (ImageView) findViewById(R.id.iv_drawable);
+        durationSeekBar = (RangeBar) findViewById(R.id.materialBar);
+        durationSeekBar.setSelectorColor(getResources().getColor(android.R.color.darker_gray));
+        durationSeekBar.setConnectingLineColor(getResources().getColor(android.R.color.darker_gray));
+        durationSeekBar.setPinColor(getResources().getColor(android.R.color.darker_gray));
+        durationSeekBar.setSeekPinByIndex(3);
+        translateProgress2Duration();
 
-        durationSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        durationSeekBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
+            public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex,
+                                              int rightPinIndex,
+                                              String leftPinValue, String rightPinValue) {
+                translateProgress2Duration();
                 updateNormClassifierOutput();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // TODO Auto-generated method stub
-                translateProgress2Duration(seekBar);
             }
         });
 
@@ -109,8 +109,7 @@ public class HomeScoreFragment extends Fragment {
 
     protected void updateNormClassifierOutput() {
         // @TODO: this is just demo data, will replace with realworld data later
-        Random rand = new Random();
-        normClassifierOutput = (30 + rand.nextInt(70)) / 100.f;
+        normClassifierOutput =  ( (float)(durationSeekBar.getRightIndex() + 3) % durationSeekBar.getTickCount() ) / durationSeekBar.getTickCount();
         scoreAnimater.stopThread();
         circularAnimation().start();
         myThread = new Thread(scoreAnimater);
@@ -121,7 +120,6 @@ public class HomeScoreFragment extends Fragment {
     public void onResume() {
         // kick off the data generating thread:
         super.onResume();
-        ivDrawable = (ImageView) findViewById(R.id.iv_drawable);
         circularDrawable = new CircularProgressDrawable.Builder()
                 .setRingWidth(getResources().getDimensionPixelSize(R.dimen.drawable_ring_size))
                 .setOutlineColor(getResources().getColor(android.R.color.darker_gray))
@@ -159,31 +157,40 @@ public class HomeScoreFragment extends Fragment {
 
     private ObjectAnimator setDynamicColorsArguement() {
         ObjectAnimator colorAnimator;
-        if (normClassifierOutput < 0.2) {
+        if (normClassifierOutput < 0.16) {
             return ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
                     getResources().getColor(android.R.color.holo_green_light));
-        } else if (normClassifierOutput < 0.4) {
+        } else if (normClassifierOutput < 0.33) {
             return ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
                     getResources().getColor(android.R.color.holo_green_light),
                     getResources().getColor(android.R.color.holo_blue_light));
-        } else if (normClassifierOutput < 0.6) {
+        } else if (normClassifierOutput < 0.5) {
             return ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
                     getResources().getColor(android.R.color.holo_green_light),
                     getResources().getColor(android.R.color.holo_blue_light),
                     getResources().getColor(android.R.color.holo_purple));
-        } else if (normClassifierOutput < 0.8) {
+        } else if (normClassifierOutput < 0.66) {
             return ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
                     getResources().getColor(android.R.color.holo_green_light),
                     getResources().getColor(android.R.color.holo_blue_light),
                     getResources().getColor(android.R.color.holo_purple),
                     getResources().getColor(android.R.color.holo_orange_light));
-        } else {
+        } else if (normClassifierOutput < 0.95) {
             return ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
                     getResources().getColor(android.R.color.holo_green_light),
                     getResources().getColor(android.R.color.holo_blue_light),
                     getResources().getColor(android.R.color.holo_purple),
                     getResources().getColor(android.R.color.holo_orange_light),
                     getResources().getColor(android.R.color.holo_red_dark));
+        } else {
+            return ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
+                    getResources().getColor(android.R.color.holo_green_light),
+                    getResources().getColor(android.R.color.holo_blue_light),
+                    getResources().getColor(android.R.color.holo_purple),
+                    getResources().getColor(android.R.color.holo_orange_light),
+                    getResources().getColor(android.R.color.holo_red_dark),
+                    getResources().getColor(android.R.color.black)
+                    );
         }
     }
 
@@ -193,14 +200,13 @@ public class HomeScoreFragment extends Fragment {
 
         public void stopThread() {
             keepRunning = false;
-            dynamicPercentage = 0.f;
-            updateScoreTextViewInUiThread();
         }
 
         //@Override
         public void run() {
             try {
                 keepRunning = true;
+                dynamicPercentage = 0.f;
                 float step = SLEEP_INTER * normClassifierOutput / ANIM_DURATION;
                 while(dynamicPercentage <= normClassifierOutput && keepRunning) {
                     Thread.sleep(SLEEP_INTER);
@@ -228,27 +234,33 @@ public class HomeScoreFragment extends Fragment {
         return mMainView.findViewById(id);
     }
 
-    protected void translateProgress2Duration(SeekBar seekBar) {
-        final int progress = seekBar.getProgress();
+    protected void translateProgress2Duration() {
+        final int progress = durationSeekBar.getRightIndex();
         durationTextView.post(new Runnable() {
             @Override
             public void run() {
-                String base = "past 1 ";
+                String base = "past";
                 switch (progress) {
                     case 1:
-                        durationTextView.setText(base + "day");
+                        durationTextView.setText(base + " 1 day");
                         break;
                     case 2:
-                        durationTextView.setText(base + "week");
+                        durationTextView.setText(base + " 1 week");
                         break;
                     case 3:
-                        durationTextView.setText(base + "month");
+                        durationTextView.setText(base + " 2 weeks");
                         break;
                     case 4:
-                        durationTextView.setText(base + "season");
+                        durationTextView.setText(base + " 1 month");
                         break;
                     case 5:
-                        durationTextView.setText(base + "year");
+                        durationTextView.setText(base + " 1 season");
+                        break;
+                    case 6:
+                        durationTextView.setText(base + " 1/2 year");
+                        break;
+                    case 7:
+                        durationTextView.setText(base + " 1 year");
                         break;
                     default:
                         durationTextView.setText("now");
@@ -256,5 +268,4 @@ public class HomeScoreFragment extends Fragment {
             }
         });
     }
-
 }

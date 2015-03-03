@@ -24,5 +24,6 @@ dependencies {
     compile "com.android.support:support-v13:18.0.0"
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.sefford:circular-progress-drawable:1.31@aar'
+    compile 'com.appyvet:materialrangebar:1.0'
     compile files('libs/libmuseandroid.jar')
 }
