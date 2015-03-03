@@ -149,14 +149,42 @@ public class HomeScoreFragment extends Fragment {
         progressAnimation.setDuration(ANIM_DURATION);
         progressAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
 
-        ObjectAnimator colorAnimator = ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
-                getResources().getColor(android.R.color.holo_green_light),
-                getResources().getColor(android.R.color.holo_red_dark));
+        ObjectAnimator colorAnimator = setDynamicColorsArguement();
         colorAnimator.setEvaluator(new ArgbEvaluator());
         colorAnimator.setDuration(ANIM_DURATION);
 
         animation.playTogether(progressAnimation, colorAnimator);
         return animation;
+    }
+
+    private ObjectAnimator setDynamicColorsArguement() {
+        ObjectAnimator colorAnimator;
+        if (normClassifierOutput < 0.2) {
+            return ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
+                    getResources().getColor(android.R.color.holo_green_light));
+        } else if (normClassifierOutput < 0.4) {
+            return ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
+                    getResources().getColor(android.R.color.holo_green_light),
+                    getResources().getColor(android.R.color.holo_blue_light));
+        } else if (normClassifierOutput < 0.6) {
+            return ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
+                    getResources().getColor(android.R.color.holo_green_light),
+                    getResources().getColor(android.R.color.holo_blue_light),
+                    getResources().getColor(android.R.color.holo_purple));
+        } else if (normClassifierOutput < 0.8) {
+            return ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
+                    getResources().getColor(android.R.color.holo_green_light),
+                    getResources().getColor(android.R.color.holo_blue_light),
+                    getResources().getColor(android.R.color.holo_purple),
+                    getResources().getColor(android.R.color.holo_orange_light));
+        } else {
+            return ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
+                    getResources().getColor(android.R.color.holo_green_light),
+                    getResources().getColor(android.R.color.holo_blue_light),
+                    getResources().getColor(android.R.color.holo_purple),
+                    getResources().getColor(android.R.color.holo_orange_light),
+                    getResources().getColor(android.R.color.holo_red_dark));
+        }
     }
 
     protected class ScoreTextAnimation implements Runnable {

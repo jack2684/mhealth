@@ -43,7 +43,7 @@
                     android:layout_marginTop="80dp"
                     android:layout_above="@+id/stressScoreTextView"
                     android:textColor="@color/dark"
-                    android:text="Stress score\n\r"
+                    android:text="Stress score\n"
                     android:id="@+id/donutSizeSeekLabel"/>
 
             </FrameLayout>

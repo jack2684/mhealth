@@ -28,10 +28,8 @@
                     android:layout_height="fill_parent"
                     android:layout_centerInParent="true"
                     android:layout_gravity="center_horizontal"
-                    android:shadowColor="@color/black"
                     android:layout_marginTop="120dp"
-                    android:shadowRadius="2"
-                    android:text="00"
+                    android:text="TAP"
                     android:textSize="88dp"
                     android:textColor="@color/dark"
                     android:id="@+id/stressScoreTextView"/>
