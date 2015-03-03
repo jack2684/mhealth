@@ -21,6 +21,7 @@ import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.example.jack.brainwaves.fragments.HomeScoreFragment;
+import com.example.jack.brainwaves.fragments.MuseFragment;
 import com.example.jack.brainwaves.fragments.SuperAwesomeCardFragment;
 
 public class MainActivity extends FragmentActivity {
@@ -202,6 +203,8 @@ public class MainActivity extends FragmentActivity {
             switch(position) {
                 case HOME:
                     return HomeScoreFragment.newInstance(position);
+                case MUSE:
+                    return MuseFragment.newInstance(position);
                 case PSS:
 
                 default:

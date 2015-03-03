@@ -25,11 +25,21 @@ import java.util.Random;
 /**
  * Created by jack on 3/2/15.
  */
-public class HomeScoreFragment extends SuperAwesomeCardFragment {
+public class PSSFragment extends Fragment {
     // Constants
     static final int ANIM_DURATION = 3600;
     static final int SLEEP_INTER = 100;
     static final int CLEAR_DURATION = 1200;
+
+    // Swipe pager related
+    protected View mMainView;
+    protected Activity mMainActivity;
+    private static final String ARG_POSITION = "position";
+    private int position;
+
+    // Fragment view Control
+    private boolean firstTime;
+    private boolean isLandscape;
 
     // Views
     private TextView stressScoreTextView;
@@ -48,8 +58,8 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
     private ScoreTextAnimation scoreAnimater;
     private Thread myThread;
 
-    public static HomeScoreFragment newInstance(int position) {
-        HomeScoreFragment f = new HomeScoreFragment();
+    public static PSSFragment newInstance(int position) {
+        PSSFragment f = new PSSFragment();
         Bundle b = new Bundle();
         b.putInt(ARG_POSITION, position);
         f.setArguments(b);
@@ -57,13 +67,15 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater i, ViewGroup c, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        inflater = i;
-        container = c;
         mMainActivity = getActivity();
         isLandscape = OrientationHelper.isLandsacpe(mMainActivity);
-        inflateLayout2Fragment(R.layout.fragment_score_circular, R.layout.fragment_score_circular_landscape);
+        if (isLandscape) {
+            mMainView = inflater.inflate(R.layout.fragment_score_circular_landscape, container, false);
+        } else {
+            mMainView = inflater.inflate(R.layout.fragment_score_circular, container, false);
+        }
 
         // initialize Views:
         stressScoreTextView = (TextView) findViewById(R.id.stressScoreTextView);

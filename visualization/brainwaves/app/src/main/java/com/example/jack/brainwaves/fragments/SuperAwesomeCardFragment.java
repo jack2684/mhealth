@@ -16,6 +16,7 @@
 
 package com.example.jack.brainwaves.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
@@ -30,10 +31,15 @@ import android.widget.TextView;
 import com.example.jack.brainwaves.R;
 
 public class SuperAwesomeCardFragment extends Fragment {
+    // Swipe pager related
+    protected View mMainView;
+    protected Activity mMainActivity;
+    protected LayoutInflater inflater;
+    protected ViewGroup container;
+    protected static final String ARG_POSITION = "position";
+    protected boolean isLandscape;
+    protected int position;
 
-	private static final String ARG_POSITION = "position";
-
-	private int position;
 
 	public static SuperAwesomeCardFragment newInstance(int position) {
 		SuperAwesomeCardFragment f = new SuperAwesomeCardFragment();
@@ -42,6 +48,18 @@ public class SuperAwesomeCardFragment extends Fragment {
 		f.setArguments(b);
 		return f;
 	}
+
+    public void inflateLayout2Fragment(int layout, int layoutLandscape){
+        if (isLandscape) {
+            mMainView = inflater.inflate(layoutLandscape, container, false);
+        } else {
+            mMainView = inflater.inflate(layout, container, false);
+        }
+    }
+
+    public void inflateLayout2Fragment(int layout){
+        mMainView = inflater.inflate(layout, container, false);
+    }
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
