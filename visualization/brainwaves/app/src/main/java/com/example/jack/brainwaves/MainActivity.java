@@ -22,6 +22,7 @@ import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.example.jack.brainwaves.fragments.HomePieFragment;
+import com.example.jack.brainwaves.fragments.HomeScoreFragment;
 import com.example.jack.brainwaves.fragments.SuperAwesomeCardFragment;
 
 public class MainActivity extends FragmentActivity {
@@ -187,7 +188,7 @@ public class MainActivity extends FragmentActivity {
         public Fragment getItem(int position) {
             switch(position) {
                 case 0:
-                    return HomePieFragment.newInstance(position);
+                    return HomeScoreFragment.newInstance(position);
                 default:
                     return SuperAwesomeCardFragment.newInstance(position);
             }
