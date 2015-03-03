@@ -125,7 +125,11 @@ public class HomeScoreFragment extends Fragment {
         // @TODO: this is just demo data, will replace with realworld data later
         int ridx = durationSeekBar.getRightIndex();
         int cnt = durationSeekBar.getTickCount();
-        normClassifierOutput = (float) (.9 * ( (float)(ridx + 3) % cnt) / cnt + 0.1);
+        normClassifierOutput = (float) (.9 * ((ridx + 3) % cnt) / cnt + 0.1f);
+        if(ridx == 0) {
+            Random rand = new Random();
+            normClassifierOutput = rand.nextInt(100) / 100f;
+        }
         scoreAnimater.stopThread();
         circularAnimation();
         myThread = new Thread(scoreAnimater);

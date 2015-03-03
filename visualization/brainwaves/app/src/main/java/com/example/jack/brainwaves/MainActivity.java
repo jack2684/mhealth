@@ -27,6 +27,25 @@ import com.example.jack.brainwaves.fragments.SuperAwesomeCardFragment;
 
 public class MainActivity extends FragmentActivity {
 
+    private final static String[] TITLES = {
+            "About",
+            "Settings",
+            "PSS Questionnaires",
+            "Home",
+            "Log over time",
+            "Real time plot",
+            "Muse Config",
+    };
+
+    final static int ABOUT      = 0;
+    final static int SETTING    = 1;
+    final static int PSS        = 2;
+    final static int HOME       = 3;
+    final static int LOGPLOT    = 4;
+    final static int REALTIME   = 5;
+    final static int MUSE       = 6;
+    final static int START_PAGE = HOME;
+
     private final Handler handler = new Handler();
 
     private PagerSlidingTabStrip tabs;
@@ -44,13 +63,11 @@ public class MainActivity extends FragmentActivity {
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         pager = (ViewPager) findViewById(R.id.pager);
         adapter = new MyPagerAdapter(getSupportFragmentManager());
-
         pager.setAdapter(adapter);
-
         final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
                 .getDisplayMetrics());
         pager.setPageMargin(pageMargin);
-
+        pager.setCurrentItem(START_PAGE, true);
         tabs.setViewPager(pager);
 
         //changeColor(currentColor);
@@ -165,8 +182,6 @@ public class MainActivity extends FragmentActivity {
 
     public class MyPagerAdapter extends FragmentPagerAdapter {
 
-        private final String[] TITLES = {"Home", "Log over time", "Real time plot", "Muse Config", "PSS Questionnaires", "Settings", "About"};
-
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -187,7 +202,7 @@ public class MainActivity extends FragmentActivity {
         @Override
         public Fragment getItem(int position) {
             switch(position) {
-                case 0:
+                case HOME:
                     return HomeScoreFragment.newInstance(position);
                 default:
                     return SuperAwesomeCardFragment.newInstance(position);
