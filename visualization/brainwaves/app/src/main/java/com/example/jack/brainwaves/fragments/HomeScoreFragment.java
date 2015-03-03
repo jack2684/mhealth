@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -29,6 +31,7 @@ public class HomeScoreFragment extends Fragment {
     // Constants
     static final int ANIM_DURATION = 3600;
     static final int SLEEP_INTER = 100;
+    static final int CLEAR_DURATION = 1200;
 
     // Swipe pager related
     protected View mMainView;
@@ -45,6 +48,7 @@ public class HomeScoreFragment extends Fragment {
     private TextView durationTextView;
     private ImageView ivDrawable;
     private RangeBar durationSeekBar;
+    private RangeBar durationSeekBarL;  // For landscape
 
     // Draweable
     private CircularProgressDrawable circularDrawable;
@@ -86,13 +90,23 @@ public class HomeScoreFragment extends Fragment {
         durationSeekBar.setSeekPinByIndex(3);
         translateProgress2Duration();
 
+        scoreAnimater = new ScoreTextAnimation();
+        circularDrawable = new CircularProgressDrawable.Builder()
+                .setRingWidth(getResources().getDimensionPixelSize(R.dimen.drawable_ring_size))
+                .setOutlineColor(getResources().getColor(android.R.color.darker_gray))
+                .setRingColor(getResources().getColor(android.R.color.holo_green_light))
+                .create();
+        ivDrawable.setImageDrawable(circularDrawable);
+
         durationSeekBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
             @Override
             public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex,
                                               int rightPinIndex,
                                               String leftPinValue, String rightPinValue) {
+                scoreAnimater.stopThread();
+                clearAnimation();
                 translateProgress2Duration();
-                updateNormClassifierOutput();
+                updateScoreTextViewInUiThread("TAP");
             }
         });
 
@@ -103,15 +117,17 @@ public class HomeScoreFragment extends Fragment {
             }
         });
 
-        scoreAnimater = new ScoreTextAnimation();
+
         return mMainView;
     }
 
     protected void updateNormClassifierOutput() {
         // @TODO: this is just demo data, will replace with realworld data later
-        normClassifierOutput =  ( (float)(durationSeekBar.getRightIndex() + 3) % durationSeekBar.getTickCount() ) / durationSeekBar.getTickCount();
+        int ridx = durationSeekBar.getRightIndex();
+        int cnt = durationSeekBar.getTickCount();
+        normClassifierOutput = (float) (.9 * ( (float)(ridx + 3) % cnt) / cnt + 0.1);
         scoreAnimater.stopThread();
-        circularAnimation().start();
+        circularAnimation();
         myThread = new Thread(scoreAnimater);
         myThread.start();
     }
@@ -120,13 +136,7 @@ public class HomeScoreFragment extends Fragment {
     public void onResume() {
         // kick off the data generating thread:
         super.onResume();
-        circularDrawable = new CircularProgressDrawable.Builder()
-                .setRingWidth(getResources().getDimensionPixelSize(R.dimen.drawable_ring_size))
-                .setOutlineColor(getResources().getColor(android.R.color.darker_gray))
-                .setRingColor(getResources().getColor(android.R.color.holo_green_light))
-//                .setCenterColor(getResources().getColor(android.R.color.holo_blue_dark))
-                .create();
-        ivDrawable.setImageDrawable(circularDrawable);
+
     }
 
     @Override
@@ -139,10 +149,12 @@ public class HomeScoreFragment extends Fragment {
      *
      * @return Animation
      */
-    private Animator circularAnimation() {
+    private void circularAnimation() {
         AnimatorSet animation = new AnimatorSet();
 
-        ObjectAnimator progressAnimation = ObjectAnimator.ofFloat(circularDrawable, CircularProgressDrawable.PROGRESS_PROPERTY,
+        ObjectAnimator progressAnimation = ObjectAnimator.ofFloat(
+                circularDrawable,
+                CircularProgressDrawable.PROGRESS_PROPERTY,
                 0f, normClassifierOutput);
         progressAnimation.setDuration(ANIM_DURATION);
         progressAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -152,7 +164,37 @@ public class HomeScoreFragment extends Fragment {
         colorAnimator.setDuration(ANIM_DURATION);
 
         animation.playTogether(progressAnimation, colorAnimator);
-        return animation;
+        try {
+            animation.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * clearAnimation will turn a 3/4 animation with Anticipate/Overshoot interpolation to a
+     * blank waiting - like state, wait for 2 seconds then return to the original state
+     *
+     * @return Animation
+     */
+    private void clearAnimation() {
+        float progress = circularDrawable.getProgress();
+        if(progress != 0f) {
+            AnimatorSet animation = new AnimatorSet();
+            ObjectAnimator progressAnimation = ObjectAnimator.ofFloat(
+                    circularDrawable,
+                    CircularProgressDrawable.PROGRESS_PROPERTY,
+                    progress, 0f);
+            normClassifierOutput = 0f;
+            progressAnimation.setDuration(CLEAR_DURATION);
+            progressAnimation.setInterpolator(new AnticipateInterpolator());
+            animation.play(progressAnimation);
+            try {
+                animation.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private ObjectAnimator setDynamicColorsArguement() {
@@ -211,23 +253,22 @@ public class HomeScoreFragment extends Fragment {
                 while(dynamicPercentage <= normClassifierOutput && keepRunning) {
                     Thread.sleep(SLEEP_INTER);
                     dynamicPercentage += step;
-                    System.out.println(dynamicPercentage);
-                    updateScoreTextViewInUiThread();    // This has to be done in UI Thread!!
+                    updateScoreTextViewInUiThread(
+                            String.format("%.0f", Math.floor(dynamicPercentage * 100)));    // This has to be done in UI Thread!!
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+    }
 
-        protected void updateScoreTextViewInUiThread() {
-            stressScoreTextView.post(new Runnable() {
-                @Override
-                public void run() {
-                    stressScoreTextView.setText(String.format("%.0f", Math.floor(dynamicPercentage * 100)));
-                }
-            });
-        }
-
+    protected void updateScoreTextViewInUiThread(final String s) {
+        stressScoreTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                stressScoreTextView.setText(s);
+            }
+        });
     }
 
     private final View findViewById(int id) {
