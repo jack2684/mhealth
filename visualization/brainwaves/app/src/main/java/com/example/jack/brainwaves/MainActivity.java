@@ -13,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -21,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.example.jack.brainwaves.fragments.HomePieFragment;
 import com.example.jack.brainwaves.fragments.HomeScoreFragment;
 import com.example.jack.brainwaves.fragments.SuperAwesomeCardFragment;
 
@@ -204,6 +202,8 @@ public class MainActivity extends FragmentActivity {
             switch(position) {
                 case HOME:
                     return HomeScoreFragment.newInstance(position);
+                case PSS:
+
                 default:
                     return SuperAwesomeCardFragment.newInstance(position);
             }
