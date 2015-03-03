@@ -47,7 +47,7 @@ public class HomeScoreFragment extends Fragment {
     private ImageView ivDrawable;
 
     // Key to the show
-    private float normClassifierOutput;
+    private float normClassifierOutput;     // Normalized, expected to be 0 to 1
     private float dynamicPercentage;
     private Animator circularAnimater;
     private ScoreTextAnimation scoreAnimater;
@@ -110,10 +110,9 @@ public class HomeScoreFragment extends Fragment {
     protected void updateNormClassifierOutput() {
         // @TODO: this is just demo data, will replace with realworld data later
         Random rand = new Random();
-        normClassifierOutput = (60 + rand.nextInt(40)) / 100.f;
+        normClassifierOutput = (30 + rand.nextInt(70)) / 100.f;
         scoreAnimater.stopThread();
-        circularAnimater = circularAnimation();
-        circularAnimater.start();
+        circularAnimation().start();
         myThread = new Thread(scoreAnimater);
         myThread.start();
     }
@@ -146,7 +145,7 @@ public class HomeScoreFragment extends Fragment {
         AnimatorSet animation = new AnimatorSet();
 
         ObjectAnimator progressAnimation = ObjectAnimator.ofFloat(circularDrawable, CircularProgressDrawable.PROGRESS_PROPERTY,
-                0f, 1f);
+                0f, normClassifierOutput);
         progressAnimation.setDuration(ANIM_DURATION);
         progressAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
 
@@ -166,6 +165,8 @@ public class HomeScoreFragment extends Fragment {
 
         public void stopThread() {
             keepRunning = false;
+            dynamicPercentage = 0.f;
+            updateScoreTextViewInUiThread();
         }
 
         //@Override
@@ -176,19 +177,19 @@ public class HomeScoreFragment extends Fragment {
                 while(dynamicPercentage <= normClassifierOutput && keepRunning) {
                     Thread.sleep(SLEEP_INTER);
                     dynamicPercentage += step;
-                    updateUIInUIThread();    // This has to be done in UI Thread!!
+                    System.out.println(dynamicPercentage);
+                    updateScoreTextViewInUiThread();    // This has to be done in UI Thread!!
                 }
-                System.out.println(this.getClass().getName() + ": Animation down");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
-        protected void updateUIInUIThread() {
+        protected void updateScoreTextViewInUiThread() {
             stressScoreTextView.post(new Runnable() {
                 @Override
                 public void run() {
-                    stressScoreTextView.setText(String.format("%.0f", dynamicPercentage * 100));
+                    stressScoreTextView.setText(String.format("%.0f", Math.floor(dynamicPercentage * 100)));
                 }
             });
         }
@@ -204,7 +205,7 @@ public class HomeScoreFragment extends Fragment {
         durationTextView.post(new Runnable() {
             @Override
             public void run() {
-                String base = "Since: \npast 1 ";
+                String base = "past 1 ";
                 switch (progress) {
                     case 1:
                         durationTextView.setText(base + "day");
@@ -222,7 +223,7 @@ public class HomeScoreFragment extends Fragment {
                         durationTextView.setText(base + "year");
                         break;
                     default:
-                        durationTextView.setText("Since: \nnow");
+                        durationTextView.setText("now");
                 }
             }
         });

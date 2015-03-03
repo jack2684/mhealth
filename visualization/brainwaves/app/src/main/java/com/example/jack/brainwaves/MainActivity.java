@@ -165,7 +165,7 @@ public class MainActivity extends FragmentActivity {
 
     public class MyPagerAdapter extends FragmentPagerAdapter {
 
-        private final String[] TITLES = {"Home", "Log over time", "Real time plot", "PSS Questionnaires", "Muse Config", "Settings", "About"};
+        private final String[] TITLES = {"Home", "Log over time", "Real time plot", "Muse Config", "PSS Questionnaires", "Settings", "About"};
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
