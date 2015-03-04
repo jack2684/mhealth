@@ -61,7 +61,7 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
         container = c;
         mMainActivity = getActivity();
         isLandscape = OrientationHelper.isLandsacpe(mMainActivity);
-        inflateLayout2Fragment(R.layout.fragment_score_circular, R.layout.fragment_score_circular_landscape);
+        inflateLayout2Fragment(R.layout.fragment_home, R.layout.fragment_home_landscape);
 
         // initialize Views:
         stressScoreTextView = (TextView) findViewById(R.id.stressScoreTextView);

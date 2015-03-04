@@ -26,9 +26,6 @@ import com.example.jack.brainwaves.fragments.HomeScoreFragment;
 import com.example.jack.brainwaves.fragments.MuseFragment;
 import com.example.jack.brainwaves.fragments.PSSFragment;
 import com.example.jack.brainwaves.fragments.SuperAwesomeCardFragment;
-import com.viewpagerindicator.PageIndicator;
-import com.viewpagerindicator.TabPageIndicator;
-import com.viewpagerindicator.TitlePageIndicator;
 
 public class MainActivity extends FragmentActivity {
 

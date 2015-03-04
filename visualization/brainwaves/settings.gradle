@@ -1,1 +1,1 @@
-include ':viewpagerindicatorLib', ':app'
+include ':app', ':SwitchButton'
