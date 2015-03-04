@@ -145,6 +145,30 @@
                             android:textSize="15dp"
                             android:layout_gravity="center_vertical|left"
                             />
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center_vertical"
+                            android:text="Facebook"
+                            android:textStyle="bold"
+                            android:background="@color/transparent"
+                            />
+
+                    </FrameLayout>
+                    <FrameLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="8dp"
+                        >
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center_vertical"
+                            android:text="Twitter"
+                            android:textStyle="bold"
+                            android:background="@color/transparent"
+                            />
 
                     </FrameLayout>
                     <View
