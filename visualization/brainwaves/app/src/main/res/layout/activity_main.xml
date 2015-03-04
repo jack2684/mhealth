@@ -21,6 +21,7 @@
         android:layout_height="fill_parent"
         android:layout_above="@+id/footer"
         android:layout_below="@+id/tabs"
+        android:layout_marginTop="48dip"
         tools:context=".MainActivity" />
 
     <TextView
