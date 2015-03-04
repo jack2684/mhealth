@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="unspecified"><source path="/home/jack/github/mhealth/visualization/demo/switchButtonDemo/build/intermediates/exploded-aar/demo/switchButton/unspecified/assets"/></dataSet><dataSet config="main"><source path="/home/jack/github/mhealth/visualization/demo/switchButtonDemo/src/main/assets"/></dataSet><dataSet config="debug"><source path="/home/jack/github/mhealth/visualization/demo/switchButtonDemo/src/debug/assets"/></dataSet></merger>

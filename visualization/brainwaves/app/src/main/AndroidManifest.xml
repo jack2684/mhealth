@@ -35,10 +35,6 @@
             android:name=".RealtimePlotActivity"
             android:label="@string/title_activity_orientation_sensor_example" >
         </activity>
-        <activity
-            android:name=".MuseActivity"
-            android:label="@string/title_activity_muse" >
-        </activity>
     </application>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 </manifest>

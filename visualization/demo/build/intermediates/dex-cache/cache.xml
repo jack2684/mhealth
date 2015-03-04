@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/jack/github/mhealth/visualization/demo/switchButtonDemo/build/intermediates/exploded-aar/demo/switchButton/unspecified/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="506f2be473ddd28f9846a41d6e01b25779338446">
+        <dex dex="/home/jack/github/mhealth/visualization/demo/switchButtonDemo/build/intermediates/pre-dexed/debug/classes-34f33c0095fa730a3e75a874e45bc44e299a9a2f.jar" />
+    </item>
+
+</items>

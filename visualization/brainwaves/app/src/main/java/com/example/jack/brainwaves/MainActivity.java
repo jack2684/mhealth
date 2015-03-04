@@ -1,13 +1,6 @@
 package com.example.jack.brainwaves;
 
-import android.app.ActionBar;
-import android.content.pm.ActivityInfo;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.TransitionDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -17,14 +10,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.example.jack.brainwaves.fragments.AboutFragment;
 import com.example.jack.brainwaves.fragments.HomeScoreFragment;
 import com.example.jack.brainwaves.fragments.MuseFragment;
 import com.example.jack.brainwaves.fragments.PSSFragment;
+import com.example.jack.brainwaves.fragments.SettingFragment;
 import com.example.jack.brainwaves.fragments.SuperAwesomeCardFragment;
 
 public class MainActivity extends FragmentActivity {
@@ -141,6 +133,8 @@ public class MainActivity extends FragmentActivity {
                     return PSSFragment.newInstance(position);
                 case ABOUT:
                     return AboutFragment.newInstance(position);
+                case SETTING:
+                    return SettingFragment.newInstance(position);
                 default:
                     return SuperAwesomeCardFragment.newInstance(position);
             }

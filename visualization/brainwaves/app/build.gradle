@@ -25,5 +25,6 @@ dependencies {
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.sefford:circular-progress-drawable:1.31@aar'
     compile 'com.appyvet:materialrangebar:1.0'
+    compile project(':SwitchButton')
     compile files('libs/libmuseandroid.jar')
 }
