@@ -18,31 +18,36 @@ import com.example.jack.brainwaves.fragments.MuseFragment;
 import com.example.jack.brainwaves.fragments.PSSFragment;
 import com.example.jack.brainwaves.fragments.SettingFragment;
 import com.example.jack.brainwaves.fragments.SuperAwesomeCardFragment;
+import com.example.jack.brainwaves.helper.AccountHelper;
 
-public class MainActivity extends FragmentActivity implements SettingFragment.onSettingListener {
+public class MainActivity extends FragmentActivity implements
+        SettingFragment.onSettingListener,
+        MuseFragment.onMuseListener {
 
     private final static String[] TITLES = {
-            "About",
+            "Log over time",
             "PSS Questionnaires",
             "Home",
-            "Log over time",
             "Real time plot",
             "Muse Config",
             "Settings",
+            "About",
     };
 
-    final static int ABOUT      = 0;
+    final static int LOGPLOT    = 0;
     final static int PSS        = 1;
     final static int HOME       = 2;
-    final static int LOGPLOT    = 3;
-    final static int REALTIME   = 4;
-    final static int MUSE       = 5;
-    final static int SETTING    = 6;
+    final static int REALTIME   = 3;
+    final static int MUSE       = 4;
+    final static int SETTING    = 5;
+    final static int ABOUT      = 6;
     final static int START_PAGE = HOME;
 
     MuseFragment muserFrag = null;
 
     private final Handler handler = new Handler();
+
+    private AccountHelper useraccount;
 
     private PagerSlidingTabStrip tabs;
     private ViewPager pager;
@@ -55,6 +60,8 @@ public class MainActivity extends FragmentActivity implements SettingFragment.on
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        useraccount = new AccountHelper();
 
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         pager = (ViewPager) findViewById(R.id.pager);
@@ -83,7 +90,6 @@ public class MainActivity extends FragmentActivity implements SettingFragment.on
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         currentColor = savedInstanceState.getInt("currentColor");
-        //changeColor(currentColor);
     }
 
     @Override
@@ -93,8 +99,25 @@ public class MainActivity extends FragmentActivity implements SettingFragment.on
 
     @Override
     public void onUserIDSubmitted(String id) {
+        useraccount.setLogin(id);
         if(muserFrag != null) {
             muserFrag.updateSessionName(id);
+        }
+    }
+
+    @Override
+    public String tryGetLoginState() {
+        if(useraccount.isLogin()) {
+            return useraccount.getUsername();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void onMuseGetSessionname() {
+        if(useraccount.isLogin()) {
+            muserFrag.updateSessionName(useraccount.getUsername());
         }
     }
 

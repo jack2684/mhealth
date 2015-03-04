@@ -1,8 +1,6 @@
 package com.example.jack.brainwaves.fragments;
 
 import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.pm.ActivityInfo;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,12 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.jack.brainwaves.R;
 import com.example.jack.brainwaves.helper.OrientationHelper;
@@ -92,6 +86,12 @@ public class MuseFragment extends SuperAwesomeCardFragment implements View.OnCli
         Log.i("Muse Headband", "libmuse version=" + LibMuseVersion.SDK_VERSION);
         setIsSessionNameInputActive(true);
         return mMainView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((onMuseListener) mMainActivity).onMuseGetSessionname();
     }
 
     @Override
@@ -448,5 +448,8 @@ public class MuseFragment extends SuperAwesomeCardFragment implements View.OnCli
         muse.enableDataTransmission(dataTransmission);
     }
 
-
+    // Container Activity must implement this interface
+    public interface onMuseListener {
+        public void onMuseGetSessionname();
+    }
 }
