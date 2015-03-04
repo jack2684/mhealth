@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.viewpagerindicator.TitlePageIndicator
+    <!--com.viewpagerindicator.TitlePageIndicator
         android:id="@+id/titles"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent" />
+        android:layout_width="fill_parent" /-->
 
     <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/tabs"
@@ -21,6 +21,7 @@
         android:layout_height="fill_parent"
         android:layout_above="@+id/footer"
         android:layout_below="@+id/tabs"
+        android:layout_marginTop="48dip"
         tools:context=".MainActivity" />
 
     <TextView
