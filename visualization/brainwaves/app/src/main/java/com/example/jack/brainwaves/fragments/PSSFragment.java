@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import java.io.IOException;
  */
 public class PSSFragment extends SuperAwesomeCardFragment implements View.OnClickListener {
     private TextView pssText;
+    private FrameLayout welcomFrame;
     private RadioGroup pssRadioGroup;
     private int currentPssTextIndex;
     private String pssResponses = "";
@@ -49,8 +51,10 @@ public class PSSFragment extends SuperAwesomeCardFragment implements View.OnClic
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Create listeners and pass reference to activity to them
+        welcomFrame = (FrameLayout) findViewById(R.id.pss_welcome);
+        welcomFrame.setOnClickListener(this);
         TextView button;
-        button = (TextView) findViewById(R.id.pss_cancel);
+        button = (TextView) findViewById(R.id.pss_quit);
         button.setOnClickListener(this);
         button = (TextView) findViewById(R.id.pss_next);
         button.setOnClickListener(this);
@@ -74,18 +78,24 @@ public class PSSFragment extends SuperAwesomeCardFragment implements View.OnClic
             pssText.invalidate();
             ((RadioButton) findViewById(R.id.radio_never)).setChecked(true);
             if (currentPssTextIndex == 0) {
-                writePssResponses();
+                //@TODO implement session name across fragments
+//                writePssResponses();
                 pssResponses = "";
                 Toast.makeText(mMainActivity, "Writing PSS Responses", Toast.LENGTH_LONG).show();
+                welcomFrame.setVisibility(View.VISIBLE);
             }
-        } else if (v.getId() == R.id.pss_cancel) {
-
+        } else if (v.getId() == R.id.pss_quit) {
+            welcomFrame.setVisibility(View.VISIBLE);
+            currentPssTextIndex = 0;
+        } else if (v.getId() == R.id.pss_welcome) {
+            welcomFrame.setVisibility(View.GONE);
         }
     }
 
     private void writePssResponses() {
         String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
-        File outFile = new File(root + "/pss_" + ((EditText) findViewById(R.id.sessionName)).getText() + "_" + System.currentTimeMillis());
+        //@TODO implement session name across fragments
+        File outFile = new File(root + "/pss_" + ("jacktest" + "_" + System.currentTimeMillis()));
         try {
             outFile.createNewFile();
             FileOutputStream writer = new FileOutputStream(outFile);

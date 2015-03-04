@@ -4,93 +4,131 @@
     android:orientation="vertical"
     android:weightSum="1"
     android:padding="10dp">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:paddingTop="60dp"
-        android:text="Medium Text"
-        android:id="@+id/pss_text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <RadioGroup
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.40"
-        android:id="@+id/pss_radio_group">
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Never"
-            android:id="@+id/radio_never" />
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Almost Never"
-            android:id="@+id/radio_almost_never" />
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sometimes"
-            android:id="@+id/radio_sometimes" />
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fairly Often"
-            android:id="@+id/radio_fairly_often" />
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Very Often"
-            android:id="@+id/radio_very_often"
-            android:checked="false" />
-    </RadioGroup>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray"
-            android:layout_centerHorizontal="true"
-            android:padding="10dp"
+    <FrameLayout
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:id="@+id/pss_welcome">
+        <ImageView
+            android:id="@+id/iv_drawable"
+            android:layout_width="match_parent"
+            android:layout_height="333dp"
+            android:padding="12dip"
             />
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Next"
-            android:id="@+id/pss_next"
-            android:textStyle="bold"
-            android:textSize="18dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="60dp"
-            android:paddingRight="20dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            />
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="120dp"
+            android:text="TAP"
+            android:textSize="88dp"
+            android:textColor="@color/dark"
+            android:id="@+id/stressScoreTextView"/>
         <TextView
             android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="120dp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/dark"
+            android:text="To start PSS test please\n"
+            android:id="@+id/stressScoreLabel"/>
+    </FrameLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:paddingTop="60dp"
+            android:text="Medium Text"
+            android:id="@+id/pss_text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:id="@+id/pss_cancel"
-            android:textSize="18dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="60dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            />
-    </RelativeLayout>
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.40"
+            android:id="@+id/pss_radio_group">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Never"
+                android:id="@+id/radio_never" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Almost Never"
+                android:id="@+id/radio_almost_never" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sometimes"
+                android:id="@+id/radio_sometimes" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fairly Often"
+                android:id="@+id/radio_fairly_often" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Very Often"
+                android:id="@+id/radio_very_often"
+                android:checked="false" />
+        </RadioGroup>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_centerHorizontal="true"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Next"
+                android:id="@+id/pss_next"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="60dp"
+                android:paddingRight="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quit"
+                android:id="@+id/pss_quit"
+                android:textSize="18dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="60dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                />
+        </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>
