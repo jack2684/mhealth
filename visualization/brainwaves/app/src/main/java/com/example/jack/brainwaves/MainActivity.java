@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.example.jack.brainwaves.fragments.AboutFragment;
 import com.example.jack.brainwaves.fragments.HomeScoreFragment;
 import com.example.jack.brainwaves.fragments.MuseFragment;
 import com.example.jack.brainwaves.fragments.PSSFragment;
@@ -84,77 +85,6 @@ public class MainActivity extends FragmentActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-
-//            case R.id.action_contact:
-//                QuickContactFragment dialog = new QuickContactFragment();
-//                dialog.show(getSupportFragmentManager(), "QuickContactFragment");
-//                return true;
-
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void changeColor(int newColor) {
-
-        tabs.setIndicatorColor(newColor);
-
-        // change ActionBar color just if an ActionBar is available
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-
-            Drawable colorDrawable = new ColorDrawable(newColor);
-            Drawable bottomDrawable = getResources().getDrawable(R.drawable.actionbar_bottom);
-            LayerDrawable ld = new LayerDrawable(new Drawable[]{colorDrawable, bottomDrawable});
-
-            if (oldBackground == null) {
-
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    ld.setCallback(drawableCallback);
-                } else {
-                    getActionBar().setBackgroundDrawable(ld);
-                }
-
-            } else {
-
-                TransitionDrawable td = new TransitionDrawable(new Drawable[]{oldBackground, ld});
-
-                // workaround for broken ActionBarContainer drawable handling on
-                // pre-API 17 builds
-                // https://github.com/android/platform_frameworks_base/commit/a7cc06d82e45918c37429a59b14545c6a57db4e4
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    td.setCallback(drawableCallback);
-                } else {
-                    getActionBar().setBackgroundDrawable(td);
-                }
-
-                td.startTransition(200);
-
-            }
-
-            oldBackground = ld;
-
-            // http://stackoverflow.com/questions/11002691/actionbar-setbackgrounddrawable-nulling-background-from-thread-handler
-            ActionBar ab = getActionBar();
-            ab.setDisplayShowTitleEnabled(false);
-            ab.setDisplayShowTitleEnabled(true);
-
-        }
-
-        currentColor = newColor;
-
-    }
-
-    public void onColorClicked(View v) {
-
-        int color = Color.parseColor(v.getTag().toString());
-        //changeColor(color);
-
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("currentColor", currentColor);
@@ -212,6 +142,8 @@ public class MainActivity extends FragmentActivity {
                     return MuseFragment.newInstance(position);
                 case PSS:
                     return PSSFragment.newInstance(position);
+                case ABOUT:
+                    return AboutFragment.newInstance(position);
                 default:
                     return SuperAwesomeCardFragment.newInstance(position);
             }

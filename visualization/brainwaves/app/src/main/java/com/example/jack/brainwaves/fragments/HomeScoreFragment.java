@@ -104,11 +104,6 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
         return mMainView;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
     protected void updateNormClassifierOutput() {
         // @TODO: this is just demo data, will replace with realworld data later
         int ridx = durationSeekBar.getRightIndex();

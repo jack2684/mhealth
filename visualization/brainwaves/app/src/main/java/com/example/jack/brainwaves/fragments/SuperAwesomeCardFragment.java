@@ -33,7 +33,7 @@ import com.example.jack.brainwaves.R;
 
 public class SuperAwesomeCardFragment extends Fragment {
     // Swipe pager related
-    protected View mMainView;
+    protected View mMainView = null;
     protected Activity mMainActivity;
     protected LayoutInflater inflater;
     protected ViewGroup container;
@@ -83,9 +83,9 @@ public class SuperAwesomeCardFragment extends Fragment {
         final int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources()
                 .getDisplayMetrics());
 
+
         TextView v = new TextView(getActivity());
         params.setMargins(margin, margin, margin, margin);
-        v.setLayoutParams(params);
         v.setLayoutParams(params);
         v.setGravity(Gravity.CENTER);
         v.setBackgroundResource(R.drawable.background_card);
