@@ -50,7 +50,7 @@
                     <View
                         android:layout_width="fill_parent"
                         android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
+                        android:background="@color/lightgray"
                         android:layout_centerHorizontal="true"
                         android:layout_margin="10dp"
                         android:padding="10dp"
@@ -65,7 +65,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Personal ID"
+                            android:text="Account"
                             android:layout_gravity="left|center_vertical"
                             />
                         <EditText
@@ -76,37 +76,21 @@
                             android:layout_gravity="right|center_vertical"
                             />
                     </FrameLayout>
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
-                        android:layout_centerHorizontal="true"
-                        android:layout_margin="10dp"
-                        android:padding="10dp"
-                        />
-
                     <FrameLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:padding="8dp"
                         >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Rigster new ID"
-                            android:layout_gravity="left|center_vertical"
-                            />
                         <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Please type new ID"
+                            android:text="Please type password"
                             android:textColor="@color/lightgray"
-
                             android:layout_gravity="right|center_vertical"
                             />
-
                     </FrameLayout>
+
                     <FrameLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -117,6 +101,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|center_vertical"
+                            android:text="Login/out"
+                            android:textStyle="bold"
+                            android:background="@color/transparent"
+                            />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center_vertical"
                             android:text="Register"
                             android:textStyle="bold"
                             android:background="@color/transparent"
@@ -126,7 +119,7 @@
                     <View
                         android:layout_width="fill_parent"
                         android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
+                        android:background="@color/lightgray"
                         android:layout_centerHorizontal="true"
                         android:layout_margin="10dp"
                         android:padding="10dp"
@@ -174,7 +167,7 @@
                     <View
                         android:layout_width="fill_parent"
                         android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
+                        android:background="@color/lightgray"
                         android:layout_centerHorizontal="true"
                         android:layout_margin="10dp"
                         android:padding="10dp"
@@ -201,14 +194,7 @@
                             android:layout_gravity="center_vertical|right"
                             />
                     </FrameLayout>
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
-                        android:layout_centerHorizontal="true"
-                        android:layout_margin="10dp"
-                        android:padding="10dp"
-                        />
+
 
                     <FrameLayout
                         android:layout_width="fill_parent"
@@ -224,7 +210,7 @@
                             android:layout_gravity="center_vertical|left"
                             />
                         <com.kyleduo.switchbutton.SwitchButton
-                            android:id="@+id/sb_default"
+                            android:id="@+id/sb_default2"
                             style="@style/SwitchButtonStyle"
                             app:onColor="@color/happy_blue"
                             app:thumbPressedColor="@color/happy_blue"
