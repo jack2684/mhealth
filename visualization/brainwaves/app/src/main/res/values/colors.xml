@@ -9,4 +9,6 @@
     <color name="lightgray">#ffb3b3b3</color>
     <color name="halfgray">#ff828282</color>
     <color name="background_window">#FFE5E5E5</color>
+    <color name="happy_blue">#ff5a87d9</color>
+    <color name="transparent">#00ffffff</color>
 </resources>

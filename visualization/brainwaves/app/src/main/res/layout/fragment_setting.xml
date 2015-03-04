@@ -21,11 +21,195 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
 
-                <com.kyleduo.switchbutton.SwitchButton
-                    android:id="@+id/sb_use_listener"
-                    style="@style/MaterialDesignStyle"
-                    app:onColor="#ff5a87d9"
-                    />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="85dp"
+                        android:orientation="horizontal"
+                        android:padding="8dp"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Welcom"
+                            android:layout_gravity="center_horizontal|top"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Jack"
+                            android:textSize="50dp"
+                            android:layout_gravity="center_horizontal|bottom"
+                            />
+                    </FrameLayout>
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="10dp"
+                        android:padding="10dp"
+                        />
+
+                    <FrameLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="8dp"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Personal ID"
+                            android:layout_gravity="left|center_vertical"
+                            />
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Please type your ID"
+                            android:textColor="@color/lightgray"
+                            android:layout_gravity="right|center_vertical"
+                            />
+                    </FrameLayout>
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="10dp"
+                        android:padding="10dp"
+                        />
+
+                    <FrameLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="8dp"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Rigster new ID"
+                            android:layout_gravity="left|center_vertical"
+                            />
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Please type new ID"
+                            android:textColor="@color/lightgray"
+
+                            android:layout_gravity="right|center_vertical"
+                            />
+
+                    </FrameLayout>
+                    <FrameLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="8dp"
+                        >
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center_vertical"
+                            android:text="Register"
+                            android:textStyle="bold"
+                            android:background="@color/transparent"
+                            />
+
+                    </FrameLayout>
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="10dp"
+                        android:padding="10dp"
+                        />
+
+                    <FrameLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="8dp"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Register via"
+                            android:textSize="15dp"
+                            android:layout_gravity="center_vertical|left"
+                            />
+
+                    </FrameLayout>
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="10dp"
+                        android:padding="10dp"
+                        />
+
+                    <FrameLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="8dp"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Demo mode"
+                            android:textSize="15dp"
+                            android:layout_gravity="center_vertical|left"
+                            />
+                        <com.kyleduo.switchbutton.SwitchButton
+                            android:id="@+id/sb_default"
+                            style="@style/SwitchButtonStyle"
+                            app:onColor="@color/happy_blue"
+                            app:thumbPressedColor="@color/happy_blue"
+                            android:layout_gravity="center_vertical|right"
+                            />
+                    </FrameLayout>
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="10dp"
+                        android:padding="10dp"
+                        />
+
+                    <FrameLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="8dp"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Auto data synchronization"
+                            android:textSize="15dp"
+                            android:layout_gravity="center_vertical|left"
+                            />
+                        <com.kyleduo.switchbutton.SwitchButton
+                            android:id="@+id/sb_default"
+                            style="@style/SwitchButtonStyle"
+                            app:onColor="@color/happy_blue"
+                            app:thumbPressedColor="@color/happy_blue"
+                            android:layout_gravity="center_vertical|right"
+                            />
+                    </FrameLayout>
+
+                </LinearLayout>
+
 
             </LinearLayout>
         </ScrollView>

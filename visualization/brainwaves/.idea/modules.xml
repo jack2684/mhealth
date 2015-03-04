@@ -5,6 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/SwitchButton/SwitchButton.iml" filepath="$PROJECT_DIR$/SwitchButton/SwitchButton.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/brainwaves.iml" filepath="$PROJECT_DIR$/brainwaves.iml" />
+      <module fileurl="file://$PROJECT_DIR$/switchButton/switchButton.iml" filepath="$PROJECT_DIR$/switchButton/switchButton.iml" />
+      <module fileurl="file://$PROJECT_DIR$/switchButtonDemo/switchButtonDemo.iml" filepath="$PROJECT_DIR$/switchButtonDemo/switchButtonDemo.iml" />
     </modules>
   </component>
 </project>

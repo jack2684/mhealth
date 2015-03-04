@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merger version="3"><dataSet config="main"><source path="/home/jack/github/mhealth/visualization/brainwaves/SwitchButton/src/main/res"><file name="ic_launcher" path="/home/jack/github/mhealth/visualization/brainwaves/SwitchButton/src/main/res/drawable-mdpi/ic_launcher.png" qualifiers="mdpi-v4" type="drawable"/><file name="ic_launcher" path="/home/jack/github/mhealth/visualization/brainwaves/SwitchButton/src/main/res/drawable-hdpi/ic_launcher.png" qualifiers="hdpi-v4" type="drawable"/><file path="/home/jack/github/mhealth/visualization/brainwaves/SwitchButton/src/main/res/values/styles.xml" qualifiers=""><style name="MD">
         <item name="animationVelocity">6</item>
-        <item name="insetBottom">16dp</item>
-        <item name="insetTop">16dp</item>
-        <item name="insetLeft">16dp</item>
-        <item name="insetRight">16dp</item>
-        <item name="measureFactor">1.4</item>
+        <item name="insetBottom">-81dp</item>
+        <item name="insetTop">-21dp</item>
+        <item name="insetLeft">1dp</item>
+        <item name="insetRight">1dp</item>
+        <item name="measureFactor">1.8</item>
         <item name="offDrawable">@drawable/md_back_off</item>
         <item name="onDrawable">@drawable/md_back_on</item>
         <item name="thumbDrawable">@drawable/md_thumb</item>
-        <item name="thumb_margin">-17dp</item>
+        <item name="thumb_margin">-30dp</item>
     </style><style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style><style name="AppBaseTheme" parent="android:Theme.Light">
