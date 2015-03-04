@@ -1,6 +1,7 @@
 package com.example.jack.brainwaves;
 
 import android.app.ActionBar;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -69,6 +70,29 @@ public class MainActivity extends FragmentActivity {
         pager.setPageMargin(pageMargin);
         pager.setCurrentItem(START_PAGE, true);
         tabs.setViewPager(pager);
+
+        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch(position) {
+                    case HOME:
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+                        break;
+                    default:
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         //changeColor(currentColor);
     }

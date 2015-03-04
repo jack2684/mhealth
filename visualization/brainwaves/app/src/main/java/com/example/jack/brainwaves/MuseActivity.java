@@ -55,7 +55,6 @@ import com.interaxon.libmuse.MuseVersion;
  * and updates UI when data from Muse is received. Similarly you can implement
  * listers for other data or register same listener to listen for different type
  * of data.
- * For simplicity we create Listeners as inner classes of MainActivity. We pass
  * reference to MainActivity as we want listeners to update UI thread in this
  * example app.
  * You can also connect multiple muses to the same phone and register same
@@ -361,7 +360,7 @@ public class MuseActivity extends Activity implements OnClickListener {
 
         perceivedStressScaleView = ((LayoutInflater)
                 getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
-                R.layout.perceived_stress_scale, null
+                R.layout.fragment_pss, null
         );
         dataView = ((LayoutInflater)
                 getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
@@ -383,11 +382,11 @@ public class MuseActivity extends Activity implements OnClickListener {
         Button pauseButton = (Button) findViewById(R.id.pause);
         pauseButton.setOnClickListener(this);
 
-        Button button = (Button) findViewById(R.id.pss_close);
-        button.setOnClickListener(this);
+//        Button button = (Button) findViewById(R.id.pss_close);
+//        button.setOnClickListener(this);
 
-        button = (Button) findViewById(R.id.pss_next);
-        button.setOnClickListener(this);
+//        button = (Button) findViewById(R.id.pss_next);
+//        button.setOnClickListener(this);
 
         pssText = (TextView) findViewById(R.id.pss_text);
         pssText.setText(PSSText[currentPssTextIndex]);
@@ -463,10 +462,10 @@ public class MuseActivity extends Activity implements OnClickListener {
                 muse.enableDataTransmission(dataTransmission);
             }
         }
-        else if (v.getId() == R.id.pss_close) {
-            perceivedStressScaleView.setVisibility(View.GONE);
-            dataView.setVisibility(View.VISIBLE);
-        }
+//        else if (v.getId() == R.id.pss_close) {
+//            perceivedStressScaleView.setVisibility(View.GONE);
+//            dataView.setVisibility(View.VISIBLE);
+//        }
         else if (v.getId() == R.id.pss_next) {
 
             int pssResponse = pssRadioGroup.indexOfChild(

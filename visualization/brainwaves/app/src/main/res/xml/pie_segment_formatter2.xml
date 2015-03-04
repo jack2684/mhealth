@@ -2,6 +2,6 @@
 <config
     fillPaint.color="@color/background_window"
     labelPaint.textSize="5dp"
-    innerEdgePaint.color = "@color/halfgrey"
-    radialEdgeColor.color = "@color/halfgrey"
-    outerEdgePaint.color = "@color/halfgrey"/>
+    innerEdgePaint.color = "@color/halfgray"
+    radialEdgeColor.color = "@color/halfgray"
+    outerEdgePaint.color = "@color/halfgray"/>

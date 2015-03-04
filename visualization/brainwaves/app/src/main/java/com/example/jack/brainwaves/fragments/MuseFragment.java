@@ -2,6 +2,7 @@ package com.example.jack.brainwaves.fragments;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
@@ -68,7 +69,7 @@ public class MuseFragment extends SuperAwesomeCardFragment implements View.OnCli
         container = c;
         mMainActivity = getActivity();
         isLandscape = OrientationHelper.isLandsacpe(mMainActivity);
-        inflateLayout2Fragment(R.layout.fragment_muse, R.layout.fragment_muse_landscape);
+        inflateLayout2Fragment(R.layout.fragment_muse);
 
         // Create listeners and pass reference to activity to them
         WeakReference<Activity> weakActivity =
@@ -91,7 +92,9 @@ public class MuseFragment extends SuperAwesomeCardFragment implements View.OnCli
     @Override
     public void onDestroy() {
         super.onDestroy();
-        dataListener.closeOutputFiles();
+        if(dataListener != null) {
+            dataListener.closeOutputFiles();
+        }
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -56,6 +57,7 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
         return f;
     }
 
+
     @Override
     public View onCreateView(LayoutInflater i, ViewGroup c, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -103,8 +105,12 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
             }
         });
 
-
         return mMainView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     protected void updateNormClassifierOutput() {

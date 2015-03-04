@@ -1,46 +1,25 @@
 package com.example.jack.brainwaves.fragments;
 
-import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jack.brainwaves.R;
 import com.example.jack.brainwaves.helper.OrientationHelper;
-import com.interaxon.libmuse.Accelerometer;
-import com.interaxon.libmuse.ConnectionState;
-import com.interaxon.libmuse.Eeg;
-import com.interaxon.libmuse.LibMuseVersion;
-import com.interaxon.libmuse.Muse;
-import com.interaxon.libmuse.MuseArtifactPacket;
-import com.interaxon.libmuse.MuseConnectionListener;
-import com.interaxon.libmuse.MuseConnectionPacket;
-import com.interaxon.libmuse.MuseDataListener;
-import com.interaxon.libmuse.MuseDataPacket;
-import com.interaxon.libmuse.MuseDataPacketType;
-import com.interaxon.libmuse.MuseManager;
-import com.interaxon.libmuse.MusePreset;
-import com.interaxon.libmuse.MuseVersion;
 
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by jack on 3/2/15.
@@ -66,11 +45,14 @@ public class PSSFragment extends SuperAwesomeCardFragment implements View.OnClic
         container = c;
         mMainActivity = getActivity();
         isLandscape = OrientationHelper.isLandsacpe(mMainActivity);
-        inflateLayout2Fragment(R.layout.perceived_stress_scale);
+        inflateLayout2Fragment(R.layout.fragment_pss);
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Create listeners and pass reference to activity to them
-        Button button;
-        button = (Button) findViewById(R.id.pss_next);
+        TextView button;
+        button = (TextView) findViewById(R.id.pss_cancel);
+        button.setOnClickListener(this);
+        button = (TextView) findViewById(R.id.pss_next);
         button.setOnClickListener(this);
         pssText = (TextView) findViewById(R.id.pss_text);
         pssText.setText(PSSText[currentPssTextIndex]);
@@ -96,6 +78,8 @@ public class PSSFragment extends SuperAwesomeCardFragment implements View.OnClic
                 pssResponses = "";
                 Toast.makeText(mMainActivity, "Writing PSS Responses", Toast.LENGTH_LONG).show();
             }
+        } else if (v.getId() == R.id.pss_cancel) {
+
         }
     }
 

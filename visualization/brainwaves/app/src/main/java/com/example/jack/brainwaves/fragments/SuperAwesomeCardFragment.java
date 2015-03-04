@@ -17,6 +17,7 @@
 package com.example.jack.brainwaves.fragments;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
@@ -96,6 +97,10 @@ public class SuperAwesomeCardFragment extends Fragment {
 
     protected final View findViewById(int id) {
         return mMainView.findViewById(id);
+    }
+
+    protected void setRequestedOrientation(int requestedOrientation) {
+        mMainActivity.setRequestedOrientation(requestedOrientation);
     }
 
 }
