@@ -19,26 +19,28 @@ import com.example.jack.brainwaves.fragments.PSSFragment;
 import com.example.jack.brainwaves.fragments.SettingFragment;
 import com.example.jack.brainwaves.fragments.SuperAwesomeCardFragment;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements SettingFragment.onSettingListener {
 
     private final static String[] TITLES = {
             "About",
-            "Settings",
             "PSS Questionnaires",
             "Home",
             "Log over time",
             "Real time plot",
             "Muse Config",
+            "Settings",
     };
 
     final static int ABOUT      = 0;
-    final static int SETTING    = 1;
-    final static int PSS        = 2;
-    final static int HOME       = 3;
-    final static int LOGPLOT    = 4;
-    final static int REALTIME   = 5;
-    final static int MUSE       = 6;
+    final static int PSS        = 1;
+    final static int HOME       = 2;
+    final static int LOGPLOT    = 3;
+    final static int REALTIME   = 4;
+    final static int MUSE       = 5;
+    final static int SETTING    = 6;
     final static int START_PAGE = HOME;
+
+    MuseFragment muserFrag = null;
 
     private final Handler handler = new Handler();
 
@@ -63,8 +65,6 @@ public class MainActivity extends FragmentActivity {
         pager.setPageMargin(pageMargin);
         pager.setCurrentItem(START_PAGE, true);
         tabs.setViewPager(pager);
-
-        //changeColor(currentColor);
     }
 
     @Override
@@ -86,22 +86,17 @@ public class MainActivity extends FragmentActivity {
         //changeColor(currentColor);
     }
 
-    private Drawable.Callback drawableCallback = new Drawable.Callback() {
-        @Override
-        public void invalidateDrawable(Drawable who) {
-            getActionBar().setBackgroundDrawable(who);
-        }
+    @Override
+    public void onDemomodeSelected(boolean isDemo) {
 
-        @Override
-        public void scheduleDrawable(Drawable who, Runnable what, long when) {
-            handler.postAtTime(what, when);
-        }
+    }
 
-        @Override
-        public void unscheduleDrawable(Drawable who, Runnable what) {
-            handler.removeCallbacks(what);
+    @Override
+    public void onUserIDSubmitted(String id) {
+        if(muserFrag != null) {
+            muserFrag.updateSessionName(id);
         }
-    };
+    }
 
     public class MyPagerAdapter extends FragmentPagerAdapter {
 
@@ -128,7 +123,8 @@ public class MainActivity extends FragmentActivity {
                 case HOME:
                     return HomeScoreFragment.newInstance(position);
                 case MUSE:
-                    return MuseFragment.newInstance(position);
+                    muserFrag = MuseFragment.newInstance(position);
+                    return muserFrag;
                 case PSS:
                     return PSSFragment.newInstance(position);
                 case ABOUT:

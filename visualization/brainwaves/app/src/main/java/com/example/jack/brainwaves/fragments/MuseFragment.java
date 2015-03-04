@@ -52,7 +52,9 @@ public class MuseFragment extends SuperAwesomeCardFragment implements View.OnCli
     private ConnectionListener connectionListener;
     private DataListener dataListener;
     private boolean dataTransmission = true;
-    boolean isSessionNameInputActive;
+    private boolean isSessionNameInputActive;
+    private String sessionName;
+    private TextView sessionNameView;
 
     public static MuseFragment newInstance(int position) {
         MuseFragment f = new MuseFragment();
@@ -70,6 +72,9 @@ public class MuseFragment extends SuperAwesomeCardFragment implements View.OnCli
         mMainActivity = getActivity();
         isLandscape = OrientationHelper.isLandsacpe(mMainActivity);
         inflateLayout2Fragment(R.layout.fragment_muse);
+
+        // For views
+        sessionNameView = (TextView) findViewById(R.id.sessionName);
 
         // Create listeners and pass reference to activity to them
         WeakReference<Activity> weakActivity =
@@ -159,6 +164,16 @@ public class MuseFragment extends SuperAwesomeCardFragment implements View.OnCli
         }
     }
 
+    public void updateSessionName(String id) {
+        sessionName = id;
+        sessionNameView.post(new Runnable() {
+            @Override
+            public void run() {
+                sessionNameView.setText(sessionName);
+            }
+        });
+    }
+
     /**
      * Connection listener updates UI with new connection status and logs it.
      */
@@ -238,7 +253,7 @@ public class MuseFragment extends SuperAwesomeCardFragment implements View.OnCli
         public void prepareOutputFiles() {
             setIsSessionNameInputActive(false);
             String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
-            File outDir = new File(root + "/muse_" + ((EditText) findViewById(R.id.sessionName)).getText() + "_" + System.currentTimeMillis());
+            File outDir = new File(root + "/muse_" + sessionName + "_" + System.currentTimeMillis());
             outDir.mkdirs();
 
             eegOut = createBinaryFile(new File(outDir, "eeg"));
@@ -417,8 +432,6 @@ public class MuseFragment extends SuperAwesomeCardFragment implements View.OnCli
 
     private void setIsSessionNameInputActive(boolean b) {
         isSessionNameInputActive = b;
-        EditText sessionNameEditor = (EditText) findViewById(R.id.sessionName);
-        sessionNameEditor.setEnabled(b);
     }
 
     private void configure_library() {

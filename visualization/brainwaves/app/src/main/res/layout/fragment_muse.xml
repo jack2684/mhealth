@@ -26,12 +26,12 @@
                 android:layout_height="wrap_content"
                 android:text="Session Name: " />
 
-            <EditText
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/sessionName"
                 android:enabled="false"
-                android:text="session" />
+                android:text="[default_name]" />
         </LinearLayout>
 
         <Spinner
