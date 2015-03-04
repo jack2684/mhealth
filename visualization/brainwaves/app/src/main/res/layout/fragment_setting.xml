@@ -243,7 +243,6 @@
                             android:id="@+id/mDemosb"
                             style="@style/SwitchButtonStyle"
                             app:onColor="@color/happy_blue"
-                            app:thumbPressedColor="@color/happy_blue"
                             android:layout_gravity="center_vertical|right"
                             />
                     </FrameLayout>
@@ -266,7 +265,27 @@
                             android:id="@+id/mSyncsb"
                             style="@style/SwitchButtonStyle"
                             app:onColor="@color/happy_blue"
-                            app:thumbPressedColor="@color/happy_blue"
+                            android:layout_gravity="center_vertical|right"
+                            />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="8dp"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Stress alarm"
+                            android:textSize="15dp"
+                            android:layout_gravity="center_vertical|left"
+                            />
+                        <com.kyleduo.switchbutton.SwitchButton
+                            android:id="@+id/mAlarmsb"
+                            style="@style/SwitchButtonStyle"
+                            app:onColor="@color/happy_blue"
                             android:layout_gravity="center_vertical|right"
                             />
                     </FrameLayout>

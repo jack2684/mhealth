@@ -1,3 +1,1 @@
 include ':app', ':SwitchButton'
-include ':switchButton'
-include ':switchButtonDemo'
