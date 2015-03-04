@@ -101,7 +101,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|center_vertical"
-                            android:text="Login/out"
+                            android:text="Login"
+                            android:textStyle="bold"
+                            android:background="@color/transparent"
+                            />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Logout"
                             android:textStyle="bold"
                             android:background="@color/transparent"
                             />
@@ -138,14 +147,7 @@
                             android:textSize="15dp"
                             android:layout_gravity="center_vertical|left"
                             />
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right|center_vertical"
-                            android:text="Facebook"
-                            android:textStyle="bold"
-                            android:background="@color/transparent"
-                            />
+
 
                     </FrameLayout>
                     <FrameLayout
@@ -154,14 +156,29 @@
                         android:orientation="horizontal"
                         android:padding="8dp"
                         >
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right">
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|center_vertical"
                             android:text="Twitter"
                             android:textStyle="bold"
+                            android:layout_margin="8dp"
                             android:background="@color/transparent"
                             />
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center_vertical"
+                            android:text="Facebook"
+                            android:textStyle="bold"
+                            android:layout_margin="8dp"
+                            android:background="@color/transparent"
+                            />
+                        </LinearLayout>
 
                     </FrameLayout>
                     <View
@@ -187,7 +204,7 @@
                             android:layout_gravity="center_vertical|left"
                             />
                         <com.kyleduo.switchbutton.SwitchButton
-                            android:id="@+id/sb_default"
+                            android:id="@+id/mDemosb"
                             style="@style/SwitchButtonStyle"
                             app:onColor="@color/happy_blue"
                             app:thumbPressedColor="@color/happy_blue"
@@ -210,7 +227,7 @@
                             android:layout_gravity="center_vertical|left"
                             />
                         <com.kyleduo.switchbutton.SwitchButton
-                            android:id="@+id/sb_default2"
+                            android:id="@+id/mSyncsb"
                             style="@style/SwitchButtonStyle"
                             app:onColor="@color/happy_blue"
                             app:thumbPressedColor="@color/happy_blue"
