@@ -100,7 +100,6 @@ public class PSSFragment extends SuperAwesomeCardFragment implements View.OnClic
         pssText = (TextView) findViewById(R.id.pss_text);
         pssText.setText(PSSText[currentPssTextIndex]);
         pssRadioGroup = (RadioGroup) findViewById(R.id.pss_radio_group);
-        ((RadioButton) findViewById(R.id.radio_never)).setChecked(true);
 
         scoreAnimator = new ScoreTextAnimationHelper();
 
@@ -111,27 +110,29 @@ public class PSSFragment extends SuperAwesomeCardFragment implements View.OnClic
     public void onResume() {
         super.onResume();
         normClassifierOutput = 0f;
+        pssRadioGroup.clearCheck();
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.pss_next) {
-            int pssResponse = pssRadioGroup.indexOfChild(
-                    pssRadioGroup.findViewById(pssRadioGroup.getCheckedRadioButtonId())
-            );
-            // @TODO apply actual score! some of them should be reverted.
+            View checkedRadio = pssRadioGroup.findViewById(pssRadioGroup.getCheckedRadioButtonId());
+            if(checkedRadio == null) {
+                Toast.makeText(mMainActivity, "Please make an option.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            int pssResponse = pssRadioGroup.indexOfChild(checkedRadio);
             normClassifierOutput += getThisPSSScore(pssResponse, currentPssTextIndex);
             pssResponses += pssResponse + (currentPssTextIndex == PSSText.length - 1 ? "" : ",") ;
 
             currentPssTextIndex = (currentPssTextIndex + 1) % PSSText.length;
             pssText.setText(PSSText[currentPssTextIndex]);
             pssText.invalidate();
-            ((RadioButton) findViewById(R.id.radio_never)).setChecked(true);
+            pssRadioGroup.clearCheck();
             if (currentPssTextIndex == 0) {
-                //@TODO implement session name across fragments
 //                writePssResponses();
                 pssResponses = "";
-                Toast.makeText(mMainActivity, "Writing PSS Responses", Toast.LENGTH_LONG).show();
+                Toast.makeText(mMainActivity, "Writing PSS Responses", Toast.LENGTH_SHORT).show();
                 welcomFrame.setVisibility(View.VISIBLE);
                 updateNormClassifierOutput();
             }

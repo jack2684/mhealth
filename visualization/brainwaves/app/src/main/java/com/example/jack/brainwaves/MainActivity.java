@@ -54,7 +54,6 @@ public class MainActivity extends FragmentActivity {
 
     private PagerSlidingTabStrip tabs;
     private ViewPager pager;
-    private TitlePageIndicator indicator;
     private MyPagerAdapter adapter;
 
     private Drawable oldBackground = null;
@@ -67,7 +66,6 @@ public class MainActivity extends FragmentActivity {
 
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         pager = (ViewPager) findViewById(R.id.pager);
-        indicator= (TitlePageIndicator) findViewById(R.id.titles);
         adapter = new MyPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
         final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
@@ -75,29 +73,6 @@ public class MainActivity extends FragmentActivity {
         pager.setPageMargin(pageMargin);
         pager.setCurrentItem(START_PAGE, true);
         tabs.setViewPager(pager);
-
-        indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                switch(position) {
-                    case HOME:
-                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
-                        break;
-                    default:
-                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
         //changeColor(currentColor);
     }
