@@ -25,6 +25,7 @@ import com.example.jack.brainwaves.fragments.HomeScoreFragment;
 import com.example.jack.brainwaves.fragments.MuseFragment;
 import com.example.jack.brainwaves.fragments.PSSFragment;
 import com.example.jack.brainwaves.fragments.SuperAwesomeCardFragment;
+import com.viewpagerindicator.PageIndicator;
 
 public class MainActivity extends FragmentActivity {
 
@@ -51,6 +52,7 @@ public class MainActivity extends FragmentActivity {
 
     private PagerSlidingTabStrip tabs;
     private ViewPager pager;
+    private PageIndicator indicator;
     private MyPagerAdapter adapter;
 
     private Drawable oldBackground = null;
