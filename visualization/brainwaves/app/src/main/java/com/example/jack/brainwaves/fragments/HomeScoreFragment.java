@@ -4,10 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
-import android.app.Activity;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,9 +41,8 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
 
     // Key to the show
     private float normClassifierOutput;     // Normalized, expected to be 0 to 1
-    private float dynamicPercentage;
     private Animator circularAnimater;
-    private ScoreTextAnimation scoreAnimater;
+    private ScoreTextAnimationHelper scoreAnimator;
     private Thread myThread;
 
     public static HomeScoreFragment newInstance(int position) {
@@ -78,7 +74,7 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
         durationSeekBar.setSeekPinByIndex(3);
         translateProgress2Duration();
 
-        scoreAnimater = new ScoreTextAnimation();
+        scoreAnimator = new ScoreTextAnimationHelper();
         circularDrawable = new CircularProgressDrawable.Builder()
                 .setRingWidth(getResources().getDimensionPixelSize(R.dimen.drawable_ring_size))
                 .setOutlineColor(getResources().getColor(android.R.color.darker_gray))
@@ -91,7 +87,7 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
             public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex,
                                               int rightPinIndex,
                                               String leftPinValue, String rightPinValue) {
-                scoreAnimater.stopThread();
+                scoreAnimator.stopThread();
                 clearAnimation();
                 translateProgress2Duration();
                 updateScoreTextViewInUiThread("TAP");
@@ -122,9 +118,9 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
             Random rand = new Random();
             normClassifierOutput = rand.nextInt(100) / 100f;
         }
-        scoreAnimater.stopThread();
+        scoreAnimator.stopThread();
         circularAnimation();
-        myThread = new Thread(scoreAnimater);
+        myThread = new Thread(scoreAnimator);
         myThread.start();
     }
 
@@ -220,9 +216,10 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
         }
     }
 
-    protected class ScoreTextAnimation implements Runnable {
+    protected class ScoreTextAnimationHelper implements Runnable {
         // Circular animation
         private boolean keepRunning = false;
+        private float digit;
 
         public void stopThread() {
             keepRunning = false;
@@ -232,13 +229,13 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
         public void run() {
             try {
                 keepRunning = true;
-                dynamicPercentage = 0.f;
+                digit = 0.f;
                 float step = SLEEP_INTER * normClassifierOutput / ANIM_DURATION;
-                while(dynamicPercentage <= normClassifierOutput && keepRunning) {
+                while(digit <= normClassifierOutput && keepRunning) {
                     Thread.sleep(SLEEP_INTER);
-                    dynamicPercentage += step;
+                    digit += step;
                     updateScoreTextViewInUiThread(
-                            String.format("%.0f", Math.floor(dynamicPercentage * 100)));    // This has to be done in UI Thread!!
+                            String.format("%.0f", Math.floor(digit * 100)));    // This has to be done in UI Thread!!
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();

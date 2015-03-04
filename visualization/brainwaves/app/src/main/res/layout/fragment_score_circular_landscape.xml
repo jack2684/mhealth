@@ -40,8 +40,7 @@
                     android:layout_marginTop="80dp"
                     android:layout_gravity="center_horizontal"
                     android:textColor="@color/dark"
-                    android:text="Stress score\n"
-                    android:id="@+id/stressScoreLabel"/>
+                    android:text="Stress score\n"/>
 
             </FrameLayout>
 
