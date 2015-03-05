@@ -21,11 +21,13 @@ android {
 
 repositories {
     maven { url "https://jitpack.io" }
+    jcenter()
 }
 
 dependencies {
     //compile "com.android.support:support-v13:18.0.0"
     compile 'com.github.PhilJay:MPAndroidChart:v2.0.7'
+    compile 'com.github.navasmdc:MaterialDesign:1.+@aar'
     compile 'com.jjoe64:graphview:4.0.0'
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.sefford:circular-progress-drawable:1.31@aar'

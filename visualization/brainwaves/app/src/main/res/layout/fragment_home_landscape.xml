@@ -81,6 +81,50 @@
                         custom:rangeBar="false"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"/>
+
+                    <FrameLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/less"
+                            android:id="@+id/less"
+                            android:textStyle="bold"
+                            android:textSize="18dp"
+                            android:layout_gravity="left"
+                            android:paddingBottom="30dp"
+                            android:paddingLeft="25dp"
+                            android:paddingRight="100dp"
+                            android:background="@color/transparent"
+                            />
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="|"
+                            android:textSize="18dp"
+                            android:paddingBottom="30dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@color/transparent"
+                            />
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/more"
+                            android:textStyle="bold"
+                            android:id="@+id/more"
+                            android:textSize="18dp"
+                            android:layout_gravity="right"
+                            android:paddingBottom="30dp"
+                            android:paddingRight="25dp"
+                            android:paddingLeft="100dp"
+                            android:background="@color/transparent"
+                            />
+                    </FrameLayout>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

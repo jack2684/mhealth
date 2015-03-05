@@ -30,10 +30,9 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
     static final int CLEAR_DURATION = 1200;
 
     // Views
-    private TextView stressScoreTextView;
-    private TextView durationTextView;
+    private TextView stressScoreTextView, durationTextView, moreButton, lessButton;
     private ImageView ivDrawable;
-    private RangeBar durationSeekBar;
+    private RangeBar timeRangeber;
     private RangeBar durationSeekBarL;  // For landscape
 
     // Draweable
@@ -66,13 +65,16 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
         stressScoreTextView = (TextView) findViewById(R.id.stressScoreTextView);
         durationTextView = (TextView) findViewById(R.id.durationTextView);
         ivDrawable = (ImageView) findViewById(R.id.iv_drawable);
-        durationSeekBar = (RangeBar) findViewById(R.id.materialBar);
-        durationSeekBar.setSelectorColor(getResources().getColor(android.R.color.darker_gray));
-        durationSeekBar.setConnectingLineColor(getResources().getColor(android.R.color.darker_gray));
-        durationSeekBar.setPinColor(getResources().getColor(android.R.color.darker_gray));
-        durationSeekBar.setSeekPinByIndex(3);
+        moreButton = (TextView) findViewById(R.id.more);
+        lessButton = (TextView) findViewById(R.id.less);
+        timeRangeber = (RangeBar) findViewById(R.id.materialBar);
+        timeRangeber.setSelectorColor(getResources().getColor(android.R.color.darker_gray));
+        timeRangeber.setConnectingLineColor(getResources().getColor(android.R.color.darker_gray));
+        timeRangeber.setPinColor(getResources().getColor(android.R.color.darker_gray));
+        timeRangeber.setSeekPinByIndex(3);
         translateProgress2Duration();
 
+        // Setup circular animation
         scoreAnimator = new ScoreTextAnimationHelper();
         circularDrawable = new CircularProgressDrawable.Builder()
                 .setRingWidth(getResources().getDimensionPixelSize(R.dimen.drawable_ring_size))
@@ -81,15 +83,13 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
                 .create();
         ivDrawable.setImageDrawable(circularDrawable);
 
-        durationSeekBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+        // Setup Listeners
+        timeRangeber.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
             @Override
             public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex,
                                               int rightPinIndex,
                                               String leftPinValue, String rightPinValue) {
-                scoreAnimator.stopThread();
-                clearAnimation();
-                translateProgress2Duration();
-                updateScoreTextViewInUiThread("TAP");
+                updateTimeRange();
             }
         });
 
@@ -100,13 +100,36 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
             }
         });
 
+        moreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timeRangeber.setSeekPinByIndex(Math.min(timeRangeber.getRightIndex() + 1, timeRangeber.getTickCount()));
+                updateNormClassifierOutput();
+            }
+        });
+
+        lessButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timeRangeber.setSeekPinByIndex(Math.max(timeRangeber.getRightIndex() - 1, 0));
+                updateNormClassifierOutput();
+            }
+        });
+
         return mMainView;
+    }
+
+    protected void updateTimeRange() {
+        scoreAnimator.stopThread();
+        clearAnimation();
+        translateProgress2Duration();
+        updateScoreTextViewInUiThread("TAP");
     }
 
     protected void updateNormClassifierOutput() {
         // @TODO: this is just demo data, will replace with realworld data later
-        int ridx = durationSeekBar.getRightIndex();
-        int cnt = durationSeekBar.getTickCount();
+        int ridx = timeRangeber.getRightIndex();
+        int cnt = timeRangeber.getTickCount();
         normClassifierOutput = (float) (.9 * ((ridx + 3) % cnt) / cnt + 0.1f);
         if(ridx == 0) {
             Random rand = new Random();
@@ -173,38 +196,33 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
 
     private ObjectAnimator setDynamicColorsArguement() {
         ObjectAnimator colorAnimator;
-        if (normClassifierOutput < 0.16) {
+        if (normClassifierOutput < 0.2) {
             return ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
                     getResources().getColor(android.R.color.holo_green_light));
-        } else if (normClassifierOutput < 0.33) {
+        } else if (normClassifierOutput < 0.4) {
             return ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
                     getResources().getColor(android.R.color.holo_green_light),
                     getResources().getColor(android.R.color.holo_blue_light));
-        } else if (normClassifierOutput < 0.5) {
+        } else if (normClassifierOutput < 0.6) {
             return ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
                     getResources().getColor(android.R.color.holo_green_light),
                     getResources().getColor(android.R.color.holo_blue_light),
                     getResources().getColor(android.R.color.holo_purple));
-        } else if (normClassifierOutput < 0.66) {
+        } else if (normClassifierOutput < 0.8) {
             return ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
                     getResources().getColor(android.R.color.holo_green_light),
                     getResources().getColor(android.R.color.holo_blue_light),
                     getResources().getColor(android.R.color.holo_purple),
-                    getResources().getColor(android.R.color.holo_orange_light));
-        } else if (normClassifierOutput < 0.95) {
+                    getResources().getColor(android.R.color.holo_orange_dark));
+        } else if (normClassifierOutput < 1.1) {
             return ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
                     getResources().getColor(android.R.color.holo_green_light),
                     getResources().getColor(android.R.color.holo_blue_light),
                     getResources().getColor(android.R.color.holo_purple),
-                    getResources().getColor(android.R.color.holo_orange_light),
+                    getResources().getColor(android.R.color.holo_orange_dark),
                     getResources().getColor(android.R.color.holo_red_dark));
         } else {
             return ObjectAnimator.ofInt(circularDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
-                    getResources().getColor(android.R.color.holo_green_light),
-                    getResources().getColor(android.R.color.holo_blue_light),
-                    getResources().getColor(android.R.color.holo_purple),
-                    getResources().getColor(android.R.color.holo_orange_light),
-                    getResources().getColor(android.R.color.holo_red_dark),
                     getResources().getColor(android.R.color.black)
                     );
         }
@@ -229,7 +247,7 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
                     Thread.sleep(SLEEP_INTER);
                     digit += step;
                     updateScoreTextViewInUiThread(
-                            String.format("%.0f", Math.floor(digit * 100)));    // This has to be done in UI Thread!!
+                            String.format("%.1f", digit * 5));    // This has to be done in UI Thread!!
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -247,7 +265,7 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
     }
 
     protected void translateProgress2Duration() {
-        final int progress = durationSeekBar.getRightIndex();
+        final int progress = timeRangeber.getRightIndex();
         durationTextView.post(new Runnable() {
             @Override
             public void run() {
@@ -283,6 +301,6 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
 
     // Container Activity must implement this interface
     public interface onScoreListener {
-        public int[] tryGetPreviousState();     // Score and duration
+        public int[] tryGetPreviousState();     // Score and
     }
 }

@@ -23,14 +23,6 @@
             android:theme="@android:style/Theme.Holo.Light.NoActionBar"
             >
         </activity>
-        <activity
-            android:name=".DynamicXYPlotActivity"
-            android:label="@string/title_activity_dynamic_xyplot" >
-        </activity>
-        <activity
-            android:name=".RealtimePlotActivity"
-            android:label="@string/title_activity_orientation_sensor_example" >
-        </activity>
     </application>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 </manifest>

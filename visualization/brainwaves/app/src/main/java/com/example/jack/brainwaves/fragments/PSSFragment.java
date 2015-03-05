@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.jack.brainwaves.R;
 import com.example.jack.brainwaves.helper.OrientationHelper;
+import com.gc.materialdesign.views.ProgressBarDeterminate;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -68,6 +69,7 @@ public class PSSFragment extends SuperAwesomeCardFragment implements View.OnClic
     private RadioGroup pssRadioGroup;
     private int currentPssTextIndex;
     private String pssResponses = "";
+    private ProgressBarDeterminate progressDeterminate;
 
     ScoreTextAnimationHelper scoreAnimator;
 
@@ -91,6 +93,9 @@ public class PSSFragment extends SuperAwesomeCardFragment implements View.OnClic
         // Create listeners and pass reference to activity to them
         welcomFrame = (FrameLayout) findViewById(R.id.pss_welcome);
         stressScoreTextView = (TextView) findViewById(R.id.stressScoreTextView);
+        pssRadioGroup = (RadioGroup) findViewById(R.id.pss_radio_group);
+        progressDeterminate = (ProgressBarDeterminate) findViewById(R.id.progressDeterminate);
+
         welcomFrame.setOnClickListener(this);
         TextView button;
         button = (TextView) findViewById(R.id.pss_quit);
@@ -99,7 +104,9 @@ public class PSSFragment extends SuperAwesomeCardFragment implements View.OnClic
         button.setOnClickListener(this);
         pssText = (TextView) findViewById(R.id.pss_text);
         pssText.setText(PSSText[currentPssTextIndex]);
-        pssRadioGroup = (RadioGroup) findViewById(R.id.pss_radio_group);
+        progressDeterminate.setMax(PSSText.length);
+        progressDeterminate.setMin(0);
+        progressDeterminate.setProgress(0);
 
         scoreAnimator = new ScoreTextAnimationHelper();
 
@@ -128,9 +135,10 @@ public class PSSFragment extends SuperAwesomeCardFragment implements View.OnClic
             currentPssTextIndex = (currentPssTextIndex + 1) % PSSText.length;
             pssText.setText(PSSText[currentPssTextIndex]);
             pssText.invalidate();
+            progressDeterminate.setProgress(currentPssTextIndex);
             pssRadioGroup.clearCheck();
             if (currentPssTextIndex == 0) {
-//                writePssResponses();
+                writePssResponses();
                 pssResponses = "";
                 Toast.makeText(mMainActivity, "Writing PSS Responses", Toast.LENGTH_SHORT).show();
                 welcomFrame.setVisibility(View.VISIBLE);
@@ -138,7 +146,7 @@ public class PSSFragment extends SuperAwesomeCardFragment implements View.OnClic
             }
         } else if (v.getId() == R.id.pss_quit) {
             welcomFrame.setVisibility(View.VISIBLE);
-            updateScoreTextViewInUiThread("TAP");
+            updateScoreTextViewInUiThread("START");
             normClassifierOutput = 0f;
             currentPssTextIndex = 0;
         } else if (v.getId() == R.id.pss_welcome && showingPSS == false) {
@@ -197,7 +205,7 @@ public class PSSFragment extends SuperAwesomeCardFragment implements View.OnClic
                     Thread.sleep(SLEEP_INTER);
                     digit += step;
                     updateScoreTextViewInUiThread(
-                            String.format("%.0f", Math.floor(digit * 100)));    // This has to be done in UI Thread!!
+                            String.format("%.1f", digit * 5));    // This has to be done in UI Thread!!
                 }
                 showingPSS = false;
             } catch (InterruptedException e) {

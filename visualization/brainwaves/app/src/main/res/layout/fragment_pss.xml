@@ -13,142 +13,52 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical">
-
-    <FrameLayout
-        android:layout_height="fill_parent"
-        android:layout_width="fill_parent"
-        android:layout_gravity="center"
         android:orientation="vertical"
-        android:id="@+id/pss_welcome">
-        <ImageView
-            android:id="@+id/iv_drawable"
-            android:layout_width="match_parent"
-            android:layout_height="333dp"
-            android:padding="12dip"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="120dp"
-            android:text="START"
-            android:textSize="88dp"
-            android:textColor="@color/dark"
-            android:id="@+id/stressScoreTextView"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="120dp"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/dark"
-            android:text="Perceived Stress Scale:\n"/>
-    </FrameLayout>
+        android:id="@+id/pss_root">
 
-    <ScrollView android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
-        <LinearLayout
-            android:orientation="vertical"
+        <FrameLayout
+            android:layout_height="fill_parent"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:paddingTop="60dp"
-                android:text="Medium Text"
-                android:id="@+id/pss_text"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_margin="8dp"/>
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:id="@+id/pss_welcome">
 
-            <RadioGroup
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="0.40"
-                android:id="@+id/pss_radio_group">
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Never"
-                    android:id="@+id/radio_never" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Almost Never"
-                    android:id="@+id/radio_almost_never" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sometimes"
-                    android:id="@+id/radio_sometimes" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Fairly Often"
-                    android:id="@+id/radio_fairly_often" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Very Often"
-                    android:id="@+id/radio_very_often"
-                    android:checked="false" />
-            </RadioGroup>
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="10dp"
-                />
-            <FrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
+                android:layout_gravity="center"
                 >
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Quit"
-                    android:id="@+id/pss_quit"
-                    android:textSize="18dp"
-                    android:paddingBottom="100dp"
-                    android:paddingLeft="60dp"
-                    android:paddingRight="60dp"
-                    android:layout_gravity="left"
+                    android:textColor="@color/dark"
+                    android:text="Perceived Stress Scale:\n"
+                    android:layout_gravity="center"
                     />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="|"
-                    android:textSize="18dp"
-                    android:paddingBottom="100dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:layout_gravity="center_horizontal"
+                    android:text="START"
+                    android:textSize="88dp"
+                    android:textColor="@color/dark"
+                    android:id="@+id/stressScoreTextView"
+                    android:layout_gravity="center"
                     />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Next"
-                    android:id="@+id/pss_next"
-                    android:textStyle="bold"
-                    android:textSize="18dp"
-                    android:paddingBottom="100dp"
-                    android:paddingLeft="60dp"
-                    android:paddingRight="60dp"
-                    android:layout_gravity="right"
+                    android:textColor="@color/dark"
+                    android:text="Out of 5"
+                    android:layout_gravity="center"
                     />
-            </FrameLayout>
-        </LinearLayout>
-    </ScrollView>
+            </LinearLayout>
+        </FrameLayout>
+        <include layout="@layout/component_pss_questions">
+
+        </include>
 
     </LinearLayout>
     </FrameLayout>

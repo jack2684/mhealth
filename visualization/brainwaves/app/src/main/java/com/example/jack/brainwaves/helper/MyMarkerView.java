@@ -1,5 +1,5 @@
 
-package com.example.jack.brainwaves.custom;
+package com.example.jack.brainwaves.helper;
 
 import android.content.Context;
 import android.widget.TextView;

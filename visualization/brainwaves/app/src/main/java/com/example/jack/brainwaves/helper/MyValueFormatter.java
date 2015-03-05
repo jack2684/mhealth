@@ -1,4 +1,4 @@
-package com.example.jack.brainwaves.custom;
+package com.example.jack.brainwaves.helper;
 
 import com.github.mikephil.charting.utils.ValueFormatter;
 

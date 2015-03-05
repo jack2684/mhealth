@@ -33,5 +33,7 @@
     <string name="title_activity_pie_chart">PieChartActivity</string>
     <string name="first">firsttab</string>
     <string name="last">lasttab</string>
+    <string name="less"><![CDATA[<<]]></string>
+    <string name="more"><![CDATA[>>]]></string>
 
 </resources>
