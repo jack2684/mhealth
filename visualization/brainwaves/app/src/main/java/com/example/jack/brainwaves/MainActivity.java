@@ -14,6 +14,7 @@ import android.view.Menu;
 import com.astuetz.PagerSlidingTabStrip;
 import com.example.jack.brainwaves.fragments.AboutFragment;
 import com.example.jack.brainwaves.fragments.HomeScoreFragment;
+import com.example.jack.brainwaves.fragments.LogPlotFragment;
 import com.example.jack.brainwaves.fragments.MuseFragment;
 import com.example.jack.brainwaves.fragments.PSSFragment;
 import com.example.jack.brainwaves.fragments.SettingFragment;
@@ -154,6 +155,8 @@ public class MainActivity extends FragmentActivity implements
                     return AboutFragment.newInstance(position);
                 case SETTING:
                     return SettingFragment.newInstance(position);
+                case LOGPLOT:
+                    return LogPlotFragment.newInstance(position);
                 default:
                     return SuperAwesomeCardFragment.newInstance(position);
             }

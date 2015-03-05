@@ -33,7 +33,7 @@
             android:layout_centerInParent="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="120dp"
-            android:text="TAP"
+            android:text="START"
             android:textSize="88dp"
             android:textColor="@color/dark"
             android:id="@+id/stressScoreTextView"/>

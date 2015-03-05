@@ -80,10 +80,10 @@ public class PSSFragment extends SuperAwesomeCardFragment implements View.OnClic
     }
 
     @Override
-    public View onCreateView(LayoutInflater i, ViewGroup c, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        inflater = i;
-        container = c;
+        this.inflater = inflater;
+        this.container = container;
         mMainActivity = getActivity();
         isLandscape = OrientationHelper.isLandsacpe(mMainActivity);
         inflateLayout2Fragment(R.layout.fragment_pss);
