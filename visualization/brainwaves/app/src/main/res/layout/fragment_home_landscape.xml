@@ -45,7 +45,7 @@
                         android:layout_marginTop="80dp"
                         android:layout_gravity="center_horizontal"
                         android:textColor="@color/dark"
-                        android:text="Stress score\n"/>
+                        android:text="Stress score out of 5\n"/>
 
                 </FrameLayout>
 

@@ -3,17 +3,17 @@ package com.example.jack.brainwaves.fragments;
 import com.example.jack.brainwaves.MainActivity;
 import com.example.jack.brainwaves.R;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
-import com.example.jack.brainwaves.R;
 import com.example.jack.brainwaves.helper.MyMarkerView;
 import com.example.jack.brainwaves.helper.OrientationHelper;
 import com.github.mikephil.charting.charts.LineChart;
@@ -36,8 +36,19 @@ import java.util.ArrayList;
  */
 public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar.OnSeekBarChangeListener,
         OnChartGestureListener, OnChartValueSelectedListener {
+    final static int DATA_CNT = 25;
     private LineChart mChart;
     private SwitchButton locksb;
+    private Button moreButton, lessButton;
+    private TextView unitTextView;
+    private int unitPicked;
+    private String unitStrings[] = {
+            "Daily ago",
+            "Weekly ago",
+            "Monthly ago",
+            "Seasonly ago",
+            "Yearly ago",
+    };
     private LimitLine limitLine = new LimitLine(100f, "Upper Limit");
 
     final static int ANIM_DURATION = 1000;
@@ -59,10 +70,16 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         isLandscape = OrientationHelper.isLandsacpe(mMainActivity);
         inflateLayout2Fragment(R.layout.fragment_logplot);
 
+
         locksb = (SwitchButton) findViewById(R.id.locksb);
         mChart = (LineChart) findViewById(R.id.chart1);
+        moreButton = (Button) findViewById(R.id.more);
+        lessButton = (Button) findViewById(R.id.less);
+        unitTextView = (TextView) findViewById(R.id.unit);
         mChart.setOnChartGestureListener(this);
         mChart.setOnChartValueSelectedListener(this);
+        unitPicked = 2;
+        unitTextView.setText(unitStrings[unitPicked]);
 
         // no description text
         mChart.setDescription("");
@@ -96,8 +113,9 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         mChart.setHighlightIndicatorEnabled(false);
 
         // add data
-        setData(50, 0);
+        setData(DATA_CNT * (unitStrings.length - unitPicked), 0);
         mChart.animateY(ANIM_DURATION);
+
 //        mChart.setVisibleYRange(30, AxisDependency.LEFT);
 
         mChart.zoom(10f, 1f, 50, 0);
@@ -112,11 +130,42 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         // // dont forget to refresh the drawing
         // mChart.invalidate();
 
+
+
+        locksb.setOnClickListener(new CompoundButton.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
         locksb.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                ((MainActivity)mMainActivity).onSettingPageLocker(b);
-                setData(50, 5);
+                ((MainActivity) mMainActivity).onSettingPageLocker(b);
+                if (b) {
+                    setData(DATA_CNT * (unitStrings.length - unitPicked), 5);
+                }
+            }
+        });
+
+        moreButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(unitPicked >= 0 && unitPicked < unitStrings.length - 1) {
+                    unitPicked++;
+                    unitTextView.setText(unitStrings[unitPicked]);
+                    setData(DATA_CNT * (unitStrings.length - unitPicked), 5);
+                }
+            }
+        });
+
+        lessButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(unitPicked >= 1 && unitPicked < unitStrings.length ) {
+                    unitPicked--;
+                    unitTextView.setText(unitStrings[unitPicked]);
+                    setData(DATA_CNT * (unitStrings.length - unitPicked), 5);
+                }
             }
         });
 
@@ -172,7 +221,7 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         YAxis leftAxis = mChart.getAxisLeft();
         XAxis xAxis = mChart.getXAxis();
 //        leftAxis.addLimitLine(limitLine);     //@TODO might deprecate limit latter
-        leftAxis.setAxisMaxValue(6f);
+        leftAxis.setAxisMaxValue(5f);
         leftAxis.setAxisMinValue(0f);
         leftAxis.setStartAtZero(false);
         leftAxis.setDrawGridLines(false);
