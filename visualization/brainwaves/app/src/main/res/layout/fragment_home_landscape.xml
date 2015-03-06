@@ -74,7 +74,7 @@
                         xmlns:custom="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/materialBar"
                         android:layout_width="match_parent"
-                        android:layout_height="72dp"
+                        android:layout_height="80dp"
                         custom:tickStart="0"
                         custom:tickInterval="1"
                         custom:tickEnd="7"
@@ -90,7 +90,7 @@
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/less"
+                            android:text="@string/leftarrow"
                             android:id="@+id/less"
                             android:textStyle="bold"
                             android:textSize="18dp"
@@ -114,7 +114,7 @@
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/more"
+                            android:text="@string/rightarrow"
                             android:textStyle="bold"
                             android:id="@+id/more"
                             android:textSize="18dp"

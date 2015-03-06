@@ -20,10 +20,12 @@ import com.example.jack.brainwaves.fragments.PSSFragment;
 import com.example.jack.brainwaves.fragments.SettingFragment;
 import com.example.jack.brainwaves.fragments.SuperAwesomeCardFragment;
 import com.example.jack.brainwaves.helper.AccountHelper;
+import com.example.jack.brainwaves.helper.LockableViewPager;
 
 public class MainActivity extends FragmentActivity implements
         SettingFragment.onSettingListener,
-        MuseFragment.onMuseListener {
+        MuseFragment.onMuseListener,
+        LogPlotFragment.onLogPlotListener {
 
     private final static String[] TITLES = {
             "Log over time",
@@ -51,7 +53,7 @@ public class MainActivity extends FragmentActivity implements
     private AccountHelper useraccount;
 
     private PagerSlidingTabStrip tabs;
-    private ViewPager pager;
+    private LockableViewPager pager;
     private MyPagerAdapter adapter;
 
     private Drawable oldBackground = null;
@@ -65,7 +67,7 @@ public class MainActivity extends FragmentActivity implements
         useraccount = new AccountHelper();
 
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        pager = (ViewPager) findViewById(R.id.pager);
+        pager = (LockableViewPager) findViewById(R.id.pager);
         adapter = new MyPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
         final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
@@ -120,6 +122,11 @@ public class MainActivity extends FragmentActivity implements
         if(useraccount.isLogin()) {
             muserFrag.updateSessionName(useraccount.getUsername());
         }
+    }
+
+    @Override
+    public void onSettingPageLocker(boolean b) {
+        pager.setPagingEnabled(!b);
     }
 
     public class MyPagerAdapter extends FragmentPagerAdapter {

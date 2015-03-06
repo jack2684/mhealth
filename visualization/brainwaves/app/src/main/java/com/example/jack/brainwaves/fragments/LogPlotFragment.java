@@ -1,11 +1,16 @@
 package com.example.jack.brainwaves.fragments;
 
+import com.example.jack.brainwaves.MainActivity;
+import com.example.jack.brainwaves.R;
+
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
 
 import com.example.jack.brainwaves.R;
@@ -14,6 +19,7 @@ import com.example.jack.brainwaves.helper.OrientationHelper;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -21,6 +27,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.Highlight;
+import com.kyleduo.switchbutton.SwitchButton;
 
 import java.util.ArrayList;
 
@@ -30,7 +37,10 @@ import java.util.ArrayList;
 public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar.OnSeekBarChangeListener,
         OnChartGestureListener, OnChartValueSelectedListener {
     private LineChart mChart;
-    private SeekBar mSeekBarX, mSeekBarY;
+    private SwitchButton locksb;
+    private LimitLine limitLine = new LimitLine(100f, "Upper Limit");
+
+    final static int ANIM_DURATION = 1000;
 
     public static LogPlotFragment newInstance(int position) {
         LogPlotFragment f = new LogPlotFragment();
@@ -49,15 +59,7 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         isLandscape = OrientationHelper.isLandsacpe(mMainActivity);
         inflateLayout2Fragment(R.layout.fragment_logplot);
 
-        mSeekBarX = (SeekBar) findViewById(R.id.seekBar1);
-        mSeekBarY = (SeekBar) findViewById(R.id.seekBar2);
-
-        mSeekBarX.setProgress(5);
-        mSeekBarY.setProgress(0);
-
-        mSeekBarY.setOnSeekBarChangeListener(this);
-        mSeekBarX.setOnSeekBarChangeListener(this);
-
+        locksb = (SwitchButton) findViewById(R.id.locksb);
         mChart = (LineChart) findViewById(R.id.chart1);
         mChart.setOnChartGestureListener(this);
         mChart.setOnChartValueSelectedListener(this);
@@ -94,8 +96,8 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         mChart.setHighlightIndicatorEnabled(false);
 
         // add data
-        setData(50, 100);
-        mChart.animateX(2500);
+        setData(50, 0);
+        mChart.animateY(ANIM_DURATION);
 //        mChart.setVisibleYRange(30, AxisDependency.LEFT);
 
         mChart.zoom(10f, 1f, 50, 0);
@@ -110,6 +112,14 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         // // dont forget to refresh the drawing
         // mChart.invalidate();
 
+        locksb.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                ((MainActivity)mMainActivity).onSettingPageLocker(b);
+                setData(50, 5);
+            }
+        });
+
         return mMainView;
     }
 
@@ -123,8 +133,7 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         ArrayList<Entry> yVals = new ArrayList<Entry>();
 
         for (int i = 0; i < count; i++) {
-            float mult = (range + 1);
-            float val = (float) (Math.random() * mult) + 3;// + (float)
+            float val = (float) (Math.random() * range);// + (float)
             // ((mult *
             // 0.1) / 10);
             yVals.add(new Entry(val, i));
@@ -136,13 +145,15 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         // set1.setFillColor(Color.RED);
 
         // set the line to be drawn like this "- - - - - -"
-        set1.enableDashedLine(10f, 5f, 0f);
-        set1.setColor(Color.BLACK);
-        set1.setCircleColor(Color.BLACK);
-        set1.setLineWidth(1f);
-        set1.setCircleSize(4f);
+        set1.setColor(getResources().getColor(R.color.happy_blue));
+        set1.setCircleColor(getResources().getColor(R.color.happy_blue));
+        set1.setLineWidth(3f);
+        set1.setCircleSize(6f);
         set1.setFillAlpha(65);
-        set1.setFillColor(Color.BLACK);
+        set1.setFillColor(Color.GRAY);
+        set1.setDrawFilled(true);
+        set1.setDrawValues(false);
+
         // set1.setShader(new LinearGradient(0, 0, 0, mChart.getHeight(),
         // Color.BLACK, Color.WHITE, Shader.TileMode.MIRROR));
 
@@ -153,34 +164,31 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         LineData data = new LineData(xVals, dataSets);
         data.setValueTextSize(10f);
 
-        LimitLine ll1 = new LimitLine(100f, "Upper Limit");
-        ll1.setLineWidth(4f);
-        ll1.enableDashedLine(10f, 10f, 0f);
-        ll1.setLabelPosition(LimitLine.LimitLabelPosition.POS_RIGHT);
-        ll1.setTextSize(10f);
-
-        LimitLine ll2 = new LimitLine(0f, "Lower Limit");
-        ll2.setLineWidth(4f);
-        ll2.enableDashedLine(10f, 10f, 0f);
-        ll2.setLabelPosition(LimitLine.LimitLabelPosition.POS_RIGHT);
-        ll2.setTextSize(10f);
+        limitLine.setLineWidth(1f);
+        limitLine.enableDashedLine(10f, 10f, 0f);
+        limitLine.setLabelPosition(LimitLine.LimitLabelPosition.POS_RIGHT);
+        limitLine.setTextSize(10f);
 
         YAxis leftAxis = mChart.getAxisLeft();
-        leftAxis.addLimitLine(ll1);
-        leftAxis.addLimitLine(ll2);
-        leftAxis.setAxisMaxValue(110f);
-        leftAxis.setAxisMinValue(-10f);
+        XAxis xAxis = mChart.getXAxis();
+//        leftAxis.addLimitLine(limitLine);     //@TODO might deprecate limit latter
+        leftAxis.setAxisMaxValue(6f);
+        leftAxis.setAxisMinValue(0f);
         leftAxis.setStartAtZero(false);
+        leftAxis.setDrawGridLines(false);
+        xAxis.setDrawGridLines(false);
+
         mChart.getAxisRight().setEnabled(false);
 
         // set data
         mChart.setData(data);
+        mChart.animateY(ANIM_DURATION);
+    }
 
-        ArrayList<LineDataSet> sets = (ArrayList<LineDataSet>) mChart.getData()
-                .getDataSets();
-        for (LineDataSet set : sets) {
-            set.setDrawFilled(true);
-        }
+
+
+    public interface onLogPlotListener {
+        public void onSettingPageLocker(boolean b);
     }
 
     @Override
@@ -215,9 +223,9 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        mChart.zoom((float)mSeekBarX.getProgress() / 5f, 1f, mSeekBarY.getProgress(), 0);
+//        mChart.zoom((float)mSeekBarX.getProgress() / 5f, 1f, mSeekBarY.getProgress(), 0);
 
-        mSeekBarX.setProgress(5);
+//        mSeekBarX.setProgress(5);
 
         // redraw
         mChart.invalidate();

@@ -33,7 +33,6 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
     private TextView stressScoreTextView, durationTextView, moreButton, lessButton;
     private ImageView ivDrawable;
     private RangeBar timeRangeber;
-    private RangeBar durationSeekBarL;  // For landscape
 
     // Draweable
     private CircularProgressDrawable circularDrawable;
@@ -71,7 +70,8 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
         timeRangeber.setSelectorColor(getResources().getColor(android.R.color.darker_gray));
         timeRangeber.setConnectingLineColor(getResources().getColor(android.R.color.darker_gray));
         timeRangeber.setPinColor(getResources().getColor(android.R.color.darker_gray));
-        timeRangeber.setSeekPinByIndex(3);
+        timeRangeber.setSeekPinByIndex(2);
+        timeRangeber.setPinRadius(20f);
         translateProgress2Duration();
 
         // Setup circular animation

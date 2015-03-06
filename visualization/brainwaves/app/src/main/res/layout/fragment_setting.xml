@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:background="#eeeeee"
     android:orientation="vertical"
-    tools:context="com.kyleduo.switchbuttondemo.StyleActivity" >
+    tools:context="com.kyleduo.switchbuttondemo.StyleActivity"
+    >
 
     <FrameLayout
         android:layout_width="match_parent"

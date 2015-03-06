@@ -15,7 +15,7 @@
         android:layout_height="48dip"
         android:background="@drawable/background_tabs" />
 
-    <android.support.v4.view.ViewPager
+    <com.example.jack.brainwaves.helper.LockableViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
