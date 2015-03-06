@@ -10,5 +10,11 @@
     <color name="halfgray">#ff828282</color>
     <color name="background_window">#FFE5E5E5</color>
     <color name="happy_blue">#ff5a87d9</color>
+    <color name="unhappy_blue">#ff85a1d9</color>
     <color name="transparent">#00ffffff</color>
+    <color name="happy_green">#ff63d96c</color>
+    <color name="unhappy_green">#ff8ed999</color>
+    <color name="happy_orange">#ffd98656</color>
+    <color name="happy_yellow">#ffd0d938</color>
+    <color name="happy_purple">#ffc751d9</color>
 </resources>

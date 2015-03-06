@@ -126,7 +126,7 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         mChart.setPinchZoom(false);
 
         vpHandler = new ViewPortHandler();
-        vpHandler.centerViewPort(new float[]{2.5f, 0f}, mChart);
+        mChart.moveViewTo(0, 2.5f, YAxis.AxisDependency.LEFT);
 //        mChart.centerViewPort(19, 19);
 
 
@@ -182,6 +182,10 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         return mMainView;
     }
 
+    final static float DOT_SIZE = 6f;
+    final static float LINE_SIZE = 1f;
+    final static int ALPHA = 80;
+
     private void setData(int count, float range) {
 
         ArrayList<String> xVals = new ArrayList<String>();
@@ -190,7 +194,6 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         }
 
         ArrayList<Entry> yVals = new ArrayList<Entry>();
-
         for (int i = 0; i < count; i++) {
             float val = (float) (Math.random() * range);// + (float)
             // ((mult *
@@ -199,25 +202,52 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         }
 
         // create a dataset and give it a type
-        LineDataSet set1 = new LineDataSet(yVals, "PSS");
+        LineDataSet set1 = new LineDataSet(yVals, "MUSE");
         // set1.setFillAlpha(110);
         // set1.setFillColor(Color.RED);
 
         // set the line to be drawn like this "- - - - - -"
-        set1.setColor(getResources().getColor(R.color.happy_blue));
-        set1.setCircleColor(getResources().getColor(R.color.happy_blue));
-        set1.setLineWidth(3f);
-        set1.setCircleSize(6f);
-        set1.setFillAlpha(65);
-        set1.setFillColor(Color.GRAY);
+        set1.setColor(getResources().getColor(R.color.dark));
+        set1.setCircleColor(getResources().getColor(R.color.dark));
+        set1.setLineWidth(LINE_SIZE);
+        set1.setCircleSize(DOT_SIZE);
+        set1.setFillAlpha(ALPHA);
+        set1.setFillColor(getResources().getColor(R.color.unhappy_blue));
         set1.setDrawFilled(true);
         set1.setDrawValues(false);
+
+
+
+
+        ArrayList<Entry> yVals2 = new ArrayList<Entry>();
+        for (int i = 0; i < count; i++) {
+            float val = (float) (Math.min(5, (0.5 + Math.random()) * yVals.get(i).getVal()));// + (float)
+            // ((mult *
+            // 0.1) / 10);
+            yVals2.add(new Entry(val, i));
+        }
+
+        // create a dataset and give it a type
+        LineDataSet set2 = new LineDataSet(yVals2, "PSS");
+        // set1.setFillAlpha(110);
+        // set1.setFillColor(Color.RED);
+
+        // set the line to be drawn like this "- - - - - -"
+        set2.setColor(getResources().getColor(R.color.dark));
+        set2.setCircleColor(getResources().getColor(R.color.dark));
+        set2.setLineWidth(LINE_SIZE);
+        set2.setCircleSize(DOT_SIZE);
+        set2.setFillAlpha(ALPHA);
+        set2.setFillColor(getResources().getColor(R.color.unhappy_green));
+        set2.setDrawFilled(true);
+        set2.setDrawValues(false);
 
         // set1.setShader(new LinearGradient(0, 0, 0, mChart.getHeight(),
         // Color.BLACK, Color.WHITE, Shader.TileMode.MIRROR));
 
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         dataSets.add(set1); // add the datasets
+        dataSets.add(set2); // add the datasets
 
         // create a data object with the datasets
         LineData data = new LineData(xVals, dataSets);
@@ -231,7 +261,7 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         YAxis leftAxis = mChart.getAxisLeft();
         XAxis xAxis = mChart.getXAxis();
 //        leftAxis.addLimitLine(limitLine);     //@TODO might deprecate limit latter
-        leftAxis.setAxisMaxValue(5f);
+        leftAxis.setAxisMaxValue(6f);
         leftAxis.setAxisMinValue(0f);
         leftAxis.setStartAtZero(false);
         leftAxis.setDrawGridLines(false);
