@@ -26,6 +26,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.renderer.ViewPortHandler;
 import com.github.mikephil.charting.utils.Highlight;
 import com.kyleduo.switchbutton.SwitchButton;
 
@@ -36,12 +37,14 @@ import java.util.ArrayList;
  */
 public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar.OnSeekBarChangeListener,
         OnChartGestureListener, OnChartValueSelectedListener {
-    final static int DATA_CNT = 25;
+    final static int DATA_CNT_BASE = 3;
+    final static int DATA_CNT_POWER = 3;
     private LineChart mChart;
     private SwitchButton locksb;
     private Button moreButton, lessButton;
     private TextView unitTextView;
     private int unitPicked;
+    ViewPortHandler vpHandler;
     private String unitStrings[] = {
             "Daily ago",
             "Weekly ago",
@@ -113,12 +116,19 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         mChart.setHighlightIndicatorEnabled(false);
 
         // add data
-        setData(DATA_CNT * (unitStrings.length - unitPicked), 0);
+        setData((int) Math.pow(DATA_CNT_BASE, unitStrings.length - unitPicked), 0);
         mChart.animateY(ANIM_DURATION);
 
 //        mChart.setVisibleYRange(30, AxisDependency.LEFT);
 
         mChart.zoom(10f, 1f, 50, 0);
+
+        mChart.setPinchZoom(false);
+
+        vpHandler = new ViewPortHandler();
+        vpHandler.centerViewPort(new float[]{2.5f, 0f}, mChart);
+//        mChart.centerViewPort(19, 19);
+
 
         // get the legend (only possible after setting data)
         Legend l = mChart.getLegend();
@@ -142,7 +152,7 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 ((MainActivity) mMainActivity).onSettingPageLocker(b);
                 if (b) {
-                    setData(DATA_CNT * (unitStrings.length - unitPicked), 5);
+                    setData((int) Math.pow(DATA_CNT_BASE, unitStrings.length - unitPicked), 5);
                 }
             }
         });
@@ -153,7 +163,7 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
                 if(unitPicked >= 0 && unitPicked < unitStrings.length - 1) {
                     unitPicked++;
                     unitTextView.setText(unitStrings[unitPicked]);
-                    setData(DATA_CNT * (unitStrings.length - unitPicked), 5);
+                    setData((int) Math.pow(DATA_CNT_BASE, unitStrings.length - unitPicked), 5);
                 }
             }
         });
@@ -161,10 +171,10 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         lessButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(unitPicked >= 1 && unitPicked < unitStrings.length ) {
+                if (unitPicked >= 1 && unitPicked < unitStrings.length) {
                     unitPicked--;
                     unitTextView.setText(unitStrings[unitPicked]);
-                    setData(DATA_CNT * (unitStrings.length - unitPicked), 5);
+                    setData((int) Math.pow(DATA_CNT_BASE, unitStrings.length - unitPicked), 5);
                 }
             }
         });
@@ -175,7 +185,7 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
     private void setData(int count, float range) {
 
         ArrayList<String> xVals = new ArrayList<String>();
-        for (int i = 0; i < count; i++) {
+        for (int i = count - 1; i >= 0; i--) {
             xVals.add((i) + "");
         }
 
@@ -226,9 +236,9 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         leftAxis.setStartAtZero(false);
         leftAxis.setDrawGridLines(false);
         xAxis.setDrawGridLines(false);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 
         mChart.getAxisRight().setEnabled(false);
-
         // set data
         mChart.setData(data);
         mChart.animateY(ANIM_DURATION);

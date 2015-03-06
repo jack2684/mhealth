@@ -35,5 +35,6 @@
     <string name="last">lasttab</string>
     <string name="leftarrow"><![CDATA[<<]]></string>
     <string name="rightarrow"><![CDATA[>>]]></string>
+    <string name="lockandview"><![CDATA[Lock tab & view data]]></string>
 
 </resources>
