@@ -195,7 +195,7 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
 
         ArrayList<Entry> yVals = new ArrayList<Entry>();
         for (int i = 0; i < count; i++) {
-            if(range == 0){
+            if(range != 0){
                 float val = (float) (Math.random() * range * 0.8 + 1);// + (float)
                 // ((mult *
                 // 0.1) / 10);
