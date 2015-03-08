@@ -29,13 +29,29 @@ tools:context="com.kyleduo.switchbuttondemo.StyleActivity"
                 android:layout_height="match_parent"
                 android:layout_above="@+id/addentry"
                 />
-            <Button
+            <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp"
                 android:id="@+id/addentry"
                 android:layout_alignParentBottom="true"
-                android:text="Add entry"
-                />
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Start realtime plot"
+                    android:textSize="15dp"
+                    android:layout_gravity="center_vertical|left"
+                    android:layout_marginLeft="10dp"
+                    />
+                <com.kyleduo.switchbutton.SwitchButton
+                    android:id="@+id/realtimesb"
+                    style="@style/SwitchButtonStyle"
+                    app:onColor="@color/happy_blue"
+                    android:layout_gravity="center_vertical|right"
+                    />
+            </FrameLayout>
             </RelativeLayout>
         </LinearLayout>
     </FrameLayout>

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 
 import com.example.jack.brainwaves.R;
 import com.example.jack.brainwaves.helper.OrientationHelper;
@@ -28,12 +29,14 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.Highlight;
+import com.kyleduo.switchbutton.SwitchButton;
 
 public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implements
         OnChartValueSelectedListener {
 
     private LineChart mChart;
-    private Button addentry;
+//    private Button addentry;
+    private SwitchButton realteimsb;
 
     public static RealtimeLineChartFragment newInstance(int position) {
         RealtimeLineChartFragment f = new RealtimeLineChartFragment();
@@ -52,7 +55,8 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
         isLandscape = OrientationHelper.isLandsacpe(mMainActivity);
         inflateLayout2Fragment(R.layout.fragment_realtime_linechart);
 
-        addentry = (Button) findViewById(R.id.addentry);
+//        addentry = (Button) findViewById(R.id.addentry);
+        realteimsb = (SwitchButton) findViewById(R.id.realtimesb);
         mChart = (LineChart) findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);
 
@@ -109,9 +113,22 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setEnabled(false);
 
-        addentry.setOnClickListener(new Button.OnClickListener() {
+//        addentry.setOnClickListener(new Button.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                addEntry();
+//            }
+//        });
+
+        realteimsb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+            }
+        });
+        realteimsb.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 addEntry();
             }
         });
