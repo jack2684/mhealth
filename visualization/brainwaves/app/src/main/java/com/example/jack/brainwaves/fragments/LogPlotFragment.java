@@ -73,7 +73,6 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         isLandscape = OrientationHelper.isLandsacpe(mMainActivity);
         inflateLayout2Fragment(R.layout.fragment_logplot);
 
-
         locksb = (SwitchButton) findViewById(R.id.locksb);
         mChart = (LineChart) findViewById(R.id.chart1);
         moreButton = (Button) findViewById(R.id.more);
@@ -196,7 +195,7 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         ArrayList<Entry> yVals = new ArrayList<Entry>();
         for (int i = 0; i < count; i++) {
             if(range != 0){
-                float val = (float) (Math.random() * range * 0.8 + 1);// + (float)
+                float val = (float) (Math.random() * range * 0.8 + 0.5);// + (float)
                 // ((mult *
                 // 0.1) / 10);
                 yVals.add(new Entry(val, i));

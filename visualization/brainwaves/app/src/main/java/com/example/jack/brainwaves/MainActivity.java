@@ -17,6 +17,7 @@ import com.example.jack.brainwaves.fragments.HomeScoreFragment;
 import com.example.jack.brainwaves.fragments.LogPlotFragment;
 import com.example.jack.brainwaves.fragments.MuseFragment;
 import com.example.jack.brainwaves.fragments.PSSFragment;
+import com.example.jack.brainwaves.fragments.RealtimeLineChartFragment;
 import com.example.jack.brainwaves.fragments.SettingFragment;
 import com.example.jack.brainwaves.fragments.SuperAwesomeCardFragment;
 import com.example.jack.brainwaves.helper.AccountHelper;
@@ -164,6 +165,8 @@ public class MainActivity extends FragmentActivity implements
                     return SettingFragment.newInstance(position);
                 case LOGPLOT:
                     return LogPlotFragment.newInstance(position);
+                case REALTIME:
+                    return RealtimeLineChartFragment.newInstance(position);
                 default:
                     return SuperAwesomeCardFragment.newInstance(position);
             }

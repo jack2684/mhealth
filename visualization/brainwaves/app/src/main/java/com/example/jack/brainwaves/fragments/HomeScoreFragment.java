@@ -71,7 +71,7 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
         timeRangeber.setConnectingLineColor(getResources().getColor(android.R.color.darker_gray));
         timeRangeber.setPinColor(getResources().getColor(android.R.color.darker_gray));
         timeRangeber.setSeekPinByIndex(2);
-        timeRangeber.setPinRadius(20f);
+        timeRangeber.setPinRadius(30f);
         translateProgress2Duration();
 
         // Setup circular animation
