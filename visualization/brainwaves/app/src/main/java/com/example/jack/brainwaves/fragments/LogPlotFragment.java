@@ -38,9 +38,8 @@ import java.util.ArrayList;
 public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar.OnSeekBarChangeListener,
         OnChartGestureListener, OnChartValueSelectedListener {
     final static int DATA_CNT_BASE = 3;
-    final static int DATA_CNT_POWER = 3;
     private LineChart mChart;
-    private SwitchButton locksb;
+    protected SwitchButton locksb;
     private Button moreButton, lessButton;
     private TextView unitTextView;
     private int unitPicked;

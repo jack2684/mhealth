@@ -35,7 +35,7 @@ tools:context="com.kyleduo.switchbuttondemo.StyleActivity"
                 android:orientation="horizontal"
                 android:padding="8dp"
                 android:id="@+id/addentry"
-                android:layout_alignParentBottom="true"
+                android:layout_above="@+id/lock"
                 >
                 <TextView
                     android:layout_width="wrap_content"
@@ -47,6 +47,29 @@ tools:context="com.kyleduo.switchbuttondemo.StyleActivity"
                     />
                 <com.kyleduo.switchbutton.SwitchButton
                     android:id="@+id/realtimesb"
+                    style="@style/SwitchButtonStyle"
+                    app:onColor="@color/happy_blue"
+                    android:layout_gravity="center_vertical|right"
+                    />
+            </FrameLayout>
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:id="@+id/lock"
+                android:layout_alignParentBottom="true"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lockandview"
+                    android:textSize="15dp"
+                    android:layout_gravity="center_vertical|left"
+                    android:layout_marginLeft="10dp"
+                    />
+                <com.kyleduo.switchbutton.SwitchButton
+                    android:id="@+id/locksb"
                     style="@style/SwitchButtonStyle"
                     app:onColor="@color/happy_blue"
                     android:layout_gravity="center_vertical|right"

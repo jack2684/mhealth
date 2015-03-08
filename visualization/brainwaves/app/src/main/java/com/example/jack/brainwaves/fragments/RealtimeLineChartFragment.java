@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 
+import com.example.jack.brainwaves.MainActivity;
 import com.example.jack.brainwaves.R;
 import com.example.jack.brainwaves.helper.OrientationHelper;
 import com.github.mikephil.charting.charts.LineChart;
@@ -31,12 +32,16 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.Highlight;
 import com.kyleduo.switchbutton.SwitchButton;
 
-public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implements
+public class RealtimeLineChartFragment extends LogPlotFragment implements
         OnChartValueSelectedListener {
 
     private LineChart mChart;
 //    private Button addentry;
     private SwitchButton realteimsb;
+
+    final static float DOT_SIZE = 0f;
+    final static float LINE_SIZE = 1f;
+    final static int ALPHA = 80;
 
     public static RealtimeLineChartFragment newInstance(int position) {
         RealtimeLineChartFragment f = new RealtimeLineChartFragment();
@@ -57,6 +62,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
 
 //        addentry = (Button) findViewById(R.id.addentry);
         realteimsb = (SwitchButton) findViewById(R.id.realtimesb);
+        locksb = (SwitchButton) findViewById(R.id.locksb);
         mChart = (LineChart) findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);
 
@@ -76,14 +82,14 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
         mChart.setDrawGridBackground(false);
 
         // if disabled, scaling can be done on x- and y-axis separately
-        mChart.setPinchZoom(true);
+        mChart.setPinchZoom(false);
 
         // set an alternative background color
-        mChart.setBackgroundColor(Color.LTGRAY);
+        mChart.setBackgroundColor(Color.WHITE);
 
         LineData data = new LineData();
-        data.setValueTextColor(Color.WHITE);
-        
+//        data.setValueTextColor(Color.WHITE);
+
         // add empty data
         mChart.setData(data);
 
@@ -96,19 +102,20 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
         // l.setPosition(LegendPosition.LEFT_OF_CHART);
         l.setForm(LegendForm.LINE);
         l.setTypeface(tf);
-        l.setTextColor(Color.WHITE);
+        l.setTextColor(Color.DKGRAY);
 
         XAxis xl = mChart.getXAxis();
         xl.setTypeface(tf);
         xl.setTextColor(Color.WHITE);
         xl.setDrawGridLines(false);
         xl.setAvoidFirstLastClipping(true);
+        xl.setPosition(XAxis.XAxisPosition.TOP_INSIDE);
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(tf);
-        leftAxis.setTextColor(Color.WHITE);
+        leftAxis.setTextColor(Color.DKGRAY);
         leftAxis.setAxisMaxValue(120f);
-        leftAxis.setDrawGridLines(true);
+        leftAxis.setDrawGridLines(false);
         
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setEnabled(false);
@@ -130,6 +137,17 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 addEntry();
+            }
+        });
+        locksb.setOnClickListener(new CompoundButton.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        locksb.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                ((MainActivity) mMainActivity).onSettingPageLocker(b);
             }
         });
 
@@ -172,7 +190,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
             mChart.notifyDataSetChanged();
 
             // limit the number of visible entries
-             mChart.setVisibleXRange(6);
+             mChart.setVisibleXRange(50);
             // mChart.setVisibleYRange(30, AxisDependency.LEFT);
             
              // move to the latest entry
@@ -192,13 +210,13 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
         set.setAxisDependency(AxisDependency.LEFT);
         set.setColor(ColorTemplate.getHoloBlue());
         set.setCircleColor(ColorTemplate.getHoloBlue());
-        set.setLineWidth(2f);
-        set.setCircleSize(4f);
+        set.setLineWidth(LINE_SIZE);
+        set.setCircleSize(DOT_SIZE);
         set.setFillAlpha(65);
         set.setFillColor(ColorTemplate.getHoloBlue());
         set.setHighLightColor(Color.rgb(244, 117, 117));
         set.setValueTextColor(Color.WHITE);
-        set.setValueTextSize(10f);
+        set.setValueTextSize(0f);
         return set;
     }
 
