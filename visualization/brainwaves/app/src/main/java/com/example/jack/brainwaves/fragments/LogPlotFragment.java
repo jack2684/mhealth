@@ -273,6 +273,7 @@ public class LogPlotFragment extends SuperAwesomeCardFragment implements SeekBar
         mChart.getAxisRight().setEnabled(false);
         // set data
         mChart.setData(data);
+        mChart.moveViewToX(data.getXValCount()-7);
         mChart.animateY(ANIM_DURATION);
     }
 

@@ -4,6 +4,7 @@ package com.example.jack.brainwaves.fragments;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,16 +33,23 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.Highlight;
 import com.kyleduo.switchbutton.SwitchButton;
 
-public class RealtimeLineChartFragment extends LogPlotFragment implements
+public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implements
         OnChartValueSelectedListener {
+
+    static final int SAMPLE_INTERVAL = 250;
 
     private LineChart mChart;
 //    private Button addentry;
     private SwitchButton realteimsb;
+    private SwitchButton locksb;
+
+    private RealtimeDataSource datasrouce;
 
     final static float DOT_SIZE = 0f;
     final static float LINE_SIZE = 1f;
     final static int ALPHA = 80;
+
+    private int xcnt = 0;
 
     public static RealtimeLineChartFragment newInstance(int position) {
         RealtimeLineChartFragment f = new RealtimeLineChartFragment();
@@ -61,7 +69,6 @@ public class RealtimeLineChartFragment extends LogPlotFragment implements
         inflateLayout2Fragment(R.layout.fragment_realtime_linechart);
 
 //        addentry = (Button) findViewById(R.id.addentry);
-        realteimsb = (SwitchButton) findViewById(R.id.realtimesb);
         locksb = (SwitchButton) findViewById(R.id.locksb);
         mChart = (LineChart) findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);
@@ -106,7 +113,7 @@ public class RealtimeLineChartFragment extends LogPlotFragment implements
 
         XAxis xl = mChart.getXAxis();
         xl.setTypeface(tf);
-        xl.setTextColor(Color.WHITE);
+        xl.setTextColor(Color.DKGRAY);
         xl.setDrawGridLines(false);
         xl.setAvoidFirstLastClipping(true);
         xl.setPosition(XAxis.XAxisPosition.TOP_INSIDE);
@@ -120,6 +127,8 @@ public class RealtimeLineChartFragment extends LogPlotFragment implements
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setEnabled(false);
 
+        datasrouce = new RealtimeDataSource();
+
 //        addentry.setOnClickListener(new Button.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -127,18 +136,6 @@ public class RealtimeLineChartFragment extends LogPlotFragment implements
 //            }
 //        });
 
-        realteimsb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        realteimsb.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                addEntry();
-            }
-        });
         locksb.setOnClickListener(new CompoundButton.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,6 +145,10 @@ public class RealtimeLineChartFragment extends LogPlotFragment implements
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 ((MainActivity) mMainActivity).onSettingPageLocker(b);
+                datasrouce.stopThread();
+                if(b) {
+                    new Thread(datasrouce).start();
+                }
             }
         });
 
@@ -166,8 +167,6 @@ public class RealtimeLineChartFragment extends LogPlotFragment implements
         return true;
     }
 
-    private int year = 15;
-    
     private void addEntry() {
 
         LineData data = mChart.getData();
@@ -183,14 +182,14 @@ public class RealtimeLineChartFragment extends LogPlotFragment implements
             }
 
             // add a new x-value first
-            data.addXValue(DemoBase.mMonths[data.getXValCount() % 12] + " " + (year + data.getXValCount() / 12));
+            data.addXValue(String.valueOf(xcnt++));
             data.addEntry(new Entry((float) (Math.random() * 40) + 40f, set.getEntryCount()), 0);
 
             // let the chart know it's data has changed
             mChart.notifyDataSetChanged();
 
             // limit the number of visible entries
-             mChart.setVisibleXRange(50);
+             mChart.setVisibleXRange(100);
             // mChart.setVisibleYRange(30, AxisDependency.LEFT);
             
              // move to the latest entry
@@ -200,13 +199,13 @@ public class RealtimeLineChartFragment extends LogPlotFragment implements
 //             mChart.moveViewTo(data.getXValCount()-7, 55f, AxisDependency.LEFT);
 
             // redraw the chart
-//            mChart.invalidate();
+            mChart.invalidate();
         }
     }
 
     private LineDataSet createSet() {
 
-        LineDataSet set = new LineDataSet(null, "Dynamic Data");
+        LineDataSet set = new LineDataSet(null, "Alpha");
         set.setAxisDependency(AxisDependency.LEFT);
         set.setColor(ColorTemplate.getHoloBlue());
         set.setCircleColor(ColorTemplate.getHoloBlue());
@@ -244,5 +243,33 @@ public class RealtimeLineChartFragment extends LogPlotFragment implements
     @Override
     public void onNothingSelected() {
         Log.i("Nothing selected", "Nothing selected.");
+    }
+
+    protected class RealtimeDataSource implements Runnable {
+        // Circular animation
+        private boolean keepRunning = false;
+        private float digit;
+
+        public void stopThread() {
+            keepRunning = false;
+        }
+
+        //@Override
+        public void run() {
+            try {
+                keepRunning = true;
+                while(keepRunning) {
+                    mChart.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            addEntry();
+                        }
+                    });
+                    Thread.sleep(SAMPLE_INTERVAL);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
