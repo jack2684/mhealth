@@ -26,7 +26,8 @@ import com.example.jack.brainwaves.helper.LockableViewPager;
 public class MainActivity extends FragmentActivity implements
         SettingFragment.onSettingListener,
         MuseFragment.onMuseListener,
-        LogPlotFragment.onLogPlotListener {
+        LogPlotFragment.onLogPlotListener,
+        RealtimeLineChartFragment.onRealtimeplotListener{
 
     private final static String[] TITLES = {
             "Log over time",
@@ -59,6 +60,8 @@ public class MainActivity extends FragmentActivity implements
 
     private Drawable oldBackground = null;
     private int currentColor = 0xFF666666;
+
+    private boolean demoMode = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +101,7 @@ public class MainActivity extends FragmentActivity implements
 
     @Override
     public void onDemomodeSelected(boolean isDemo) {
-
+        demoMode = isDemo;
     }
 
     @Override
@@ -116,6 +119,11 @@ public class MainActivity extends FragmentActivity implements
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean tryGetIsdemo() {
+        return demoMode;
     }
 
     @Override

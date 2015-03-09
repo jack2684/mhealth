@@ -177,7 +177,7 @@ public class MuseFragment extends SuperAwesomeCardFragment implements View.OnCli
     /**
      * Connection listener updates UI with new connection status and logs it.
      */
-    class ConnectionListener extends MuseConnectionListener {
+    public class ConnectionListener extends MuseConnectionListener {
 
         final WeakReference<Activity> activityRef;
 
@@ -225,7 +225,7 @@ public class MuseFragment extends SuperAwesomeCardFragment implements View.OnCli
      * update UI with new values.
      * We also will log message if Artifact packets contains "blink" flag.
      */
-    class DataListener extends MuseDataListener {
+    public class DataListener extends MuseDataListener {
 
         final WeakReference<Activity> activityRef;
         private DataOutputStream eegOut;
@@ -261,8 +261,6 @@ public class MuseFragment extends SuperAwesomeCardFragment implements View.OnCli
             horseShoeOut = createBinaryFile(new File(outDir, "horseshoe"));
             blinkOut = createBinaryFile(new File(outDir, "blink"));
         }
-
-
 
         public void closeOutputFiles() {
             setIsSessionNameInputActive(true);
@@ -440,6 +438,8 @@ public class MuseFragment extends SuperAwesomeCardFragment implements View.OnCli
                 MuseDataPacketType.ACCELEROMETER);
         muse.registerDataListener(dataListener,
                 MuseDataPacketType.EEG);
+        muse.registerDataListener(dataListener,
+                MuseDataPacketType.ALPHA_RELATIVE);
         muse.registerDataListener(dataListener,
                 MuseDataPacketType.ARTIFACTS);
         muse.registerDataListener(dataListener,
