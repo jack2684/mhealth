@@ -103,7 +103,7 @@
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="|"
+                            android:text="Range"
                             android:textSize="18dp"
                             android:paddingBottom="30dp"
                             android:paddingLeft="10dp"
