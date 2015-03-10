@@ -48,7 +48,6 @@ public class MainActivity extends FragmentActivity implements
     final static int ABOUT      = 6;
     final static int START_PAGE = HOME;
 
-    MuseFragment muserFrag = null;
 
     private final Handler handler = new Handler();
 
@@ -62,6 +61,8 @@ public class MainActivity extends FragmentActivity implements
     private int currentColor = 0xFF666666;
 
     private boolean demoMode = true;
+    private HomeScoreFragment homeFrag = null;
+    private MuseFragment muserFrag = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +128,13 @@ public class MainActivity extends FragmentActivity implements
     }
 
     @Override
+    public void sendClassificationOutput(boolean stressFul) {
+        if(homeFrag != null) {
+            homeFrag.plotTwoClassification(stressFul);
+        }
+    }
+
+    @Override
     public void onMuseGetSessionname() {
         if(useraccount.isLogin()) {
             muserFrag.updateSessionName(useraccount.getUsername());
@@ -161,7 +169,8 @@ public class MainActivity extends FragmentActivity implements
         public Fragment getItem(int position) {
             switch(position) {
                 case HOME:
-                    return HomeScoreFragment.newInstance(position);
+                    homeFrag = HomeScoreFragment.newInstance(position);
+                    return homeFrag;
                 case MUSE:
                     muserFrag = MuseFragment.newInstance(position);
                     return muserFrag;

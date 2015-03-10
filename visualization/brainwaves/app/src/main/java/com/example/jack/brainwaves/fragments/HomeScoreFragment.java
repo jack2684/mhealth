@@ -4,7 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,15 @@ import android.widget.TextView;
 import com.appyvet.rangebar.RangeBar;
 import com.example.jack.brainwaves.R;
 import com.example.jack.brainwaves.helper.OrientationHelper;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.interaxon.libmuse.Eeg;
 import com.sefford.circularprogressdrawable.CircularProgressDrawable;
 
 import java.util.Random;
@@ -28,13 +40,19 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
     static final int ANIM_DURATION = 3600;
     static final int SLEEP_INTER = 100;
     static final int CLEAR_DURATION = 1200;
+    static final int LINE_COLOR = 0;
+    final static float DOT_SIZE = 3f;
+    final static float LINE_SIZE = 1f;
+    final static int ALPHA = 80;
+    final static int VISIBLE_RANGE = 50;
+    static final int SAMPLE_INTERVAL = 500;
+    static final float YMAX = 1.5f;
 
     // Views
-    private TextView stressScoreTextView, durationTextView, moreButton, lessButton;
+    private TextView stressScoreTextView, durationTextView, moreButton, lessButton, hintTextView;
     private ImageView ivDrawable;
     private RangeBar timeRangeber;
-
-    // Draweable
+    private LineChart mChart;
     private CircularProgressDrawable circularDrawable;
 
     // Key to the show
@@ -42,6 +60,8 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
     private Animator circularAnimater;
     private ScoreTextAnimationHelper scoreAnimator;
     private Thread myThread;
+    private boolean twoClassificationMode = false;
+    private int xcnt = 0;
 
     public static HomeScoreFragment newInstance(int position) {
         HomeScoreFragment f = new HomeScoreFragment();
@@ -66,6 +86,7 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
         ivDrawable = (ImageView) findViewById(R.id.iv_drawable);
         moreButton = (TextView) findViewById(R.id.more);
         lessButton = (TextView) findViewById(R.id.less);
+        hintTextView = (TextView) findViewById(R.id.hint);
         timeRangeber = (RangeBar) findViewById(R.id.materialBar);
         timeRangeber.setSelectorColor(getResources().getColor(android.R.color.darker_gray));
         timeRangeber.setConnectingLineColor(getResources().getColor(android.R.color.darker_gray));
@@ -73,6 +94,7 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
         timeRangeber.setSeekPinByIndex(2);
         timeRangeber.setPinRadius(30f);
         translateProgress2Duration();
+        configChart();
 
         // Setup circular animation
         scoreAnimator = new ScoreTextAnimationHelper();
@@ -119,6 +141,46 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
         return mMainView;
     }
 
+    private void configChart() {
+        // Set mchart
+        mChart = (LineChart) findViewById(R.id.chart1);
+        mChart.setTouchEnabled(false);
+        mChart.setDragEnabled(true);
+        mChart.setScaleEnabled(true);
+        mChart.setDrawGridBackground(false);
+        mChart.setPinchZoom(false);
+        mChart.setBackgroundColor(Color.TRANSPARENT);
+        mChart.setData(new LineData());
+        mChart.setVisibility(View.GONE);
+        mChart.getData().addDataSet(createSet());
+        mChart.setDescription("");
+        mChart.setDescriptionTextSize(0f);
+
+        // Set legend
+        Typeface tf = Typeface.createFromAsset(mMainActivity.getAssets(), "OpenSans-Regular.ttf");
+        Legend l = mChart.getLegend();
+        l.setForm(Legend.LegendForm.LINE);
+        l.setTypeface(tf);
+        l.setTextColor(Color.DKGRAY);
+
+        XAxis xl = mChart.getXAxis();
+        xl.setTypeface(tf);
+        xl.setTextColor(Color.DKGRAY);
+        xl.setDrawGridLines(false);
+        xl.setAvoidFirstLastClipping(true);
+        xl.setPosition(XAxis.XAxisPosition.TOP_INSIDE);
+
+        YAxis leftAxis = mChart.getAxisLeft();
+        leftAxis.setTypeface(tf);
+        leftAxis.setTextColor(Color.TRANSPARENT);
+        leftAxis.setAxisMaxValue(YMAX);
+        leftAxis.setDrawGridLines(false);
+        leftAxis.setAxisLineColor(Color.TRANSPARENT);
+
+        YAxis rightAxis = mChart.getAxisRight();
+        rightAxis.setEnabled(false);
+    }
+
     protected void updateTimeRange() {
         scoreAnimator.stopThread();
         clearAnimation();
@@ -128,17 +190,19 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
 
     protected void updateNormClassifierOutput() {
         // @TODO: this is just demo data, will replace with realworld data later
-        int ridx = timeRangeber.getRightIndex();
-        int cnt = timeRangeber.getTickCount();
-        normClassifierOutput = (float) (.9 * ((ridx + 3) % cnt) / cnt + 0.1f);
-        if(ridx == 0) {
-            Random rand = new Random();
-            normClassifierOutput = rand.nextInt(100) / 100f;
+        if(timeRangeber.getRightIndex() != 0) {
+            int ridx = timeRangeber.getRightIndex();
+            int cnt = timeRangeber.getTickCount();
+            normClassifierOutput = (float) (.9 * ((ridx + 3) % cnt) / cnt + 0.1f);
+            if (ridx == 0) {
+                Random rand = new Random();
+                normClassifierOutput = rand.nextInt(100) / 100f;
+            }
+            scoreAnimator.stopThread();
+            circularAnimation();
+            myThread = new Thread(scoreAnimator);
+            myThread.start();
         }
-        scoreAnimator.stopThread();
-        circularAnimation();
-        myThread = new Thread(scoreAnimator);
-        myThread.start();
     }
 
     /**
@@ -270,6 +334,11 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
             @Override
             public void run() {
                 String base = "past";
+                stressScoreTextView.setVisibility(View.VISIBLE);
+                hintTextView.setVisibility(View.VISIBLE);
+                ivDrawable.setVisibility(View.VISIBLE);
+                mChart.setVisibility(View.GONE);
+                twoClassificationMode = false;
                 switch (progress) {
                     case 1:
                         durationTextView.setText(base + " 1 day");
@@ -292,11 +361,57 @@ public class HomeScoreFragment extends SuperAwesomeCardFragment {
                     case 7:
                         durationTextView.setText(base + " 1 year");
                         break;
-                    default:
+                    case 0:
                         durationTextView.setText("now");
+                        stressScoreTextView.setVisibility(View.GONE);
+                        hintTextView.setVisibility(View.GONE);
+                        ivDrawable.setVisibility(View.GONE);
+                        mChart.setVisibility(View.VISIBLE);
+                        twoClassificationMode = true;
+                        break;
+                    default:
                 }
             }
         });
+    }
+
+    public void plotTwoClassification(final boolean stressful) {
+        if(twoClassificationMode) {
+            mMainActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    LineData data = mChart.getData();
+                    if (data != null) {
+                        LineDataSet set = data.getDataSetByIndex(0);
+                        if (set == null) {
+                            System.err.println("Cannot find dataset!");
+                        }
+                        data.addXValue(String.valueOf(xcnt++));
+                        data.addEntry(new Entry(stressful ? 1 : 0, set.getEntryCount()), 0);
+                        mChart.notifyDataSetChanged();
+                        mChart.setVisibleXRange(VISIBLE_RANGE);
+                        mChart.moveViewToX(data.getXValCount() - 7);
+                        Log.i("JAAAAAAAAAAAAAAAAAACK: ", String.valueOf(stressful));
+                    }
+                }
+            });
+        }
+    }
+
+
+    private LineDataSet createSet() {
+        LineDataSet set = new LineDataSet(null, "Stressful OR Not?");
+        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        set.setColor(Color.LTGRAY);
+        set.setCircleColor(ColorTemplate.JOYFUL_COLORS[LINE_COLOR]);
+        set.setLineWidth(LINE_SIZE);
+        set.setCircleSize(DOT_SIZE);
+        set.setFillAlpha(ALPHA);
+        set.setFillColor(ColorTemplate.getHoloBlue());
+        set.setHighLightColor(Color.rgb(244, 117, 117));
+        set.setValueTextColor(Color.WHITE);
+        set.setValueTextSize(0f);
+        return set;
     }
 
     // Container Activity must implement this interface

@@ -45,7 +45,15 @@
                         android:layout_marginTop="80dp"
                         android:layout_gravity="center_horizontal"
                         android:textColor="@color/dark"
-                        android:text="Stress score out of 5\n"/>
+                        android:text="Stress score out of 5\n"
+                        android:id="@+id/hint"
+                        />
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/chart1"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        />
 
                 </FrameLayout>
 

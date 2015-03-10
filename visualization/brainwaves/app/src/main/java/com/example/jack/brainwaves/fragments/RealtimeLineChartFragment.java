@@ -46,6 +46,7 @@ import java.io.DataOutputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implements
         OnChartValueSelectedListener {
@@ -64,7 +65,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
     final static float LINE_SIZE = 1f;
     final static int ALPHA = 80;
     final static int VISIBLE_RANGE = 50;
-    static final int SAMPLE_INTERVAL = 500;
+    static final int SAMPLE_INTERVAL = 250;
     static final float YMAX = 1500f;
 
     private int EEG_DATASET_IDX = 0;
@@ -73,6 +74,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
     private int xcnt = 0;
     private int eegx = 0;
     private int accx = 0;
+    private boolean demoMode = true;
 
     public static RealtimeLineChartFragment newInstance(int position) {
         RealtimeLineChartFragment f = new RealtimeLineChartFragment();
@@ -124,7 +126,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
         mChart.setData(data);
         LineDataSet set1 = createEEGSet();
         LineDataSet set2 = createACCSet();
-        // set.addDemoEntry(...); // can be called as well
+        // set.addentry(...); // can be called as well
         // Create two set for eeg and acc respectively
         data.addDataSet(set1);
         data.addDataSet(set2);
@@ -161,7 +163,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
 //        addentry.setOnClickListener(new Button.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                addDemoEntry();
+//                addentry();
 //            }
 //        });
 
@@ -188,7 +190,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
 
     private void doRealtimePlot(boolean b) {
         ((MainActivity) mMainActivity).onSettingPageLocker(b);
-        boolean demoMode = ((MainActivity)mMainActivity).tryGetIsdemo();
+        demoMode = ((MainActivity)mMainActivity).tryGetIsdemo();
         readyToPlot = b;
         demoDataSource.stopThread();
         if(b) {
@@ -267,44 +269,39 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
     }
 
     private void addDemoEntry() {
-
         LineData data = mChart.getData();
-
         if (data != null) {
-
             LineDataSet set = data.getDataSetByIndex(0);
-            // set.addDemoEntry(...); // can be called as well
-
             if (set == null) {
                 set = createEEGSet();
                 data.addDataSet(set);
             }
-
-            // add a new x-value first
             data.addXValue(String.valueOf(xcnt++));
             data.addEntry(new Entry((float) (Math.random() * 200) + 300f, set.getEntryCount()), 0);
-
-            // let the chart know it's data has changed
             mChart.notifyDataSetChanged();
-
-            // limit the number of visible entries
-             mChart.setVisibleXRange(VISIBLE_RANGE);
-            // mChart.setVisibleYRange(30, AxisDependency.LEFT);
-
-             // move to the latest entry
-             mChart.moveViewToX(data.getXValCount()-7);
-
-             // this automatically refreshes the chart (calls invalidate())
-//             mChart.moveViewTo(data.getXValCount()-7, 55f, AxisDependency.LEFT);
-
-            // redraw the chart
-//            mChart.invalidate();
+            mChart.setVisibleXRange(VISIBLE_RANGE);
+            mChart.moveViewToX(data.getXValCount()-7);
         }
+
+        ((MainActivity) mMainActivity).sendClassificationOutput(Math.random() > 0.8f); //@TODO integeragte classifier
     }
 
-    private void addEntry(final ArrayList<Double> museData) {
+    private void addDemoEntry2() {
+        LineData data = mChart.getData();
+        if (data != null) {
+            LineDataSet set = data.getDataSetByIndex(1);
+            if (set == null) {
+                set = createACCSet();
+                data.addDataSet(set);
+            }
+//            data.addXValue(String.valueOf(xcnt++));
+            data.addEntry(new Entry((float) (Math.random() * 50) + 900f, set.getEntryCount()), 1);
+            mChart.notifyDataSetChanged();
+            mChart.setVisibleXRange(VISIBLE_RANGE);
+            mChart.moveViewToX(data.getXValCount()-7);
+        }
 
-
+        ((MainActivity) mMainActivity).sendClassificationOutput(Math.random() > 0.8f); //@TODO integeragte classifier
     }
 
     private LineDataSet createEEGSet() {
@@ -367,6 +364,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
                         @Override
                         public void run() {
                             addDemoEntry();
+                            addDemoEntry2();
                         }
                     });
                     Thread.sleep(SAMPLE_INTERVAL);
@@ -480,7 +478,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
                         if (data != null) {
 
                             LineDataSet set = data.getDataSetByIndex(ACC_DATASET_IDX);
-                            // set.addDemoEntry(...); // can be called as well
+                            // set.addEntry(...); // can be called as well
 
                             if (set == null) {
                                 System.err.println("Cannot find dataset!");
@@ -510,12 +508,14 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
         }
 
         private void updateEeg(final ArrayList<Double> museData) {
-
             if (System.currentTimeMillis() - lastEEGUpdate > SAMPLE_INTERVAL) {
                 lastEEGUpdate = System.currentTimeMillis();
             }
             else {
                 return;
+            }
+            if(!demoMode) {
+                ((MainActivity) mMainActivity).sendClassificationOutput(false); //@TODO integeragte classifier
             }
             Activity activity = activityRef.get();
             if (activity != null) {
@@ -532,7 +532,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
                         if (data != null) {
 
                             LineDataSet set = data.getDataSetByIndex(EEG_DATASET_IDX);
-                            // set.addDemoEntry(...); // can be called as well
+                            // set.addentry(...); // can be called as well
 
                             if (set == null) {
                                     System.err.println("Cannot find dataset!");
@@ -595,5 +595,6 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
     // Container Activity must implement this interface
     public interface onRealtimeplotListener {
         public boolean tryGetIsdemo();
+        public void sendClassificationOutput(boolean stressFul);
     }
 }
