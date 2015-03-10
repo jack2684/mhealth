@@ -65,7 +65,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
     final static int ALPHA = 80;
     final static int VISIBLE_RANGE = 50;
     static final int SAMPLE_INTERVAL = 500;
-    static final float YMAX = 1200f;
+    static final float YMAX = 1500f;
 
     private int EEG_DATASET_IDX = 0;
     private int ACC_DATASET_IDX = 1;
@@ -196,6 +196,8 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
                 new Thread(demoDataSource).start();
             } else {
                 connectMuse();
+                dataTransmission = true;
+                muse.enableDataTransmission(dataTransmission);
             }
         } else {
             if(!demoMode) {
@@ -216,15 +218,9 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
         else {
             muse = pairedMuses.get(0);      // @TODO: now only connect to one device
             ConnectionState state = muse.getConnectionState();
-            while (state == ConnectionState.CONNECTED ||
+            if (state == ConnectionState.CONNECTED ||
                     state == ConnectionState.CONNECTING) {
-//                muse.disconnect(true);
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                state = muse.getConnectionState();
+                return;
             }
             configure_library();
             /**
@@ -242,6 +238,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
     }
 
     private void configure_library() {
+        muse.unregisterAllListeners();
         muse.registerConnectionListener(PlotConnectionListener);
         muse.registerDataListener(dataListener,
                 MuseDataPacketType.ACCELEROMETER);

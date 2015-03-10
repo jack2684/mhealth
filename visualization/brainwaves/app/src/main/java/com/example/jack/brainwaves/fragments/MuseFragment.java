@@ -433,6 +433,7 @@ public class MuseFragment extends SuperAwesomeCardFragment implements View.OnCli
     }
 
     private void configure_library() {
+        muse.unregisterAllListeners();
         muse.registerConnectionListener(connectionListener);
         muse.registerDataListener(dataListener,
                 MuseDataPacketType.ACCELEROMETER);
