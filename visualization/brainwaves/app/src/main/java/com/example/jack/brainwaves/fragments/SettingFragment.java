@@ -1,15 +1,18 @@
 package com.example.jack.brainwaves.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jack.brainwaves.MainActivity;
 import com.example.jack.brainwaves.R;
 import com.example.jack.brainwaves.helper.OrientationHelper;
 import com.kyleduo.switchbutton.SwitchButton;
@@ -66,6 +69,18 @@ public class SettingFragment extends SuperAwesomeCardFragment {
             @Override
             public void onClick(View view) {
                 logout();
+            }
+        });
+        mDemosb.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                ((MainActivity)mMainActivity).onDemomodeSelected(b);
+            }
+        });
+        mDemosb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 

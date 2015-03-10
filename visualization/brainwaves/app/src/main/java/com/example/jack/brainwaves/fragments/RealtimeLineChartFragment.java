@@ -4,17 +4,13 @@ package com.example.jack.brainwaves.fragments;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.media.MediaScannerConnection;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jack.brainwaves.MainActivity;
@@ -44,13 +40,9 @@ import com.interaxon.libmuse.MuseDataPacket;
 import com.interaxon.libmuse.MuseDataPacketType;
 import com.interaxon.libmuse.MuseManager;
 import com.interaxon.libmuse.MusePreset;
-import com.interaxon.libmuse.MuseVersion;
 import com.kyleduo.switchbutton.SwitchButton;
 
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +51,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
         OnChartValueSelectedListener {
 
     private Muse muse;
-    private ConnectionListener connectionListener;
+    private ConnectionListener PlotConnectionListener;
     private DataListener dataListener;
     private boolean dataTransmission = true;
 
@@ -71,11 +63,16 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
     final static float DOT_SIZE = 0f;
     final static float LINE_SIZE = 1f;
     final static int ALPHA = 80;
-    final static int VISIBLE_RANGE = 100;
-    static final int SAMPLE_INTERVAL = 100;
-    static final float YMAX = 1000f;
+    final static int VISIBLE_RANGE = 50;
+    static final int SAMPLE_INTERVAL = 500;
+    static final float YMAX = 1200f;
 
+    private int EEG_DATASET_IDX = 0;
+    private int ACC_DATASET_IDX = 1;
+    private int QUA_DATASET_IDX = -1;
     private int xcnt = 0;
+    private int eegx = 0;
+    private int accx = 0;
 
     public static RealtimeLineChartFragment newInstance(int position) {
         RealtimeLineChartFragment f = new RealtimeLineChartFragment();
@@ -125,6 +122,12 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
 
         // add empty data
         mChart.setData(data);
+        LineDataSet set1 = createEEGSet();
+        LineDataSet set2 = createACCSet();
+        // set.addDemoEntry(...); // can be called as well
+        // Create two set for eeg and acc respectively
+        data.addDataSet(set1);
+        data.addDataSet(set2);
 
         Typeface tf = Typeface.createFromAsset(mMainActivity.getAssets(), "OpenSans-Regular.ttf");
 
@@ -177,7 +180,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
         // Create listeners and pass reference to activity to them
         WeakReference<Activity> weakActivity =
                 new WeakReference<Activity>(mMainActivity);
-        connectionListener = new ConnectionListener(weakActivity);
+        PlotConnectionListener = new ConnectionListener(weakActivity);
         dataListener = new DataListener(weakActivity);
 
         return mMainView;
@@ -196,7 +199,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
             }
         } else {
             if(!demoMode) {
-                dataTransmission = !dataTransmission;
+                dataTransmission = false;
                 if (muse != null) {
                     muse.enableDataTransmission(dataTransmission);
                 }
@@ -213,9 +216,15 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
         else {
             muse = pairedMuses.get(0);      // @TODO: now only connect to one device
             ConnectionState state = muse.getConnectionState();
-            if (state == ConnectionState.CONNECTED ||
+            while (state == ConnectionState.CONNECTED ||
                     state == ConnectionState.CONNECTING) {
-                return;
+//                muse.disconnect(true);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                state = muse.getConnectionState();
             }
             configure_library();
             /**
@@ -233,7 +242,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
     }
 
     private void configure_library() {
-        muse.registerConnectionListener(connectionListener);
+        muse.registerConnectionListener(PlotConnectionListener);
         muse.registerDataListener(dataListener,
                 MuseDataPacketType.ACCELEROMETER);
         muse.registerDataListener(dataListener,
@@ -270,13 +279,13 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
             // set.addDemoEntry(...); // can be called as well
 
             if (set == null) {
-                set = createSet();
+                set = createEEGSet();
                 data.addDataSet(set);
             }
 
             // add a new x-value first
             data.addXValue(String.valueOf(xcnt++));
-            data.addEntry(new Entry((float) (Math.random() * 40) + 40f, set.getEntryCount()), 0);
+            data.addEntry(new Entry((float) (Math.random() * 200) + 300f, set.getEntryCount()), 0);
 
             // let the chart know it's data has changed
             mChart.notifyDataSetChanged();
@@ -301,15 +310,31 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
 
     }
 
-    private LineDataSet createSet() {
+    private LineDataSet createEEGSet() {
 
-        LineDataSet set = new LineDataSet(null, "Alpha");
+        LineDataSet set = new LineDataSet(null, "EEG");
         set.setAxisDependency(AxisDependency.LEFT);
-        set.setColor(ColorTemplate.getHoloBlue());
-        set.setCircleColor(ColorTemplate.getHoloBlue());
+        set.setColor(ColorTemplate.JOYFUL_COLORS[EEG_DATASET_IDX]);
+        set.setCircleColor(ColorTemplate.JOYFUL_COLORS[EEG_DATASET_IDX]);
         set.setLineWidth(LINE_SIZE);
         set.setCircleSize(DOT_SIZE);
-        set.setFillAlpha(65);
+        set.setFillAlpha(ALPHA);
+        set.setFillColor(ColorTemplate.getHoloBlue());
+        set.setHighLightColor(Color.rgb(244, 117, 117));
+        set.setValueTextColor(Color.WHITE);
+        set.setValueTextSize(0f);
+        return set;
+    }
+
+    private LineDataSet createACCSet() {
+
+        LineDataSet set = new LineDataSet(null, "ACCELEROMETER");
+        set.setAxisDependency(AxisDependency.LEFT);
+        set.setColor(ColorTemplate.JOYFUL_COLORS[ACC_DATASET_IDX]);
+        set.setCircleColor(ColorTemplate.JOYFUL_COLORS[ACC_DATASET_IDX]);
+        set.setLineWidth(LINE_SIZE);
+        set.setCircleSize(DOT_SIZE);
+        set.setFillAlpha(ALPHA);
         set.setFillColor(ColorTemplate.getHoloBlue());
         set.setHighLightColor(Color.rgb(244, 117, 117));
         set.setValueTextColor(Color.WHITE);
@@ -381,8 +406,10 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
                     public void run() {
                         if (current == ConnectionState.CONNECTED) {
                             Toast.makeText(mMainActivity, "Connected to MUSE", Toast.LENGTH_SHORT).show();
+                        } else if (current == ConnectionState.CONNECTING) {
+                            Toast.makeText(mMainActivity, "Muse conntecting...", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(mMainActivity, "Muse undefined...", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mMainActivity, "Muse disconnected...", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -408,19 +435,6 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
             this.activityRef = activityRef;
         }
 
-        private DataOutputStream createBinaryFile(File f) {
-            DataOutputStream dataOutputStream = null;
-            try {
-                dataOutputStream = new DataOutputStream(new FileOutputStream(f));
-                MediaScannerConnection.scanFile(activityRef.get(), new String[]{f.getAbsolutePath()}, null, null);
-            }
-            catch (IOException e) {
-                System.exit(1);
-                e.printStackTrace();
-            }
-            return dataOutputStream;
-        }
-
         @Override
         public void receiveMuseDataPacket(MuseDataPacket p) {
             switch (p.getPacketType()) {
@@ -441,14 +455,14 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
         @Override
         public void receiveMuseArtifactPacket(MuseArtifactPacket p) {
             if (p.getHeadbandOn() && p.getBlink()) {
-                Log.i("Artifacts", "blink");
+//                Log.i("Artifacts", "blink");
             }
         }
 
         long lastEEGUpdate, lastAccelerometerUpdate, lastHorseshoeUpdate;
 
-        private void updateAccelerometer(final ArrayList<Double> data) {
-            if (System.currentTimeMillis() - lastAccelerometerUpdate > 500) {
+        private void updateAccelerometer(final ArrayList<Double> museData) {
+            if (System.currentTimeMillis() - lastAccelerometerUpdate > SAMPLE_INTERVAL) {
                 lastAccelerometerUpdate = System.currentTimeMillis();
             }
             else {
@@ -459,22 +473,48 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        LineData data = mChart.getData();
+
+                        float normval = (float) (museData.get(Accelerometer.FORWARD_BACKWARD.ordinal())
+                                + museData.get(Accelerometer.UP_DOWN.ordinal())
+                                + museData.get(Accelerometer.LEFT_RIGHT.ordinal())
+                        );
+                        normval /= 3;
+                        if (data != null) {
+
+                            LineDataSet set = data.getDataSetByIndex(ACC_DATASET_IDX);
+                            // set.addDemoEntry(...); // can be called as well
+
+                            if (set == null) {
+                                System.err.println("Cannot find dataset!");
+                            }
+
+                            // add a new x-value first
+                            int xval = getNextX(accx);
+                            if(xval >= 0) {
+                                data.addXValue(String.valueOf(xval));
+                            }
+                            accx++;
+//                            data.addXValue(String.valueOf(accx++));
+                            data.addEntry(new Entry(normval, set.getEntryCount()), ACC_DATASET_IDX);
+                            mChart.notifyDataSetChanged();
+                            mChart.setVisibleXRange(VISIBLE_RANGE);
+                            mChart.moveViewToX(data.getXValCount() - 7);
 //                        acc_x.setText(String.format(
 //                                "%6.2f", data.get(Accelerometer.FORWARD_BACKWARD.ordinal())));
 //                        acc_y.setText(String.format(
 //                                "%6.2f", data.get(Accelerometer.UP_DOWN.ordinal())));
 //                        acc_z.setText(String.format(
 //                                "%6.2f", data.get(Accelerometer.LEFT_RIGHT.ordinal())));
+                        }
                     }
                 });
             }
-
-
         }
 
         private void updateEeg(final ArrayList<Double> museData) {
 
-            if (System.currentTimeMillis() - lastEEGUpdate > 500) {
+            if (System.currentTimeMillis() - lastEEGUpdate > SAMPLE_INTERVAL) {
                 lastEEGUpdate = System.currentTimeMillis();
             }
             else {
@@ -487,27 +527,31 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
                     public void run() {
                         LineData data = mChart.getData();
 
-                        float eegval = (float) (museData.get(Eeg.TP9.ordinal())
+                        float normval = (float) (museData.get(Eeg.TP9.ordinal())
                                                         + museData.get(Eeg.FP1.ordinal())
                                                         + museData.get(Eeg.FP2.ordinal())
                                                         + museData.get(Eeg.TP10.ordinal()));
-                        eegval /= 4;
+                        normval /= 4;
                         if (data != null) {
 
-                            LineDataSet set = data.getDataSetByIndex(0);
+                            LineDataSet set = data.getDataSetByIndex(EEG_DATASET_IDX);
                             // set.addDemoEntry(...); // can be called as well
 
                             if (set == null) {
-                                set = createSet();
-                                data.addDataSet(set);
+                                    System.err.println("Cannot find dataset!");
                             }
 
                             // add a new x-value first
-                            data.addXValue(String.valueOf(xcnt++));
-                            data.addEntry(new Entry(eegval, set.getEntryCount()), 0);
+                            int xval = getNextX(eegx);
+                            if(xval >= 0) {
+                                data.addXValue(String.valueOf(xval));
+                            }
+                            eegx++;
+                            data.addEntry(new Entry(normval, set.getEntryCount()), EEG_DATASET_IDX);
                             mChart.notifyDataSetChanged();
                             mChart.setVisibleXRange(VISIBLE_RANGE);
-                            mChart.moveViewToX(data.getXValCount()-7);
+                            mChart.moveViewToX(data.getXValCount() - 7);
+                            Log.i("JAAAAAAAAAAAAAAAAAACK: ", String.valueOf(normval));
                         }
                     }
                 });
@@ -515,7 +559,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
         }
 
         private void updateHorseshoe(final ArrayList<Double> data) {
-            if (System.currentTimeMillis() - lastHorseshoeUpdate > 500) {
+            if (System.currentTimeMillis() - lastHorseshoeUpdate > SAMPLE_INTERVAL) {
                 lastHorseshoeUpdate = System.currentTimeMillis();
             }
             else {
@@ -536,6 +580,17 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
 //                                "R Ear %.1f", data.get(Eeg.TP10.ordinal())));
                     }
                 });
+            }
+        }
+    }
+
+    private int getNextX(int myX){
+        synchronized (this) {
+            if(myX > xcnt) {
+                xcnt++;
+                return xcnt;
+            } else {
+                return -1;
             }
         }
     }
