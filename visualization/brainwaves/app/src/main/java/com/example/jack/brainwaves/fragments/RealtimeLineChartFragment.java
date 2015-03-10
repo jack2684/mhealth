@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
+import com.example.jack.brainwaves.BrainwaveClassifier;
 import com.example.jack.brainwaves.MainActivity;
 import com.example.jack.brainwaves.R;
 import com.example.jack.brainwaves.helper.OrientationHelper;
@@ -434,6 +435,7 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
         public void receiveMuseDataPacket(MuseDataPacket p) {
             switch (p.getPacketType()) {
                 case EEG:
+                    BrainwaveClassifier.storeEEGData(p.getValues());
                     updateEeg(p.getValues());
                     break;
                 case ACCELEROMETER:
@@ -515,7 +517,8 @@ public class RealtimeLineChartFragment extends SuperAwesomeCardFragment implemen
                 return;
             }
             if(!demoMode) {
-                ((MainActivity) mMainActivity).sendClassificationOutput(false); //@TODO integeragte classifier
+                boolean output = BrainwaveClassifier.getKnnLabel() == 1;
+                ((MainActivity) mMainActivity).sendClassificationOutput(output); //@TODO integeragte classifier
             }
             Activity activity = activityRef.get();
             if (activity != null) {

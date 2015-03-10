@@ -80,6 +80,9 @@ public class MainActivity extends FragmentActivity implements
         pager.setPageMargin(pageMargin);
         pager.setCurrentItem(START_PAGE, true);
         tabs.setViewPager(pager);
+
+        // Classifier
+        BrainwaveClassifier.init();
     }
 
     @Override
