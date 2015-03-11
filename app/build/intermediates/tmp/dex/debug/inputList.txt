@@ -1,3 +1,0 @@
-/home/mridul/AndroidStudioProjects/DataCollector/app/build/intermediates/classes/debug
-/home/mridul/AndroidStudioProjects/DataCollector/app/build/intermediates/pre-dexed/debug/libmuseandroid-ad94a6c4a7483c0e5dae107ec14c88303c63518d.jar
-/home/mridul/AndroidStudioProjects/DataCollector/app/build/intermediates/pre-dexed/debug/support-v4-19.1.0-32b2a1aac94369fd3c661cfb535f2bbc685f4b05.jar
